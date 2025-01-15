@@ -1,4 +1,4 @@
-package com.microsoft.codepush.react;
+package com.appzung.codepush.react;
 
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;

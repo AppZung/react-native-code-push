@@ -1,4 +1,4 @@
-package com.microsoft.codepush.react;
+package com.appzung.codepush.react;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -129,10 +129,10 @@ public class CodePush implements ReactPackage {
 
     private String getCustomPropertyFromStringsIfExist(String propertyName) {
         String property;
-      
+
         String packageName = mContext.getPackageName();
         int resId = mContext.getResources().getIdentifier("CodePush" + propertyName, "string", packageName);
-        
+
         if (resId != 0) {
             property = mContext.getString(resId);
 
@@ -140,7 +140,7 @@ public class CodePush implements ReactPackage {
                 return property;
             } else {
                 CodePushUtils.log("Specified " + propertyName + " is empty");
-            } 
+            }
         }
 
         return null;

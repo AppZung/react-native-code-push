@@ -12,10 +12,10 @@ Requirements:
         sudo gem install cocoapods -n /usr/local/bin
 
 Usage: node create-app.js <appName> <reactNativeVersion> <reactNativeCodePushVersion>
-    1. node create-app.js 
+    1. node create-app.js
     2. node create-app.js myapp
-    3. node create-app.js myapp react-native@0.62 react-native-code-push@6.1.0 
-    4. node create-app.js myapp react-native@latest Microsoft/react-native-code-push
+    3. node create-app.js myapp react-native@0.62 react-native-code-push@6.1.0
+    4. node create-app.js myapp react-native@latest appzung/react-native-code-push
 
 Parameters:
     1. <appName> - CodePushDemoAppTest
@@ -279,7 +279,7 @@ function androidSetup() {
         `${settingsGradleInclude}, ${codePushProjectImport}`);
     fs.writeFileSync(settingsGradlePath, settingsGradleContents);
 
-    let importCodePush = `\nimport com.microsoft.codepush.react.CodePush;`;
+    let importCodePush = `\nimport com.appzung.codepush.react.CodePush;`;
     let reactNativeHostInstantiationImport = "import android.app.Application;";
     let mainApplicationContents = fs.readFileSync(mainApplicationPath, "utf8");
     let getJSBundleFileOverride = "";

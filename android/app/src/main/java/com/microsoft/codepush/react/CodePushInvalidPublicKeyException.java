@@ -1,4 +1,4 @@
-package com.microsoft.codepush.react;
+package com.appzung.codepush.react;
 
 class CodePushInvalidPublicKeyException extends RuntimeException {
 

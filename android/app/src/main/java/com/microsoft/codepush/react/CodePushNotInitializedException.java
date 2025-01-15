@@ -1,4 +1,4 @@
-package com.microsoft.codepush.react;
+package com.appzung.codepush.react;
 
 public final class CodePushNotInitializedException extends RuntimeException {
 

@@ -42,7 +42,7 @@ In order to integrate CodePush into your Android project, please perform the fol
     ```kotlin
     ...
     // 1. Import the plugin class.
-    import com.microsoft.codepush.react.CodePush
+    import com.appzung.codepush.react.CodePush
 
     class MainApplication : Application(), ReactApplication {
 
@@ -65,7 +65,7 @@ In order to integrate CodePush into your Android project, please perform the fol
     ```java
     ...
     // 1. Import the plugin class.
-    import com.microsoft.codepush.react.CodePush;
+    import com.appzung.codepush.react.CodePush;
 
     public class MainApplication extends Application implements ReactApplication {
 
@@ -175,7 +175,7 @@ Update the `MainApplication.java` file to use CodePush via the following changes
 ```java
 ...
 // 1. Import the plugin class.
-import com.microsoft.codepush.react.CodePush;
+import com.appzung.codepush.react.CodePush;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -220,7 +220,7 @@ Update `MyReactActivity.java` (it could be named differently in your app) file t
 ```java
 ...
 // 1. Import the plugin class.
-import com.microsoft.codepush.react.CodePush;
+import com.appzung.codepush.react.CodePush;
 
 public class MyReactActivity extends Activity {
     private ReactRootView mReactRootView;
@@ -255,7 +255,7 @@ Update the `MainActivity.java` file to use CodePush via the following changes:
 ...
 // 1. Import the plugin class (if you used RNPM to install the plugin, this
 // should already be done for you automatically so you can skip this step).
-import com.microsoft.codepush.react.CodePush;
+import com.appzung.codepush.react.CodePush;
 
 public class MainActivity extends ReactActivity {
     // 2. Override the getJSBundleFile method in order to let
@@ -294,7 +294,7 @@ Update the `MainApplication.java` file to use CodePush via the following changes
 ```java
 ...
 // 1. Declare your ReactNativeHost to extend ReactInstanceHolder. ReactInstanceHolder is a subset of ReactNativeHost, so no additional implementation is needed.
-import com.microsoft.codepush.react.ReactInstanceHolder;
+import com.appzung.codepush.react.ReactInstanceHolder;
 
 public class MyReactNativeHost extends ReactNativeHost implements ReactInstanceHolder {
   // ... usual overrides
@@ -356,8 +356,8 @@ public class MainActivity extends SplashActivity {
 import com.facebook.react.ReactInstanceManager;
 
 // Add CodePush imports
-import com.microsoft.codepush.react.ReactInstanceHolder;
-import com.microsoft.codepush.react.CodePush;
+import com.appzung.codepush.react.ReactInstanceHolder;
+import com.appzung.codepush.react.CodePush;
 
 public class MainApplication extends NavigationApplication implements ReactInstanceHolder {
 
@@ -416,7 +416,7 @@ public class MainActivity extends NavigationActivity {
 import com.facebook.react.ReactInstanceManager;
 
 // Add CodePush imports
-import com.microsoft.codepush.react.CodePush;
+import com.appzung.codepush.react.CodePush;
 
 public class MainApplication extends NavigationApplication {
 

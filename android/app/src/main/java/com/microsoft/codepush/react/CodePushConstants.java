@@ -1,4 +1,4 @@
-package com.microsoft.codepush.react;
+package com.appzung.codepush.react;
 
 public class CodePushConstants {
     public static final String ASSETS_BUNDLE_PREFIX = "assets://";

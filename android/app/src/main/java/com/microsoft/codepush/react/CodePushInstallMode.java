@@ -1,4 +1,4 @@
-package com.microsoft.codepush.react;
+package com.appzung.codepush.react;
 
 public enum CodePushInstallMode {
     IMMEDIATE(0),

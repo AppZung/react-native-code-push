@@ -1,6 +1,6 @@
-Microsoft CodePush Plugin for React Native
+AppZung CodePush Plugin for React Native
 
-Copyright (c) Microsoft Corporation
+Copyright (c) Louis Lagrange and Louis Lagrange Consulting
 
 All rights reserved. 
 

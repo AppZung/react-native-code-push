@@ -1,17 +1,15 @@
 {
-  "name": "react-native-code-push",
+  "name": "@appzung/react-native-code-push",
   "version": "9.0.1",
   "description": "React Native plugin for the CodePush service",
+  "author": "Louis Lagrange <lagrange.louis@gmail.com> (https://github.com/Minishlink)",
+  "license": "MIT",
+  "homepage": "https://appzung.com",
+  "bugs": {
+    "email": "support@appzung.com"
+  },
   "main": "CodePush.js",
   "typings": "typings/react-native-code-push.d.ts",
-  "homepage": "https://microsoft.github.io/code-push",
-  "keywords": [
-    "react-native",
-    "code",
-    "push"
-  ],
-  "author": "Microsoft Corporation",
-  "license": "MIT",
   "scripts": {
     "clean": "shx rm -rf bin",
     "setup": "npm install --quiet --no-progress",
@@ -32,7 +30,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/microsoft/react-native-code-push"
+    "url": "https://github.com/appzung/react-native-code-push"
   },
   "dependencies": {
     "code-push": "^4.2.3",
@@ -71,5 +69,18 @@
       "postlink": "node node_modules/react-native-code-push/scripts/postlink/run",
       "postunlink": "node node_modules/react-native-code-push/scripts/postunlink/run"
     }
-  }
+  },
+  "keywords": [
+    "appzung",
+    "codepush",
+    "react-native",
+    "code",
+    "push",
+    "ota",
+    "live-updates",
+    "hot-updates",
+    "expo-updates",
+    "expo-ota",
+    "appcenter"
+  ]
 }

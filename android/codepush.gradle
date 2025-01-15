@@ -69,9 +69,9 @@ gradle.projectsEvaluated {
 
         def nodeModulesPath;
         if (project.hasProperty('nodeModulesPath')) {
-            nodeModulesPath = "${project.nodeModulesPath}/react-native-code-push"
+            nodeModulesPath = "${project.nodeModulesPath}/@appzung/react-native-code-push"
         } else {
-            nodeModulesPath = findNodeModulePath(projectDir, "react-native-code-push")
+            nodeModulesPath = findNodeModulePath(projectDir, "@appzung/react-native-code-push")
         }
 
         def targetName = variant.name.capitalize()
@@ -95,7 +95,7 @@ gradle.projectsEvaluated {
 
             // mitigates Resource and asset merger: Duplicate resources error
             project.delete(files("${jsBundleDir}"))
-            
+
             jsBundleDir.mkdirs()
             resourcesDir.mkdirs()
 

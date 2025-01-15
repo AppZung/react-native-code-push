@@ -1,8 +1,42 @@
-[![appcenterbanner](https://user-images.githubusercontent.com/31293287/32969262-3cc5d48a-cb99-11e7-91bf-fa57c67a371c.png)](http://microsoft.github.io/code-push/)
+# React Native Module for AppZung CodePush
 
-#### [Sign up With App Center](https://appcenter.ms/signup?utm_source=CodePush&utm_medium=Azure) to use CodePush
+## AppZung
 
-# React Native Module for CodePush
+AppZung is a robust solution for CodePush functionality, created in response to AppCenter's retirement.
+We will offer feature-parity with the original CodePush and introduce advanced capabilities in:
+
+- Hosting
+- Delivery
+- Analytics
+- Security
+- Privacy
+
+Currently, AppZung is used in production by several private clients, serving over 2M end-users.
+
+AppZung may or may not expand the scope beyond CodePush features in the future.
+
+It is not yet available publicly - Email hello@appzung.com to join the platform.
+
+## Migrating to AppZung CodePush
+
+This `@appzung/react-native-code-push` package aims to be a drop-in replacement for the `react-native-code-push` module from Microsoft. You may find the migration steps below.
+
+If your app does not meet the requirements of the last version of Microsoft's `react-native-code-push` (iOS 15.5, React Native 0.71+), from which this module is based on, you may still use old versions of `react-native-code-push` and specify `CodePushServerUrl` to `https://codepush.appzung.com`, as our API is compatible with the original module's features.
+
+This package will be updated with new features, that will only be available on `@appzung/react-native-code-push` (not the original `react-native-code-push` module).
+
+This package is compatible with the new architecture on iOS (tested on 0.76) with the interop layer, but not yet on Android. We started some work, but we are not focusing on it right now since there is no demand from our private clients for the moment. Note that there is ongoing work by the community on the original `react-native-code-push` repository so we will be able to integrate this faster in case it gets finished.
+
+This package won't actively support Windows target at first, except if there is demand for it. Please contact hello@appzung.com to help us assess this demand. Thank you for your understanding.
+
+### Migration steps
+
+1. Remove `react-native-code-push` from your React Native project (`npm uninstall react-native-code-push`)
+2. Install `@appzung/react-native-code-push` (`npm install @appzung/react-native-code-push`)
+3. Rename every `react-native-code-push` imports with `@appzung/react-native-code-push` imports. 
+4. For your Android files, rename every `com.microsoft.codepush` imports with `com.appzung.codepush`
+
+## Original documentation
 > [!WARNING]
 > React Native CodePush won't support new Architecture. In order to use this plugin on React Native versions starting from 0.76 you will need to [opt out](https://reactnative.dev/blog/2024/10/23/the-new-architecture-is-here#opt-out) from new architecture.
 >

@@ -1,7 +1,7 @@
 package com.testcodepush;
 
 import android.app.Application;
-import com.microsoft.codepush.react.CodePush;
+import com.appzung.codepush.react.CodePush;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;

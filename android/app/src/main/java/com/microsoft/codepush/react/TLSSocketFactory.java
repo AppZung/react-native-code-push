@@ -1,4 +1,4 @@
-package com.microsoft.codepush.react;
+package com.appzung.codepush.react;
 
 import java.io.IOException;
 import java.net.InetAddress;

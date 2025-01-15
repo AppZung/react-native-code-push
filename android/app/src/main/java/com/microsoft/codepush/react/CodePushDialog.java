@@ -1,4 +1,4 @@
-package com.microsoft.codepush.react;
+package com.appzung.codepush.react;
 
 import android.app.Activity;
 import android.app.AlertDialog;

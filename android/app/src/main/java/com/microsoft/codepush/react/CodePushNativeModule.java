@@ -1,4 +1,4 @@
-package com.microsoft.codepush.react;
+package com.appzung.codepush.react;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -156,7 +156,7 @@ public class CodePushNativeModule extends ReactContextBaseJavaModule {
                 @Override
                 public void run() {
                     try {
-                        // We don't need to resetReactRootViews anymore 
+                        // We don't need to resetReactRootViews anymore
                         // due the issue https://github.com/facebook/react-native/issues/14533
                         // has been fixed in RN 0.46.0
                         //resetReactRootViews(instanceManager);
@@ -492,7 +492,7 @@ public class CodePushNativeModule extends ReactContextBaseJavaModule {
                             return null;
                         }
                     }
-                    
+
                     promise.resolve("");
                 } catch(CodePushUnknownException e) {
                     CodePushUtils.log(e);
