@@ -110,6 +110,9 @@ xcuserdata
 *.iws
 .idea/
 
+# VSCode
+.vscode/
+
 #Gradle
 .gradletasknamecache
 .gradle/
