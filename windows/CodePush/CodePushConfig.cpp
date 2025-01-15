@@ -81,7 +81,7 @@ namespace winrt::Microsoft::CodePush::ReactNative::implementation
 
         if (!serverUrl.has_value())
         {
-            s_currentConfig.m_configuration.Insert(ServerURLConfigKey, L"https://codepush.appcenter.ms/");
+            s_currentConfig.m_configuration.Insert(ServerURLConfigKey, L"https://codepush.appzung.com/");
         }
 
         ::Microsoft::CodePush::ReactNative::CodePushNativeModule::LoadBundle();
