@@ -1,16 +1,10 @@
 {
-  "name": "react-native-code-push",
+  "name": "@appzung/react-native-code-push",
   "version": "9.0.1",
   "description": "React Native plugin for the CodePush service",
   "main": "CodePush.js",
   "typings": "typings/react-native-code-push.d.ts",
-  "homepage": "https://microsoft.github.io/code-push",
-  "keywords": [
-    "react-native",
-    "code",
-    "push"
-  ],
-  "author": "Microsoft Corporation",
+  "author": "Louis Lagrange <lagrange.louis@gmail.com> (https://github.com/Minishlink)",
   "license": "MIT",
   "scripts": {
     "clean": "shx rm -rf bin",
@@ -29,10 +23,6 @@
     "test:debugger:android": "mocha --recursive --inspect-brk=0.0.0.0 bin/test --android",
     "test:debugger:ios": "mocha --recursive --inspect-brk=0.0.0.0 bin/test --ios",
     "tslint": "tslint -c tslint.json test/**/*.ts"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/microsoft/react-native-code-push"
   },
   "dependencies": {
     "code-push": "4.2.3",
