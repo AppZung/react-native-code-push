@@ -1,21 +1,11 @@
 {
-  "name": "react-native-code-push",
+  "name": "@appzung/react-native-code-push",
   "version": "1000.0.0-beta",
   "description": "React Native plugin for the CodePush service",
   "main": "CodePush.js",
   "typings": "typings/react-native-code-push.d.ts",
-  "homepage": "https://microsoft.github.io/code-push",
-  "keywords": [
-    "react-native",
-    "code",
-    "push"
-  ],
-  "author": "Microsoft Corporation",
+  "author": "Louis Lagrange <lagrange.louis@gmail.com> (https://github.com/Minishlink)",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Microsoft/react-native-code-push"
-  },
   "dependencies": {
     "code-push": "^3.0.1",
     "glob": "^5.0.15",
