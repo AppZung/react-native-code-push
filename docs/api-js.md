@@ -18,8 +18,6 @@ When you require `react-native-code-push`, the module object provides the follow
 
 * [disallowRestart](#codepushdisallowrestart): Temporarily disallows any programmatic restarts to occur as a result of a CodePush update being installed. This is an advanced API, and is useful when a component within your app (for example an onboarding process) needs to ensure that no end-user interruptions can occur during its lifetime.
 
-* [getCurrentPackage](#codepushgetcurrentpackage): Retrieves the metadata about the currently installed update (like description, installation time, size). *NOTE: As of `v1.10.3-beta` of the CodePush module, this method is deprecated in favor of [`getUpdateMetadata`](#codepushgetupdatemetadata)*.
-
 * [getUpdateMetadata](#codepushgetupdatemetadata): Retrieves the metadata for an installed update (like description, mandatory).
 
 * [notifyAppReady](#codepushnotifyappready): Notifies the CodePush runtime that an installed update is considered successful. If you are manually checking for and installing updates (i.e. not using the [sync](#codepushsync) method to handle it all for you), then this method **MUST** be called; otherwise CodePush will treat the update as failed and rollback to the previous version when the app next restarts.
@@ -120,7 +118,7 @@ The `codePush` decorator accepts an "options" object that allows you to customiz
 
 * __checkFrequency__ *(codePush.CheckFrequency)* - Specifies when you would like to check for updates. Defaults to `codePush.CheckFrequency.ON_APP_START`. Refer to the [`CheckFrequency`](#checkfrequency) enum reference for a description of the available options and what they do.
 
-* __deploymentKey__ *(String)* - Specifies the deployment key you want to query for an update against. By default, this value is derived from the `Info.plist` file (iOS) and `MainActivity.java` file (Android), but this option allows you to override it from the script-side if you need to dynamically use a different deployment.
+* __deploymentKey__ *(String)* - Specifies the release channel public ID you want to query for an update against. By default, this value is derived from the `Info.plist` file (iOS) and strings resources (Android), but this option allows you to override it from the script-side if you need to dynamically use a different deployment.
 
 * __installMode__ *(codePush.InstallMode)* - Specifies when you would like to install optional updates (i.e. those that aren't marked as mandatory). Defaults to `codePush.InstallMode.ON_NEXT_RESTART`. Refer to the [`InstallMode`](#installmode) enum reference for a description of the available options and what they do.
 
@@ -275,39 +273,6 @@ class OnboardingProcess extends Component {
 }
 ```
 
-#### codePush.getCurrentPackage
-
-*NOTE: This method is considered deprecated as of `v1.10.3-beta` of the CodePush module. If you're running this version (or newer), we would recommend using the [`codePush.getUpdateMetadata`](#codepushgetupdatemetadata) instead, since it has more predictable behavior.*
-
-```javascript
-codePush.getCurrentPackage(): Promise<LocalPackage>;
-```
-
-Retrieves the metadata about the currently installed "package" (like description, installation time). This can be useful for scenarios such as displaying a "what's new?" dialog after an update has been applied or checking whether there is a pending update that is waiting to be applied via a resume or restart.
-
-This method returns a `Promise` which resolves to one of two possible values:
-
-1. `null` if the app is currently running the JS bundle from the binary and not a CodePush update. This occurs in the following scenarios:
-
-    1. The end-user installed the app binary and has yet to install a CodePush update
-    1. The end-user installed an update of the binary (for example from the store), which cleared away the old CodePush updates, and gave precedence back to the JS binary in the binary.
-
-2. A [`LocalPackage`](#localpackage) instance which represents the metadata for the currently running CodePush update.
-
-Example Usage:
-
-```javascript
-codePush.getCurrentPackage()
-.then((update) => {
-    // If the current app "session" represents the first time
-    // this update has run, and it had a description provided
-    // with it upon release, let's show it to the end user
-    if (update.isFirstRun && update.description) {
-        // Display a "what's new?" modal
-    }
-});
-```
-
 #### codePush.getUpdateMetadata
 
 ```javascript
@@ -359,8 +324,6 @@ codePush.notifyAppReady(): Promise<void>;
 Notifies the CodePush runtime that a freshly installed update should be considered successful, and therefore, an automatic client-side rollback isn't necessary. It is mandatory to call this function somewhere in the code of the updated bundle. Otherwise, when the app next restarts, the CodePush runtime will assume that the installed update has failed and roll back to the previous version. This behavior exists to help ensure that your end users aren't blocked by a broken update.
 
 If you are using the `sync` function, and doing your update check on app start, then you don't need to manually call `notifyAppReady` since `sync` will call it for you. This behavior exists due to the assumption that the point at which `sync` is called in your app represents a good approximation of a successful startup.
-
-*NOTE: This method is also aliased as `notifyApplicationReady` (for backwards compatibility).*
 
 #### codePush.restartApp
 
