@@ -35,8 +35,8 @@ static NSString * const PublicKeyKey = @"publicKey";
     NSString *buildVersion = [infoDictionary objectForKey:(NSString *)kCFBundleVersionKey];
     NSString *deploymentKey = [infoDictionary objectForKey:@"CodePushDeploymentKey"];
     NSString *serverURL = [infoDictionary objectForKey:@"CodePushServerURL"];
-    NSString *publicKey = [infoDictionary objectForKey:@"CodePushPublicKey"];
-    
+    NSString *publicKey = [infoDictionary objectForKey:@"CodePushSigningPublicKey"];
+
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *clientUniqueId = [userDefaults stringForKey:ClientUniqueIDConfigKey];
     if (clientUniqueId == nil) {
@@ -56,7 +56,10 @@ static NSString * const PublicKeyKey = @"publicKey";
     if (serverURL) [_configDictionary setObject:serverURL forKey:ServerURLConfigKey];
     if (clientUniqueId) [_configDictionary setObject:clientUniqueId forKey:ClientUniqueIDConfigKey];
     if (deploymentKey) [_configDictionary setObject:deploymentKey forKey:DeploymentKeyConfigKey];
-    if (publicKey) [_configDictionary setObject:publicKey forKey:PublicKeyKey];
+    if (publicKey) {
+        CPLog(@"Executing CodePush with a signing public key.");
+        [_configDictionary setObject:publicKey forKey:PublicKeyKey];
+    }
 
     return self;
 }
@@ -111,6 +114,6 @@ static NSString * const PublicKeyKey = @"publicKey";
     [_configDictionary setValue:serverURL forKey:ServerURLConfigKey];
 }
 
-//no setter for PublicKey, because it's need to be hard coded within Info.plist for safety
+//no setter for SigningPublicKey, because it's need to be hard coded within Info.plist for safety
 
 @end

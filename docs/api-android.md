@@ -8,9 +8,9 @@ You can customize CodePush by placing these values in string resources.
     ```
 
 * __Public Key__ - used for bundle verification in the Code Signing Feature. Please refer to [Code Signing](setup-android.md#code-signing-setup) section for more details about the Code Signing Feature.
-  To set the public key, you should add the content of the public key to `strings.xml` with name `CodePushPublicKey`. CodePush automatically gets this property and enables the Code Signing feature. For example:
+  To set the public key, you should add the content of the public key to `strings.xml` with name `CodePushSigningPublicKey`. CodePush automatically gets this property and enables the Code Signing feature. For example:
   ```xml
-  <string moduleConfig="true" name="CodePushPublicKey">your-public-key</string>
+  <string moduleConfig="true" name="CodePushSigningPublicKey">your-public-key</string>
   ```
 
 * __Server Url__ - used for specifying CodePush Server Url (as an Enterprise customer we may setup a custom infra for your needs).

@@ -55,14 +55,14 @@
 
 You can self sign bundles during release and verify its signature before installation of update.
 
-In order to configure Public Key for bundle verification you need to add record in `Info.plist` with name `CodePushPublicKey` and string value of public key content. Example:
+In order to configure Public Key for bundle verification you need to add record in `Info.plist` with name `CodePushSigningPublicKey` and string value of public key content. Example:
 
 ```xml
 <plist version="1.0">
   <dict>
     <!-- ...other configs... -->
 
-    <key>CodePushPublicKey</key>
+    <key>CodePushSigningPublicKey</key>
         <string>-----BEGIN PUBLIC KEY-----
 MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBANkWYydPuyOumR/sn2agNBVDnzyRpM16NAUpYPGxNgjSEp0etkDNgzzdzyvyl+OsAGBYF3jCxYOXozum+uV5hQECAwEAAQ==
 -----END PUBLIC KEY-----</string>

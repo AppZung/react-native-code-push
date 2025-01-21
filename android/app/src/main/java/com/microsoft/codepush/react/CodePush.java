@@ -78,8 +78,11 @@ public class CodePush implements ReactPackage {
 
         mCurrentInstance = this;
 
-        String publicKeyFromStrings = getCustomPropertyFromStringsIfExist("PublicKey");
-        if (publicKeyFromStrings != null) mPublicKey = publicKeyFromStrings;
+        String publicKeyFromStrings = getCustomPropertyFromStringsIfExist("SigningPublicKey");
+        if (publicKeyFromStrings != null) {
+            CodePushUtils.log("Executing CodePush with a signing public key.");
+            mPublicKey = publicKeyFromStrings;
+        }
 
         String serverUrlFromStrings = getCustomPropertyFromStringsIfExist("ServerUrl");
         if (serverUrlFromStrings != null) mServerUrl = serverUrlFromStrings;
@@ -124,6 +127,9 @@ public class CodePush implements ReactPackage {
         if (publicKey.isEmpty()) {
             throw new CodePushInvalidPublicKeyException("Specified public key is empty");
         }
+
+        CodePushUtils.log("Executing CodePush with a signing public key.");
+
         return publicKey;
     }
 

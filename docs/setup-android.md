@@ -90,12 +90,12 @@
 
 You can self sign bundles during release and verify its signature before installation of update. In order to use Public Key for Code Signing you need to do following steps:
 
-Add the `CodePushPublicKey` string resource in `/android/app/src/main/res/values/strings.xml`. It may looks like this:
+Add the `CodePushSigningPublicKey` string resource in `/android/app/src/main/res/values/strings.xml`. It may looks like this:
 
  ```xml
  <resources>
     <string name="app_name">my_app</string>
-    <string name="CodePushPublicKey">-----BEGIN PUBLIC KEY-----
+    <string name="CodePushSigningPublicKey">-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtPSR9lkGzZ4FR0lxF+ZA
 P6jJ8+Xi5L601BPN4QESoRVSrJM08roOCVrs4qoYqYJy3Of2cQWvNBEh8ti3FhHu
 tiuLFpNdfzM4DjAw0Ti5hOTfTixqVBXTJPYpSjDh7K6tUvp9MV0l5q/Ps3se1vud

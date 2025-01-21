@@ -98,12 +98,14 @@ If you are less in a hurry, you can migrate to `@appzung/react-native-code-push`
 #### Change your iOS setup
 
 1. Run `bundle exec pod install`
+2. (optional) If you already use code signing, rename `CodePushPublicKey` to `CodePushSigningPublicKey` in your `Info.plist`
 
 #### Change your Android setup
 
 1. In `android/settings.gradle` change the lines about CodePush : `include ':appzung_react-native-code-push'` and `project(':appzung_react-native-code-push').projectDir = new File(rootProject.projectDir, '../node_modules/@appzung/react-native-code-push/android/app')`
 2. In `android/app/build.gradle` change the line about CodePush: `apply from: "../../node_modules/@appzung/react-native-code-push/android/codepush.gradle"`
 3. In your Android files (eg. `MainApplication.kt`), rename every `com.microsoft.codepush` prefix imports with `com.appzung.codepush`
+4. (optional) If you already use code signing, rename `CodePushPublicKey` to `CodePushSigningPublicKey` in your strings resources
 
 ### Migrating to AppZung CLI
 
