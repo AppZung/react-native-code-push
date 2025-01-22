@@ -213,7 +213,7 @@ The `appzung releases deploy-react-native` command enables such a simple workflo
 # Release a mandatory update with a changelog from the last git commit (useful for staging releases)
 appzung releases deploy-react-native -m --description-from-current-git-commit
 
-# Force using hermes since auto-detection is not always possible. In a future version of the CLI use hermes will be enabled by default and there will be a --no-hermes flag instead. 
+# Force using hermes since auto-detection is not always possible. There is the equivalent --use-jsc to force using JSC engine.
 appzung releases deploy-react-native --use-hermes
 
 # Auto detecting the release version might not be a good strategy in a production app with multiple environments so you can specify the version
