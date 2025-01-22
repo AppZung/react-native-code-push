@@ -51,7 +51,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>CodePushDeploymentKey</key>
-	<string>deployment-key-here</string>
+	<key>CodePushReleaseChannelPublicId</key>
+	<string>release-channel-public-id-here</string>
 </dict>
 </plist>

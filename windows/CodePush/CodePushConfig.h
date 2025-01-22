@@ -29,8 +29,8 @@ namespace winrt::Microsoft::CodePush::ReactNative::implementation
 
         Windows::Data::Json::JsonObject GetConfiguration();
 
-        hstring GetDeploymentKey() { return QueryConfig(DeploymentKeyConfigKey); }
-        void SetDeploymentKey(std::wstring_view deploymentKey) { m_configuration.Insert(DeploymentKeyConfigKey, deploymentKey); }
+        hstring GetReleaseChannelPublicId() { return QueryConfig(ReleaseChannelPublicIdConfigKey); }
+        void SetReleaseChannelPublicId(std::wstring_view releaseChannelPublicId) { m_configuration.Insert(ReleaseChannelPublicIdConfigKey, releaseChannelPublicId); }
 
         hstring GetServerUrl() { return QueryConfig(ServerURLConfigKey); }
         void SetServerUrl(std::wstring_view serverUrl) { m_configuration.Insert(ServerURLConfigKey, serverUrl); }
@@ -42,7 +42,7 @@ namespace winrt::Microsoft::CodePush::ReactNative::implementation
         static constexpr std::wstring_view AppVersionConfigKey{ L"appVersion" };
         static constexpr std::wstring_view BuildVersionConfigKey{ L"buildVersion" };
         static constexpr std::wstring_view ClientUniqueIDConfigKey{ L"clientUniqueId" };
-        static constexpr std::wstring_view DeploymentKeyConfigKey{ L"deploymentKey" };
+        static constexpr std::wstring_view ReleaseChannelPublicIdConfigKey{ L"releaseChannelPublicId" };
         static constexpr std::wstring_view ServerURLConfigKey{ L"serverUrl" };
         static constexpr std::wstring_view PublicKeyKey{ L"publicKey" };
 

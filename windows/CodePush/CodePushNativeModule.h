@@ -47,7 +47,7 @@ namespace Microsoft::CodePush::ReactNative
 		static winrt::Windows::Storage::ApplicationDataContainer GetLocalSettings();
 
 		void OverrideAppVersion(std::wstring_view appVersion);
-		void SetDeploymentKey(std::wstring_view deploymentKey);
+		void SetReleaseChannelPublicId(std::wstring_view releaseChannelPublicId);
 
 		bool IsFailedHash(std::wstring_view packageHash);
 
@@ -79,7 +79,7 @@ namespace Microsoft::CodePush::ReactNative
 		 * This is the native side of the CodePush.getConfiguration method. It isn't
 		 * currently exposed via the "react-native-code-push" module, and is used
 		 * internally only by the CodePush.checkForUpdate method in order to get the
-		 * app version, as well as the deployment key that was configured in the Info.plist file.
+		 * app version, as well as the release channel that was configured.
 		 */
 		REACT_METHOD(GetConfiguration, L"getConfiguration");
 		winrt::fire_and_forget GetConfiguration(winrt::Microsoft::ReactNative::ReactPromise<winrt::Windows::Data::Json::IJsonValue> promise) noexcept;
@@ -151,8 +151,8 @@ namespace Microsoft::CodePush::ReactNative
 
 		/*
 		 * This method clears CodePush's downloaded updates.
-		 * It is needed to switch to a different deployment if the current deployment is more recent.
-		 * Note: we don’t recommend to use this method in scenarios other than that (CodePush will call this method
+		 * It is needed to switch to a different release channel if the current release channel is more recent.
+		 * Note: we donï¿½t recommend to use this method in scenarios other than that (CodePush will call this method
 		 * automatically when needed in other cases) as it could lead to unpredictable behavior.
 		 */
 		REACT_METHOD(ClearUpdates, L"clearUpdates");

@@ -8,25 +8,25 @@ import hoistStatics from 'hoist-non-react-statics';
 let NativeCodePush = require("react-native").NativeModules.CodePush;
 const PackageMixins = require("./package-mixins")(NativeCodePush);
 
-async function checkForUpdate(deploymentKey = null, handleBinaryVersionMismatchCallback = null) {
+async function checkForUpdate(releaseChannelPublicId = null, handleBinaryVersionMismatchCallback = null) {
   /*
    * Before we ask the server if an update exists, we
    * need to retrieve three pieces of information from the
-   * native side: deployment key, app version (e.g. 1.0.1)
+   * native side: release channel, app version (e.g. 1.0.1)
    * and the hash of the currently running update (if there is one).
    * This allows the client to only receive updates which are targetted
-   * for their specific deployment and version and which are actually
+   * for their specific release channel and version and which are actually
    * different from the CodePush update they have already installed.
    */
   const nativeConfig = await getConfiguration();
   /*
-   * If a deployment key was explicitly provided,
+   * If a release channel was explicitly provided,
    * then let's override the one we retrieved
    * from the native-side of the app. This allows
    * dynamically "redirecting" end-users at different
-   * deployments (e.g. an early access deployment for insiders).
+   * release channels (e.g. an early access release channel for insiders).
    */
-  const config = deploymentKey ? { ...nativeConfig, ...{ deploymentKey } } : nativeConfig;
+  const config = releaseChannelPublicId ? { ...nativeConfig, ...{ releaseChannelPublicId } } : nativeConfig;
   const sdk = getPromisifiedSdk(requestFetchAdapter, config);
 
   // Use dynamically overridden getCurrentPackage() during tests.
@@ -84,7 +84,7 @@ async function checkForUpdate(deploymentKey = null, handleBinaryVersionMismatchC
   } else {
     const remotePackage = { ...update, ...PackageMixins.remote(sdk.reportStatusDownload) };
     remotePackage.failedInstall = await NativeCodePush.isFailedUpdate(remotePackage.packageHash);
-    remotePackage.deploymentKey = deploymentKey || nativeConfig.deploymentKey;
+    remotePackage.releaseChannelPublicId = releaseChannelPublicId || nativeConfig.releaseChannelPublicId;
     return remotePackage;
   }
 }
@@ -118,6 +118,9 @@ async function getUpdateMetadata(updateState) {
 }
 
 function getPromisifiedSdk(requestFetchAdapter, config) {
+  // TODO MIGRATION Temporary retro-compat while we still use code-push module
+  config.deploymentKey = config.releaseChannelPublicId;
+
   // Use dynamically overridden AcquisitionSdk during tests.
   const sdk = new module.exports.AcquisitionSdk(requestFetchAdapter, config);
   sdk.queryUpdateWithCurrentPackage = (queryPackage) => {
@@ -132,9 +135,9 @@ function getPromisifiedSdk(requestFetchAdapter, config) {
     });
   };
 
-  sdk.reportStatusDeploy = (deployedPackage, status, previousLabelOrAppVersion, previousDeploymentKey) => {
+  sdk.reportStatusDeploy = (deployedPackage, status, previousLabelOrAppVersion, previousReleaseChannelPublicId) => {
     return new Promise((resolve, reject) => {
-      module.exports.AcquisitionSdk.prototype.reportStatusDeploy.call(sdk, deployedPackage, status, previousLabelOrAppVersion, previousDeploymentKey, (err) => {
+      module.exports.AcquisitionSdk.prototype.reportStatusDeploy.call(sdk, deployedPackage, status, previousLabelOrAppVersion, previousReleaseChannelPublicId, (err) => {
         if (err) {
           reject(err);
         } else {
@@ -183,17 +186,17 @@ async function notifyApplicationReadyInternal() {
 async function tryReportStatus(statusReport, retryOnAppResume) {
   const config = await getConfiguration();
   const previousLabelOrAppVersion = statusReport.previousLabelOrAppVersion;
-  const previousDeploymentKey = statusReport.previousDeploymentKey || config.deploymentKey;
+  const previousReleaseChannelPublicId = statusReport.previousReleaseChannelPublicId || config.releaseChannelPublicId;
   try {
     if (statusReport.appVersion) {
       log(`Reporting binary update (${statusReport.appVersion})`);
 
-      if (!config.deploymentKey) {
-        throw new Error("Deployment key is missed");
+      if (!config.releaseChannelPublicId) {
+        throw new Error("Release channel is missing");
       }
 
       const sdk = getPromisifiedSdk(requestFetchAdapter, config);
-      await sdk.reportStatusDeploy(/* deployedPackage */ null, /* status */ null, previousLabelOrAppVersion, previousDeploymentKey);
+      await sdk.reportStatusDeploy(/* deployedPackage */ null, /* status */ null, previousLabelOrAppVersion, previousReleaseChannelPublicId);
     } else {
       const label = statusReport.package.label;
       if (statusReport.status === "DeploymentSucceeded") {
@@ -203,9 +206,9 @@ async function tryReportStatus(statusReport, retryOnAppResume) {
         await NativeCodePush.setLatestRollbackInfo(statusReport.package.packageHash);
       }
 
-      config.deploymentKey = statusReport.package.deploymentKey;
+      config.releaseChannelPublicId = statusReport.package.releaseChannelPublicId;
       const sdk = getPromisifiedSdk(requestFetchAdapter, config);
-      await sdk.reportStatusDeploy(statusReport.package, statusReport.status, previousLabelOrAppVersion, previousDeploymentKey);
+      await sdk.reportStatusDeploy(statusReport.package, statusReport.status, previousLabelOrAppVersion, previousReleaseChannelPublicId);
     }
 
     NativeCodePush.recordStatusReported(statusReport);
@@ -363,7 +366,7 @@ const sync = (() => {
 async function syncInternal(options = {}, syncStatusChangeCallback, downloadProgressCallback, handleBinaryVersionMismatchCallback) {
   let resolvedInstallMode;
   const syncOptions = {
-    deploymentKey: null,
+    releaseChannelPublicId: null,
     ignoreFailedUpdates: true,
     rollbackRetryOptions: null,
     installMode: CodePush.InstallMode.ON_NEXT_RESTART,
@@ -416,7 +419,7 @@ async function syncInternal(options = {}, syncStatusChangeCallback, downloadProg
     await CodePush.notifyApplicationReady();
 
     syncStatusChangeCallback(CodePush.SyncStatus.CHECKING_FOR_UPDATE);
-    const remotePackage = await checkForUpdate(syncOptions.deploymentKey, handleBinaryVersionMismatchCallback);
+    const remotePackage = await checkForUpdate(syncOptions.releaseChannelPublicId, handleBinaryVersionMismatchCallback);
 
     const doDownloadAndInstall = async () => {
       syncStatusChangeCallback(CodePush.SyncStatus.DOWNLOADING_PACKAGE);
@@ -479,8 +482,8 @@ async function syncInternal(options = {}, syncStatusChangeCallback, downloadProg
             }
           });
         }
-        
-        // Since the install button should be placed to the 
+
+        // Since the install button should be placed to the
         // right of any other button, add it last
         dialogButtons.push({
           text: installButtonText,

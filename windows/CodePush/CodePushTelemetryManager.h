@@ -19,7 +19,7 @@ namespace Microsoft::CodePush::ReactNative
 
 	private:
 		static void ClearRetryStatusReport();
-		static std::wstring_view GetDeploymentKeyFromStatusReportIdentifier(std::wstring_view statusReportIdentifier);
+		static std::wstring_view GetReleaseChannelPublicIdFromStatusReportIdentifier(std::wstring_view statusReportIdentifier);
 		static winrt::hstring GetPackageStatusReportIdentifier(const winrt::Windows::Data::Json::JsonObject& package);
 		static winrt::hstring GetPreviousStatusReportIdentifier();
 		static std::wstring_view GetVersionLabelFromStatusReportIdentifier(std::wstring_view statusReportIdentifier);

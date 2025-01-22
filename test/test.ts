@@ -100,11 +100,11 @@ class RNAndroid extends Platform.Android implements RNPlatform {
         // Set the app version to 1.0.0 in AndroidManifest.xml
         TestUtil.replaceString(path.join(innerprojectDirectory, "android", "app", "src", "main", "AndroidManifest.xml"), "android:versionName=\"1.0\"", "android:versionName=\"1.0.0\"");
 
-        //// Replace the MainApplication.java with the correct server url and deployment key
+        //// Replace the MainApplication.java with the correct server url and release channel public ID
         const string = path.join(innerprojectDirectory, "android", "app", "src", "main", "res", "values", "strings.xml");
         const AndroidManifest = path.join(innerprojectDirectory, "android", "app", "src", "main", "AndroidManifest.xml");
         TestUtil.replaceString(string, TestUtil.SERVER_URL_PLACEHOLDER, this.getServerUrl());
-        TestUtil.replaceString(string, TestUtil.ANDROID_KEY_PLACEHOLDER, this.getDefaultDeploymentKey());
+        TestUtil.replaceString(string, TestUtil.ANDROID_RELEASE_CHANNEL_PUBLIC_ID_PLACEHOLDER, this.getDefaultReleaseChannelPublicId());
         TestUtil.replaceString(AndroidManifest, "android:allowBackup=\"false\"", "android:allowBackup=\"false\"" + "\n\t" + "android:usesCleartextTraffic=\"true\"");
 
 
@@ -119,8 +119,8 @@ class RNAndroid extends Platform.Android implements RNPlatform {
         return TestUtil.getProcessOutput("adb install -r " + this.getBinaryPath(projectDirectory), { cwd: androidDirectory }).then(() => { return null; });
     }
 
-    /** 
-     * Build function of the test application, the command depends on the OS 
+    /**
+     * Build function of the test application, the command depends on the OS
     */
     buildFunction(androidDirectory: string): Q.Promise<void> {
         const gradlewCommand = process.platform === "darwin" || process.platform === "linux" ? "./gradlew" : "gradlew";
@@ -181,10 +181,10 @@ class RNIOS extends Platform.IOS implements RNPlatform {
 
         // Install the Podfile
         return TestUtil.getProcessOutput("pod install", { cwd: iOSProject })
-            // Put the IOS deployment key in the Info.plist
+            // Put the IOS release channel public id in the Info.plist
             .then(TestUtil.replaceString.bind(undefined, infoPlistPath,
                 "</dict>\n</plist>",
-                "<key>CodePushDeploymentKey</key>\n\t<string>" + this.getDefaultDeploymentKey() + "</string>\n\t<key>CodePushServerURL</key>\n\t<string>" + this.getServerUrl() + "</string>\n\t</dict>\n</plist>"))
+                "<key>CodePushReleaseChannelPublicId</key>\n\t<string>" + this.getDefaultReleaseChannelPublicId() + "</string>\n\t<key>CodePushServerURL</key>\n\t<string>" + this.getServerUrl() + "</string>\n\t</dict>\n</plist>"))
             // Set the app version to 1.0.0 instead of 1.0 in the Info.plist
             .then(TestUtil.replaceString.bind(undefined, infoPlistPath, "1.0", "1.0.0"))
             // Remove dependence of CFBundleShortVersionString from project.pbxproj
@@ -211,7 +211,7 @@ class RNIOS extends Platform.IOS implements RNPlatform {
 
     /**
      * Maps project directories to whether or not they have built an IOS project before.
-     * 
+     *
      * The first build of an IOS project does not always succeed, so we always try again when it fails.
      *
      *  EXAMPLE:
@@ -299,7 +299,7 @@ class RNProjectManager extends ProjectManager {
 
     /**
      * Creates a new test application at the specified path, and configures it
-     * with the given server URL, android and ios deployment keys.
+     * with the given server URL, android and ios release channel public ids.
      */
     public setupProject(projectDirectory: string, templatePath: string, appName: string, appNamespace: string, version?: string): Q.Promise<void> {
         if (fs.existsSync(projectDirectory)) {
@@ -588,7 +588,7 @@ PluginTestingFramework.initializeTests(new RNProjectManager(), supportedTargetPl
                                 assert.strictEqual(remotePackage.label, updateResponse.label);
                                 assert.strictEqual(remotePackage.packageHash, updateResponse.package_hash);
                                 assert.strictEqual(remotePackage.packageSize, updateResponse.package_size);
-                                assert.strictEqual(remotePackage.deploymentKey, targetPlatform.getDefaultDeploymentKey());
+                                assert.strictEqual(remotePackage.releaseChannelPublicId, targetPlatform.getDefaultReleaseChannelPublicId());
                                 done();
                             } catch (e) {
                                 done(e);
@@ -598,7 +598,7 @@ PluginTestingFramework.initializeTests(new RNProjectManager(), supportedTargetPl
                         ServerUtil.updateCheckCallback = (request: any) => {
                             try {
                                 assert.notStrictEqual(null, request);
-                                assert.strictEqual(request.query.deployment_key, targetPlatform.getDefaultDeploymentKey());
+                                assert.strictEqual(request.query.deployment_key, targetPlatform.getDefaultReleaseChannelPublicId());
                             } catch (e) {
                                 done(e);
                             }
@@ -634,7 +634,7 @@ PluginTestingFramework.initializeTests(new RNProjectManager(), supportedTargetPl
                         ServerUtil.updateCheckCallback = (request: any) => {
                             try {
                                 assert.notStrictEqual(null, request);
-                                assert.strictEqual(request.query.deployment_key, "CUSTOM-DEPLOYMENT-KEY");
+                                assert.strictEqual(request.query.deployment_key, "CUSTOM-RELEASE-CHANNEL-PUBLIC-ID");
                                 done();
                             } catch (e) {
                                 done(e);

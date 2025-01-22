@@ -32,7 +32,7 @@
     long long _latestExpectedContentLength;
     long long _latestReceivedConentLength;
     BOOL _didUpdateProgress;
-    
+
     BOOL _allowed;
     BOOL _restartInProgress;
     NSMutableArray *_restartQueue;
@@ -215,9 +215,9 @@ static NSString *const LatestRollbackCountKey = @"count";
     [CodePushConfig current].appVersion = appVersion;
 }
 
-+ (void)setDeploymentKey:(NSString *)deploymentKey
++ (void)setReleaseChannelPublicId:(NSString *)releaseChannelPublicId
 {
-    [CodePushConfig current].deploymentKey = deploymentKey;
+    [CodePushConfig current].releaseChannelPublicId = releaseChannelPublicId;
 }
 
 /*
@@ -377,7 +377,7 @@ static NSString *const LatestRollbackCountKey = @"count";
     _allowed = YES;
     _restartInProgress = NO;
     _restartQueue = [NSMutableArray arrayWithCapacity:1];
-    
+
     self = [super init];
     if (self) {
         [self initializeUpdateAfterRestart];
@@ -583,7 +583,7 @@ static NSString *const LatestRollbackCountKey = @"count";
     if ([[self class] isFailedHash:[failedPackage objectForKey:PackageHashKey]]) {
         return;
     }
-    
+
     NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
     NSMutableArray *failedUpdates = [preferences objectForKey:FailedUpdatesKey];
     if (failedUpdates == nil) {
@@ -801,7 +801,7 @@ RCT_EXPORT_METHOD(downloadUpdate:(NSDictionary*)updatePackage
  * This is the native side of the CodePush.getConfiguration method. It isn't
  * currently exposed via the "react-native-code-push" module, and is used
  * internally only by the CodePush.checkForUpdate method in order to get the
- * app version, as well as the deployment key that was configured in the Info.plist file.
+ * app version, as well as the release channel public ID that was configured in the Info.plist file.
  */
 RCT_EXPORT_METHOD(getConfiguration:(RCTPromiseResolveBlock)resolve
                           rejecter:(RCTPromiseRejectBlock)reject)
@@ -914,7 +914,7 @@ RCT_EXPORT_METHOD(installUpdate:(NSDictionary*)updatePackage
                                                          selector:@selector(applicationDidBecomeActive)
                                                              name:UIApplicationDidBecomeActiveNotification
                                                            object:RCTSharedApplication()];
-                                                           
+
                 [[NSNotificationCenter defaultCenter] addObserver:self
                                                          selector:@selector(applicationWillEnterForeground)
                                                              name:UIApplicationWillEnterForegroundNotification
@@ -1033,7 +1033,7 @@ RCT_EXPORT_METHOD(restartApp:(BOOL)onlyIfUpdateIsPending
 
 /*
  * This method clears CodePush's downloaded updates.
- * It is needed to switch to a different deployment if the current deployment is more recent.
+ * It is needed to switch to a different release channel if the current release channel is more recent.
  * Note: we don’t recommend to use this method in scenarios other than that (CodePush will call this method
  * automatically when needed in other cases) as it could lead to unpredictable behavior.
  */

@@ -4,7 +4,7 @@ The Objective-C API is made available by importing the `CodePush.h` header into 
 
 ### CodePush
 
-Contains static methods for retreiving the `NSURL` that represents the most recent JavaScript bundle file, and can be passed to the `RCTRootView`'s `initWithBundleURL` method when bootstrapping your app in the `AppDelegate.m` file.
+Contains static methods for retrieving the `NSURL` that represents the most recent JavaScript bundle file, and can be passed to the `RCTRootView`'s `initWithBundleURL` method when bootstrapping your app in the `AppDelegate.m` file.
 
 #### Methods
 
@@ -16,4 +16,4 @@ Contains static methods for retreiving the `NSURL` that represents the most rece
 
 - __(void)overrideAppVersion:(NSString \*)appVersionOverride__ - Sets the version of the application's binary interface, which would otherwise default to the App Store version specified as the `CFBundleShortVersionString` in the `Info.plist`. This should be called a single time, before the bundle URL is loaded.
 
-- __(void)setDeploymentKey:(NSString \*)deploymentKey__ - Sets the deployment key that the app should use when querying for updates. This is a dynamic alternative to setting the deployment key in your `Info.plist` and/or specifying a deployment key in JS when calling `checkForUpdate` or `sync`.
+- __(void)setReleaseChannelPublicId:(NSString \*)releaseChannelPublicId__ - Sets the release channel public ID that the app should use when querying for updates. This is a dynamic alternative to setting the release channel in your `Info.plist` and/or specifying a release channel in JS when calling `checkForUpdate` or `sync`.

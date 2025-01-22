@@ -61,8 +61,8 @@ console.log(`App name: ${appName}`);
 console.log(`React Native version: ${reactNativeVersion}`);
 console.log(`React Native Module for CodePush version: ${reactNativeCodePushVersion} \n`);
 
-let androidStagingDeploymentKey = null;
-let iosStagingDeploymentKey = null;
+let androidStagingReleaseChannelPublicId = null;
+let iosStagingReleaseChannelPublicId = null;
 
 
 
@@ -73,16 +73,17 @@ createCodePushApp(appNameIOS, 'iOS');
 generatePlainReactNativeApp(appName, reactNativeVersion);
 process.chdir(appName);
 installCodePush(reactNativeCodePushVersion);
-linkCodePush(androidStagingDeploymentKey, iosStagingDeploymentKey);
+linkCodePush();
 //GENERATE END
 
 
 
 function createCodePushApp(name, os) {
     try {
+        // TODO MIGRATION
         console.log(`Creating CodePush app "${name}" to release updates for ${os}...`);
         try {
-            const appResult = execCommand(`appcenter apps create -d ${name} -n ${name} -o ${os} -p React-Native --output json`);
+            const appResult = execCommand(`appzung applications create -d ${name} -n ${name} -o ${os} -p React-Native --output json`);
             const app = JSON.parse(appResult);
             owner = app.owner.name;
             console.log(`App "${name}" has been created \n`);
@@ -90,28 +91,29 @@ function createCodePushApp(name, os) {
             console.error(`Error: Unable to create CodePush app. Please check that you haven't application with "${name}" name on portal.`,);
             console.error("Error: ", e.toString());
         }
-        execCommand(`appcenter codepush deployment add -a ${owner}/${name} Staging`);
+        execCommand(`appzung releases-channels create`); // TODO MIGRATION
     } catch (e) {
         console.error("Error", e.toString());
     }
 
     try {
-        const deploymentKeysResult = execCommand(`appcenter codepush deployment list -a ${owner}/${name} -k --output json`);
-        const deploymentKeys = JSON.parse(deploymentKeysResult);
-        const stagingDeploymentKey = deploymentKeys[0][1];
-        console.log(`Deployment key for ${os}: ${stagingDeploymentKey}`);
-        console.log(`Use "appcenter codepush release-react ${owner}/${name}" command to release updates for ${os} \n`);
+        // TODO MIGRATION
+        const releaseChannelPublicIdsResult = execCommand(`appzung release-channels list --output json`);
+        const releaseChannelPublicIds = JSON.parse(releaseChannelPublicIdsResult);
+        const stagingReleaseChannelPublicId = releaseChannelPublicIds[0][1];
+        console.log(`Release channel public ID for ${os}: ${stagingReleaseChannelPublicId}`);
+        console.log(`Use "appzung releases deploy-react-native" command to release updates for ${os} \n`);
 
         switch (os) {
             case 'Android':
-                androidStagingDeploymentKey = stagingDeploymentKey;
+                androidStagingReleaseChannelPublicId = stagingReleaseChannelPublicId;
                 break;
             case 'iOS':
-                iosStagingDeploymentKey = stagingDeploymentKey;
+                iosStagingReleaseChannelPublicId = stagingReleaseChannelPublicId;
                 break;
         }
     } catch (e) {
-        console.error("Error: Unable to load deployment keys");
+        console.error("Error: Unable to load release channels");
         console.error("Error: ", e.toString());
     }
 
@@ -129,33 +131,16 @@ function installCodePush(reactNativeCodePushVersion) {
     console.log(`React Native Module for CodePush has been installed \n`);
 }
 
-function linkCodePush(androidStagingDeploymentKey, iosStagingDeploymentKey) {
+function linkCodePush() {
     console.log(`Linking React Native Module for CodePush...`);
-    if (isReactNativeVersionLowerThan(60)) {
-        nexpect.spawn(`react-native link react-native-code-push`)
-            .wait("What is your CodePush deployment key for Android (hit <ENTER> to ignore)")
-            .sendline(androidStagingDeploymentKey)
-            .wait("What is your CodePush deployment key for iOS (hit <ENTER> to ignore)")
-            .sendline(iosStagingDeploymentKey)
-            .run(function (err) {
-                if (!err) {
-                    console.log(`React Native Module for CodePush has been linked \n`);
-                    setupAssets();
-                }
-                else {
-                    console.log(err);
-                }
-            });
+    androidSetup();
+    if (process.platform === 'darwin') {
+        iosSetup();
     } else {
-        androidSetup();
-        if (process.platform === 'darwin') {
-            iosSetup();
-        } else {
-            console.log('Your OS is not "Mac OS" so the iOS application will not be configured')
-        }
-        setupAssets();
-        console.log(`React Native Module for CodePush has been linked \n`);
+        console.log('Your OS is not "Mac OS" so the iOS application will not be configured')
     }
+    setupAssets();
+    console.log(`React Native Module for CodePush has been linked \n`);
 }
 
 function setupAssets() {
@@ -198,15 +183,6 @@ function setupAssets() {
 
 function optimizeToTestInDebugMode() {
     const rnXcodeShLocationFolder = 'scripts';
-    try {
-        const rnVersions = JSON.parse(execCommand(`npm view react-native versions --json`));
-        const currentRNversion = JSON.parse(fs.readFileSync('./package.json'))['dependencies']['react-native'];
-        if (rnVersions.indexOf(currentRNversion) > -1 &&
-            rnVersions.indexOf(currentRNversion) < rnVersions.indexOf("0.46.0-rc.0")) {
-            rnXcodeShLocationFolder = 'packager';
-        }
-    } catch (e) { }
-
     const rnXcodeShPath = `node_modules/react-native/${rnXcodeShLocationFolder}/react-native-xcode.sh`;
     // Replace "if [[ "$PLATFORM_NAME" == *simulator ]]; then" with "if false; then" to force bundling
     execCommand(`sed -ie 's/if \\[\\[ "\$PLATFORM_NAME" == \\*simulator \\]\\]; then/if false; then/' ${rnXcodeShPath}`);
@@ -253,8 +229,8 @@ function androidSetup() {
 
     let stringsResourcesContent = fs.readFileSync(stringsResourcesPath, "utf8");
     const insertAfterString = "<resources>";
-    const deploymentKeyString = `\t<string moduleConfig="true" name="CodePushDeploymentKey">${androidStagingDeploymentKey || "deployment-key-here"}</string>`;
-    stringsResourcesContent = stringsResourcesContent.replace(insertAfterString, `${insertAfterString}\n${deploymentKeyString}`);
+    const releaseChannelPublicIdString = `\t<string moduleConfig="true" name="CodePushReleaseChannelPublicId">${androidStagingReleaseChannelPublicId || "release-channel-public-id-here"}</string>`;
+    stringsResourcesContent = stringsResourcesContent.replace(insertAfterString, `${insertAfterString}\n${releaseChannelPublicIdString}`);
     fs.writeFileSync(stringsResourcesPath, stringsResourcesContent);
 
     let buildGradleContents = fs.readFileSync(buildGradlePath, "utf8");
@@ -327,9 +303,9 @@ function iosSetup() {
 
     const dictPlistTag = `</dict>\n</plist>`;
 
-    const codePushDeploymentKey = iosStagingDeploymentKey || 'deployment-key-here';
+    const codePushReleaseChannelPublicId = iosStagingReleaseChannelPublicId || 'release-channel-public-id-here';
     plistContents = plistContents.replace(dictPlistTag,
-        `\t<key>CodePushDeploymentKey</key>\n\t<string>${codePushDeploymentKey}</string>${dictPlistTag}`);
+        `\t<key>CodePushReleaseChannelPublicId</key>\n\t<string>${codePushReleaseChannelPublicId}</string>${dictPlistTag}`);
     fs.writeFileSync(plistPath, plistContents);
 
     let appDelegateContents = fs.readFileSync(appDelegatePath, "utf8");

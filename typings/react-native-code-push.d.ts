@@ -40,9 +40,9 @@ export interface Package {
     appVersion: string;
 
     /**
-     * The deployment key that was used to originally download this update.
+     * The release channel public ID that was used to originally download this update.
      */
-    deploymentKey: string;
+    releaseChannelPublicId: string;
 
     /**
      * The description of the update. This is the same value that you specified in the CLI when you released the update.
@@ -71,7 +71,7 @@ export interface Package {
     isPending: boolean;
 
     /**
-     * The internal label automatically given to the update by the CodePush server. This value uniquely identifies the update within its deployment.
+     * The internal label automatically given to the update by the CodePush server. This value uniquely identifies the update within its release channel.
      */
     label: string;
 
@@ -102,11 +102,11 @@ export interface RemotePackage extends Package {
 
 export interface SyncOptions {
     /**
-     * Specifies the deployment key you want to query for an update against. By default, this value is derived from the Info.plist
-     * file (iOS) and MainActivity.java file (Android), but this option allows you to override it from the script-side if you need to
-     * dynamically use a different deployment for a specific call to sync.
+     * Specifies the release channel you want to query for an update against. By default, this value is derived from the Info.plist
+     * file (iOS) and strings resources (Android), but this option allows you to override it from the script-side if you need to
+     * dynamically use a different release channel for a specific call to sync.
      */
-    deploymentKey?: string;
+    releaseChannelPublicId?: string;
 
     /**
      * Specifies when you would like to install optional updates (i.e. those that aren't marked as mandatory).
@@ -122,8 +122,8 @@ export interface SyncOptions {
 
     /**
      * Specifies the minimum number of seconds that the app needs to have been in the background before restarting the app. This property
-     * only applies to updates which are installed using `InstallMode.ON_NEXT_RESUME` or `InstallMode.ON_NEXT_SUSPEND`, and can be useful 
-     * for getting your update in front of end users sooner, without being too obtrusive. Defaults to `0`, which has the effect of applying 
+     * only applies to updates which are installed using `InstallMode.ON_NEXT_RESUME` or `InstallMode.ON_NEXT_SUSPEND`, and can be useful
+     * for getting your update in front of end users sooner, without being too obtrusive. Defaults to `0`, which has the effect of applying
      * the update immediately after a resume or unless the app suspension is long enough to not matter, regardless how long it was in the background.
      */
     minimumBackgroundDuration?: number;
@@ -222,9 +222,9 @@ export interface StatusReport {
     package?: Package;
 
     /**
-     * Deployment key used when deploying the previous package.
+     * Release channel used when deploying the previous package.
      */
-    previousDeploymentKey?: string;
+    previousReleaseChannelPublicId?: string;
 
     /**
      * The label (v#) of the package that was upgraded from.
@@ -254,13 +254,13 @@ declare namespace CodePush {
     var DEFAULT_UPDATE_DIALOG: UpdateDialog;
 
     /**
-     * Asks the CodePush service whether the configured app deployment has an update available.
+     * Asks the CodePush service whether the configured app release channel has an update available.
      *
-     * @param deploymentKey The deployment key to use to query the CodePush server for an update.
-     * 
+     * @param releaseChannelPublicId The release channel public ID to use to query the CodePush server for an update.
+     *
      * @param handleBinaryVersionMismatchCallback An optional callback for handling target binary version mismatch
      */
-    function checkForUpdate(deploymentKey?: string, handleBinaryVersionMismatchCallback?: HandleBinaryVersionMismatchCallback): Promise<RemotePackage | null>;
+    function checkForUpdate(releaseChannelPublicId?: string, handleBinaryVersionMismatchCallback?: HandleBinaryVersionMismatchCallback): Promise<RemotePackage | null>;
 
     /**
      * Retrieves the metadata for an installed update (e.g. description, mandatory).
@@ -286,7 +286,7 @@ declare namespace CodePush {
 
     /**
      * Clear all downloaded CodePush updates.
-     * This is useful when switching to a different deployment which may have an older release than the current package.
+     * This is useful when switching to a different release channel which may have an older release than the current package.
      * Note: we don’t recommend to use this method in scenarios other than that (CodePush will call
      * this method automatically when needed in other cases) as it could lead to unpredictable behavior.
      */
@@ -326,7 +326,7 @@ declare namespace CodePush {
         /**
          * Indicates that you want to install the update, but don't want to restart the app until the next time
          * the end user resumes it from the background. This way, you don't disrupt their current session,
-         * but you can get the update in front of them sooner then having to wait for the next natural restart. 
+         * but you can get the update in front of them sooner then having to wait for the next natural restart.
          * This value is appropriate for silent installs that can be applied on resume in a non-invasive way.
          */
         ON_NEXT_RESUME,
@@ -347,30 +347,30 @@ declare namespace CodePush {
          * The app is up-to-date with the CodePush server.
          */
         UP_TO_DATE,
-            
+
         /**
          * An available update has been installed and will be run either immediately after the
          * syncStatusChangedCallback function returns or the next time the app resumes/restarts,
          * depending on the InstallMode specified in SyncOptions
          */
         UPDATE_INSTALLED,
-            
+
         /**
          * The app had an optional update which the end user chose to ignore.
          * (This is only applicable when the updateDialog is used)
          */
         UPDATE_IGNORED,
-            
+
         /**
          * The sync operation encountered an unknown error.
          */
         UNKNOWN_ERROR,
-        
+
         /**
          * There is an ongoing sync operation running which prevents the current call from being executed.
          */
         SYNC_IN_PROGRESS,
-            
+
         /**
          * The CodePush server is being queried for an update.
          */

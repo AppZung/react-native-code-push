@@ -14,12 +14,12 @@ public class CodePushTelemetryManager {
     private SharedPreferences mSettings;
     private final String APP_VERSION_KEY = "appVersion";
     private final String DEPLOYMENT_FAILED_STATUS = "DeploymentFailed";
-    private final String DEPLOYMENT_KEY_KEY = "deploymentKey";
+    private final String RELEASE_CHANNEL_PUBLIC_ID_KEY = "releaseChannelPublicId";
     private final String DEPLOYMENT_SUCCEEDED_STATUS = "DeploymentSucceeded";
     private final String LABEL_KEY = "label";
     private final String LAST_DEPLOYMENT_REPORT_KEY = "CODE_PUSH_LAST_DEPLOYMENT_REPORT";
     private final String PACKAGE_KEY = "package";
-    private final String PREVIOUS_DEPLOYMENT_KEY_KEY = "previousDeploymentKey";
+    private final String PREVIOUS_RELEASE_CHANNEL_PUBLIC_ID_KEY = "previousReleaseChannelPublicId";
     private final String PREVIOUS_LABEL_OR_APP_VERSION_KEY = "previousLabelOrAppVersion";
     private final String RETRY_DEPLOYMENT_REPORT_KEY = "CODE_PUSH_RETRY_DEPLOYMENT_REPORT";
     private final String STATUS_KEY = "status";
@@ -39,10 +39,10 @@ public class CodePushTelemetryManager {
             this.clearRetryStatusReport();
             reportMap = Arguments.createMap();
             if (this.isStatusReportIdentifierCodePushLabel(previousStatusReportIdentifier)) {
-                String previousDeploymentKey = this.getDeploymentKeyFromStatusReportIdentifier(previousStatusReportIdentifier);
+                String previousReleaseChannelPublicId = this.getReleaseChannelPublicIdFromStatusReportIdentifier(previousStatusReportIdentifier);
                 String previousLabel = this.getVersionLabelFromStatusReportIdentifier(previousStatusReportIdentifier);
                 reportMap.putString(APP_VERSION_KEY, appVersion);
-                reportMap.putString(PREVIOUS_DEPLOYMENT_KEY_KEY, previousDeploymentKey);
+                reportMap.putString(PREVIOUS_RELEASE_CHANNEL_PUBLIC_ID_KEY, previousReleaseChannelPublicId);
                 reportMap.putString(PREVIOUS_LABEL_OR_APP_VERSION_KEY, previousLabel);
             } else {
                 // Previous status report was with a binary app version.
@@ -90,11 +90,11 @@ public class CodePushTelemetryManager {
                 this.clearRetryStatusReport();
                 reportMap = Arguments.createMap();
                 if (this.isStatusReportIdentifierCodePushLabel(previousStatusReportIdentifier)) {
-                    String previousDeploymentKey = this.getDeploymentKeyFromStatusReportIdentifier(previousStatusReportIdentifier);
+                    String previousReleaseChannelPublicId = this.getReleaseChannelPublicIdFromStatusReportIdentifier(previousStatusReportIdentifier);
                     String previousLabel = this.getVersionLabelFromStatusReportIdentifier(previousStatusReportIdentifier);
                     reportMap.putMap(PACKAGE_KEY, currentPackage);
                     reportMap.putString(STATUS_KEY, DEPLOYMENT_SUCCEEDED_STATUS);
-                    reportMap.putString(PREVIOUS_DEPLOYMENT_KEY_KEY, previousDeploymentKey);
+                    reportMap.putString(PREVIOUS_RELEASE_CHANNEL_PUBLIC_ID_KEY, previousReleaseChannelPublicId);
                     reportMap.putString(PREVIOUS_LABEL_OR_APP_VERSION_KEY, previousLabel);
                 } else {
                     // Previous status report was with a binary app version.
@@ -131,7 +131,7 @@ public class CodePushTelemetryManager {
         mSettings.edit().remove(RETRY_DEPLOYMENT_REPORT_KEY).commit();
     }
 
-    private String getDeploymentKeyFromStatusReportIdentifier(String statusReportIdentifier) {
+    private String getReleaseChannelPublicIdFromStatusReportIdentifier(String statusReportIdentifier) {
         String[] parsedIdentifier = statusReportIdentifier.split(":");
         if (parsedIdentifier.length > 0) {
             return parsedIdentifier[0];
@@ -141,12 +141,12 @@ public class CodePushTelemetryManager {
     }
 
     private String getPackageStatusReportIdentifier(ReadableMap updatePackage) {
-        // Because deploymentKeys can be dynamically switched, we use a
-        // combination of the deploymentKey and label as the packageIdentifier.
-        String deploymentKey = CodePushUtils.tryGetString(updatePackage, DEPLOYMENT_KEY_KEY);
+        // Because release channels can be dynamically switched, we use a
+        // combination of the releaseChannelPublicId and label as the packageIdentifier.
+        String releaseChannelPublicId = CodePushUtils.tryGetString(updatePackage, RELEASE_CHANNEL_PUBLIC_ID_KEY);
         String label = CodePushUtils.tryGetString(updatePackage, LABEL_KEY);
-        if (deploymentKey != null && label != null) {
-            return deploymentKey + ":" + label;
+        if (releaseChannelPublicId != null && label != null) {
+            return releaseChannelPublicId + ":" + label;
         } else {
             return null;
         }

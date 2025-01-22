@@ -3,8 +3,8 @@ import CodePush from "react-native-code-push";
 // This module wraps CodePush API calls to add test message callbacks to every function for simpler test code.
 
 module.exports = {
-    checkForUpdate: function (testApp, onSuccess, onError, deploymentKey) {
-        return CodePush.checkForUpdate(deploymentKey)
+    checkForUpdate: function (testApp, onSuccess, onError, releaseChannelPublicId) {
+        return CodePush.checkForUpdate(releaseChannelPublicId)
             .then((remotePackage) => {
                 return testApp.checkUpdateSuccess(remotePackage).then(() => { return onSuccess && onSuccess(remotePackage); });
             }, (error) => {

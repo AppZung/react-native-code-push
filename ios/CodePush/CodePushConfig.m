@@ -10,7 +10,7 @@ static CodePushConfig *_currentConfig;
 static NSString * const AppVersionConfigKey = @"appVersion";
 static NSString * const BuildVersionConfigKey = @"buildVersion";
 static NSString * const ClientUniqueIDConfigKey = @"clientUniqueId";
-static NSString * const DeploymentKeyConfigKey = @"deploymentKey";
+static NSString * const ReleaseChannelPublicIDConfigKey = @"releaseChannelPublicId";
 static NSString * const ServerURLConfigKey = @"serverUrl";
 static NSString * const PublicKeyKey = @"publicKey";
 
@@ -33,7 +33,7 @@ static NSString * const PublicKeyKey = @"publicKey";
 
     NSString *appVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
     NSString *buildVersion = [infoDictionary objectForKey:(NSString *)kCFBundleVersionKey];
-    NSString *deploymentKey = [infoDictionary objectForKey:@"CodePushDeploymentKey"];
+    NSString *releaseChannelPublicId = [infoDictionary objectForKey:@"CodePushReleaseChannelPublicId"];
     NSString *serverURL = [infoDictionary objectForKey:@"CodePushServerURL"];
     NSString *publicKey = [infoDictionary objectForKey:@"CodePushSigningPublicKey"];
 
@@ -55,7 +55,7 @@ static NSString * const PublicKeyKey = @"publicKey";
     if (buildVersion) [_configDictionary setObject:buildVersion forKey:BuildVersionConfigKey];
     if (serverURL) [_configDictionary setObject:serverURL forKey:ServerURLConfigKey];
     if (clientUniqueId) [_configDictionary setObject:clientUniqueId forKey:ClientUniqueIDConfigKey];
-    if (deploymentKey) [_configDictionary setObject:deploymentKey forKey:DeploymentKeyConfigKey];
+    if (releaseChannelPublicId) [_configDictionary setObject:releaseChannelPublicId forKey:ReleaseChannelPublicIDConfigKey];
     if (publicKey) {
         CPLog(@"Executing CodePush with a signing public key.");
         [_configDictionary setObject:publicKey forKey:PublicKeyKey];
@@ -79,9 +79,9 @@ static NSString * const PublicKeyKey = @"publicKey";
     return _configDictionary;
 }
 
-- (NSString *)deploymentKey
+- (NSString *)releaseChannelPublicId
 {
-    return [_configDictionary objectForKey:DeploymentKeyConfigKey];
+    return [_configDictionary objectForKey:ReleaseChannelPublicIDConfigKey];
 }
 
 - (NSString *)serverURL
@@ -104,9 +104,9 @@ static NSString * const PublicKeyKey = @"publicKey";
     [_configDictionary setValue:appVersion forKey:AppVersionConfigKey];
 }
 
-- (void)setDeploymentKey:(NSString *)deploymentKey
+- (void)setReleaseChannelPublicId:(NSString *)releaseChannelPublicId
 {
-    [_configDictionary setValue:deploymentKey forKey:DeploymentKeyConfigKey];
+    [_configDictionary setValue:releaseChannelPublicId forKey:ReleaseChannelPublicIDConfigKey];
 }
 
 - (void)setServerURL:(NSString *)serverURL

@@ -127,22 +127,22 @@ namespace Microsoft::CodePush::ReactNative
         return ApplicationData::Current().LocalSettings();
     }
 
-    void CodePushNativeModule::OverrideAppVersion(std::wstring_view appVersion) 
+    void CodePushNativeModule::OverrideAppVersion(std::wstring_view appVersion)
     {
         CodePushConfig::Current().SetAppVersion(appVersion);
     }
 
-    void CodePushNativeModule::SetDeploymentKey(std::wstring_view deploymentKey) 
+    void CodePushNativeModule::SetReleaseChannelPublicId(std::wstring_view releaseChannelPublicId)
     {
-        CodePushConfig::Current().SetDeploymentKey(deploymentKey);
+        CodePushConfig::Current().SetReleaseChannelPublicId(releaseChannelPublicId);
     }
 
     /*
      * This method checks to see whether a specific package hash
      * has previously failed installation.
      */
-    bool CodePushNativeModule::IsFailedHash(std::wstring_view packageHash) 
-    { 
+    bool CodePushNativeModule::IsFailedHash(std::wstring_view packageHash)
+    {
         auto localSettings{ GetLocalSettings() };
         auto failedUpdatesData{ localSettings.Values().TryLookup(FailedUpdatesKey) };
         if (failedUpdatesData == nullptr)
@@ -186,7 +186,7 @@ namespace Microsoft::CodePush::ReactNative
      * This method is used to get the count of rollback for the package
      * using the latest rollback information.
      */
-    int CodePushNativeModule::GetRollbackCountForPackage(std::wstring_view packageHash, const JsonObject& latestRollbackInfo) 
+    int CodePushNativeModule::GetRollbackCountForPackage(std::wstring_view packageHash, const JsonObject& latestRollbackInfo)
     {
         auto oldPackageHash{ latestRollbackInfo.GetNamedString(LatestRollbackPackageHashKey, L"null") };
         if (packageHash == oldPackageHash)
@@ -194,7 +194,7 @@ namespace Microsoft::CodePush::ReactNative
             auto oldCount{ latestRollbackInfo.GetNamedNumber(LatestRollbackCountKey, 0) };
             return static_cast<int>(oldCount);
         }
-        return 0; 
+        return 0;
     }
 
     /*
@@ -203,7 +203,7 @@ namespace Microsoft::CodePush::ReactNative
      * been applied yet via an app restart.
      */
     /*static*/ bool CodePushNativeModule::IsPendingUpdate(std::wstring_view packageHash)
-    { 
+    {
         auto localSettings{ GetLocalSettings() };
         auto pendingUpdateData{ localSettings.Values().TryLookup(PendingUpdateKey) };
         if (pendingUpdateData != nullptr)
@@ -211,7 +211,7 @@ namespace Microsoft::CodePush::ReactNative
             auto pendingUpdateString{ unbox_value<hstring>(pendingUpdateData) };
             JsonObject pendingUpdate;
             auto success{ JsonObject::TryParse(pendingUpdateString, pendingUpdate) };
-        
+
             // If there is a pending update whose "state" isn't loading, then we consider it "pending".
             // Additionally, if a specific hash was provided, we ensure it matches that of the pending update.
             auto updateIsPending{ success &&
@@ -478,9 +478,9 @@ namespace Microsoft::CodePush::ReactNative
      * This is the native side of the CodePush.getConfiguration method. It isn't
      * currently exposed via the "react-native-code-push" module, and is used
      * internally only by the CodePush.checkForUpdate method in order to get the
-     * app version, as well as the deployment key that was configured in App.cpp.
+     * app version, as well as the release channel that was configured in App.cpp.
      */
-    fire_and_forget CodePushNativeModule::GetConfiguration(ReactPromise<IJsonValue> promise) noexcept 
+    fire_and_forget CodePushNativeModule::GetConfiguration(ReactPromise<IJsonValue> promise) noexcept
     {
         auto configuration{ CodePushConfig::Current().GetConfiguration() };
         if (isRunningBinaryVersion)
@@ -498,7 +498,7 @@ namespace Microsoft::CodePush::ReactNative
     /*
      * This method is the native side of the CodePush.getUpdateMetadata method.
      */
-    fire_and_forget CodePushNativeModule::GetUpdateMetadataAsync(CodePushUpdateState updateState, ReactPromise<IJsonValue> promise) noexcept 
+    fire_and_forget CodePushNativeModule::GetUpdateMetadataAsync(CodePushUpdateState updateState, ReactPromise<IJsonValue> promise) noexcept
     {
         auto package{ co_await CodePushPackage::GetCurrentPackageAsync() };
         if (package == nullptr)
@@ -539,14 +539,14 @@ namespace Microsoft::CodePush::ReactNative
             package.Insert(PackageIsPendingKey, JsonValue::CreateBooleanValue(currentUpdateIsPending));
             promise.Resolve(package);
         }
-        co_return; 
+        co_return;
     }
 
     /*
      * This method is the native side of the LocalPackage.install method.
      */
-    fire_and_forget CodePushNativeModule::InstallUpdateAsync(JsonObject updatePackage, CodePushInstallMode installMode, int minimumBackgroundDuration, ReactPromise<void> promise) noexcept 
-    { 
+    fire_and_forget CodePushNativeModule::InstallUpdateAsync(JsonObject updatePackage, CodePushInstallMode installMode, int minimumBackgroundDuration, ReactPromise<void> promise) noexcept
+    {
         try
         {
             co_await CodePushPackage::InstallPackageAsync(updatePackage, IsPendingUpdate(L""));
@@ -568,7 +568,7 @@ namespace Microsoft::CodePush::ReactNative
 
         // Signal to JS that the update has been applied.
         promise.Resolve();
-        co_return; 
+        co_return;
     }
 
     /*
@@ -659,7 +659,7 @@ namespace Microsoft::CodePush::ReactNative
      * This information will be used to decide whether the application
      * should ignore the update or not.
      */
-    void CodePushNativeModule::GetLatestRollbackInfo(ReactPromise<IJsonValue> promise) noexcept 
+    void CodePushNativeModule::GetLatestRollbackInfo(ReactPromise<IJsonValue> promise) noexcept
     {
         auto localSettings{ GetLocalSettings() };
         auto res{ localSettings.Values().TryLookup(LatestRollbackInfoKey) };
@@ -698,7 +698,7 @@ namespace Microsoft::CodePush::ReactNative
         promise.Resolve(JsonValue::CreateNullValue());
     }
 
-    void CodePushNativeModule::Allow(ReactPromise<JSValue> promise) noexcept 
+    void CodePushNativeModule::Allow(ReactPromise<JSValue> promise) noexcept
     {
         CodePushUtils::Log(L"Re-allowing restarts.");
         m_allowed = true;
@@ -714,7 +714,7 @@ namespace Microsoft::CodePush::ReactNative
         promise.Resolve(JSValue::Null);
     }
 
-    void CodePushNativeModule::ClearPendingRestart() noexcept 
+    void CodePushNativeModule::ClearPendingRestart() noexcept
     {
         m_restartQueue.clear();
     }
@@ -729,7 +729,7 @@ namespace Microsoft::CodePush::ReactNative
     /*
      * This method is the native side of the CodePush.restartApp() method.
      */
-    fire_and_forget CodePushNativeModule::RestartApp(bool onlyIfUpdateIsPending, ReactPromise<JSValue> promise) noexcept 
+    fire_and_forget CodePushNativeModule::RestartApp(bool onlyIfUpdateIsPending, ReactPromise<JSValue> promise) noexcept
     {
         co_await RestartAppInternal(onlyIfUpdateIsPending);
         promise.Resolve(JSValue::Null);
@@ -737,11 +737,11 @@ namespace Microsoft::CodePush::ReactNative
 
     /*
      * This method clears CodePush's downloaded updates.
-     * It is needed to switch to a different deployment if the current deployment is more recent.
-     * Note: we don’t recommend to use this method in scenarios other than that (CodePush will call this method
+     * It is needed to switch to a different release channel if the current release channel is more recent.
+     * Note: we donï¿½t recommend to use this method in scenarios other than that (CodePush will call this method
      * automatically when needed in other cases) as it could lead to unpredictable behavior.
      */
-    fire_and_forget CodePushNativeModule::ClearUpdates() noexcept 
+    fire_and_forget CodePushNativeModule::ClearUpdates() noexcept
     {
         co_await ClearUpdatesStaticAsync();
     }
@@ -752,7 +752,7 @@ namespace Microsoft::CodePush::ReactNative
      * removeBundleUrl. It is only to be used during tests and no-ops if the test
      * configuration flag is not set.
      */
-    fire_and_forget CodePushNativeModule::DownloadAndReplaceCurrentBundle(std::wstring remoteBundleUrl) noexcept 
+    fire_and_forget CodePushNativeModule::DownloadAndReplaceCurrentBundle(std::wstring remoteBundleUrl) noexcept
     {
         auto errorMessage{ L"Error: DownloadAndReplaceCurrentBundle is not currently implmented" };
         hresult_error error{ E_NOTIMPL, errorMessage };
@@ -764,7 +764,7 @@ namespace Microsoft::CodePush::ReactNative
      * This method is checks if a new status update exists (new version was installed,
      * or an update failed) and return its details (version label, status).
      */
-    fire_and_forget CodePushNativeModule::GetNewStatusReportAsync(ReactPromise<IJsonValue> promise) noexcept 
+    fire_and_forget CodePushNativeModule::GetNewStatusReportAsync(ReactPromise<IJsonValue> promise) noexcept
     {
         if (needToReportRollback)
         {
@@ -816,12 +816,12 @@ namespace Microsoft::CodePush::ReactNative
         co_return;
     }
 
-    void CodePushNativeModule::RecordStatusReported(JsonObject statusReport) noexcept 
+    void CodePushNativeModule::RecordStatusReported(JsonObject statusReport) noexcept
     {
         CodePushTelemetryManager::RecordStatusReported(statusReport);
     }
 
-    void CodePushNativeModule::SaveStatusReportForRetry(JsonObject statusReport) noexcept 
+    void CodePushNativeModule::SaveStatusReportForRetry(JsonObject statusReport) noexcept
     {
         CodePushTelemetryManager::SaveStatusReportForRetry(statusReport);
     }

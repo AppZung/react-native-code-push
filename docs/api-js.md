@@ -14,7 +14,7 @@ When you require `react-native-code-push`, the module object provides the follow
 
 * [allowRestart](#codepushallowrestart): Re-allows programmatic restarts to occur as a result of an update being installed, and optionally, immediately restarts the app if a pending update had attempted to restart the app while restarts were disallowed. This is an advanced API and is only necessary if your app explicitly disallowed restarts via the `disallowRestart` method.
 
-* [checkForUpdate](#codepushcheckforupdate): Asks the CodePush service whether the configured app deployment has an update available.
+* [checkForUpdate](#codepushcheckforupdate): Asks the CodePush service whether the configured app release channel has an update available.
 
 * [disallowRestart](#codepushdisallowrestart): Temporarily disallows any programmatic restarts to occur as a result of a CodePush update being installed. This is an advanced API, and is useful when a component within your app (for example an onboarding process) needs to ensure that no end-user interruptions can occur during its lifetime.
 
@@ -26,7 +26,7 @@ When you require `react-native-code-push`, the module object provides the follow
 
 * [sync](#codepushsync): Allows checking for an update, downloading it and installing it, all with a single call. Unless you need custom UI and/or behavior, we recommend most developers to use this method when integrating CodePush into their apps
 
-* [clearUpdates](#clearupdates): Clear all downloaded CodePush updates. This is useful when switching to a different deployment which may have an older release than the current package. 
+* [clearUpdates](#clearupdates): Clear all downloaded CodePush updates. This is useful when switching to a different release channel which may have an older release than the current package. 
    
     _Note: we don’t recommend to use this method in scenarios other than that (CodePush will call this method automatically when needed in other cases) as it could lead to unpredictable behavior._
 
@@ -118,7 +118,7 @@ The `codePush` decorator accepts an "options" object that allows you to customiz
 
 * __checkFrequency__ *(codePush.CheckFrequency)* - Specifies when you would like to check for updates. Defaults to `codePush.CheckFrequency.ON_APP_START`. Refer to the [`CheckFrequency`](#checkfrequency) enum reference for a description of the available options and what they do.
 
-* __deploymentKey__ *(String)* - Specifies the release channel public ID you want to query for an update against. By default, this value is derived from the `Info.plist` file (iOS) and strings resources (Android), but this option allows you to override it from the script-side if you need to dynamically use a different deployment.
+* __releaseChannelPublicId__ *(String)* - Specifies the release channel public ID you want to query for an update against. By default, this value is derived from the `Info.plist` file (iOS) and strings resources (Android), but this option allows you to override it from the script-side if you need to dynamically use a different release channel.
 
 * __installMode__ *(codePush.InstallMode)* - Specifies when you would like to install optional updates (i.e. those that aren't marked as mandatory). Defaults to `codePush.InstallMode.ON_NEXT_RESTART`. Refer to the [`InstallMode`](#installmode) enum reference for a description of the available options and what they do.
 
@@ -193,10 +193,10 @@ See [disallowRestart](#codepushdisallowrestart) for an example of how this metho
 #### codePush.checkForUpdate
 
 ```javascript
-codePush.checkForUpdate(deploymentKey: String = null, handleBinaryVersionMismatchCallback: (update: RemotePackage) => void): Promise<RemotePackage>;
+codePush.checkForUpdate(releaseChannelPublicId: String = null, handleBinaryVersionMismatchCallback: (update: RemotePackage) => void): Promise<RemotePackage>;
 ```
 
-Queries the CodePush service to see whether the configured app deployment has an update available. By default, it will use the deployment key that is configured in your `Info.plist` file (iOS), or `MainActivity.java` file (Android), but you can override that by specifying a value via the optional `deploymentKey` parameter. This can be useful when you want to dynamically "redirect" a user to a specific deployment, such as allowing "early access" via an easter egg or a user setting switch.
+Queries the CodePush service to see whether the configured app release channel has an update available. By default, it will use the release channel public ID that is configured in your `Info.plist` file (iOS), or strings resources (Android), but you can override that by specifying a value via the optional `releaseChannelPublicId` parameter. This can be useful when you want to dynamically "redirect" a user to a specific release channel, such as allowing "early access" via an easter egg or a user setting switch.
 
 Second optional parameter `handleBinaryVersionMismatchCallback` is an optional callback function that can be used to notify user if there are any binary update.
 E.g. consider a use-case where currently installed binary version is 1.0.1 with label(codepush label) v1. Later native code was changed in the dev cycle and binary version was updated to 1.0.2. When code-push update check is triggered we ignore updates having binary version mismatch (because the update is not targeting to the binary version of currently installed app). In this case installed app (1.0.1) will ignore the update targeting version 1.0.2. You can use `handleBinaryVersionMismatchCallback` to provide a hook to handle such situations.
@@ -209,11 +209,11 @@ This method returns a `Promise` which resolves to one of two possible values:
 
 1. `null` if there is no update available. This can occur in the following scenarios:
 
-    1. The configured deployment doesn't contain any releases, and therefore, nothing to update.
-    2. The latest release within the configured deployment is targeting a different binary version than what you're currently running (either older or newer).
-    3. The currently running app already has the latest release from the configured deployment, and therefore, doesn't need it again.
-    4. The latest release within the configured deployment is currently marked as disabled, and therefore, isn't allowed to be downloaded.
-    5. The latest release within the configured deployment is in an "active rollout" state, and the requesting device doesn't fall within the percentage of users who are eligible for it.
+    1. The configured release channel doesn't contain any releases, and therefore, nothing to update.
+    2. The latest release within the configured release channel is targeting a different binary version than what you're currently running (either older or newer).
+    3. The currently running app already has the latest release from the configured release channel, and therefore, doesn't need it again.
+    4. The latest release within the configured release channel is currently marked as disabled, and therefore, isn't allowed to be downloaded.
+    5. The latest release within the configured release channel is in an "active rollout" state, and the requesting device doesn't fall within the percentage of users who are eligible for it.
 
 2. A [`RemotePackage`](#remotepackage) instance which represents an available update that can be inspected and/or subsequently downloaded.
 
@@ -345,7 +345,7 @@ This method is for advanced scenarios, and is primarily useful when the followin
 codePush.sync(options: Object, syncStatusChangeCallback: function(syncStatus: Number), downloadProgressCallback: function(progress: DownloadProgress), handleBinaryVersionMismatchCallback: function(update: RemotePackage)): Promise<Number>;
 ```
 
-Synchronizes your app's JavaScript bundle and image assets with the latest release to the configured deployment. Unlike the [checkForUpdate](#codepushcheckforupdate) method, which simply checks for the presence of an update, and let's you control what to do next, `sync` handles the update check, download and installation experience for you.
+Synchronizes your app's JavaScript bundle and image assets with the latest release to the configured release channel. Unlike the [checkForUpdate](#codepushcheckforupdate) method, which simply checks for the presence of an update, and let's you control what to do next, `sync` handles the update check, download and installation experience for you.
 
 This method provides support for two different (but customizable) "modes" to easily enable apps with different requirements:
 
@@ -373,7 +373,7 @@ codePush.sync({ updateDialog: true, installMode: codePush.InstallMode.IMMEDIATE 
 
 While the `sync` method tries to make it easy to perform silent and active updates with little configuration, it accepts an "options" object that allows you to customize numerous aspects of the default behavior mentioned above. The options available are identical to the [CodePushOptions](#codepushoptions), with the exception of the `checkFrequency` option:
 
-* __deploymentKey__ *(String)* - Refer to [`CodePushOptions`](#codepushoptions).
+* __releaseChannelPublicId__ *(String)* - Refer to [`CodePushOptions`](#codepushoptions).
 
 * __installMode__ *(codePush.InstallMode)* - Refer to [`CodePushOptions`](#codepushoptions).
 
@@ -386,10 +386,10 @@ While the `sync` method tries to make it easy to perform silent and active updat
 Example Usage:
 
 ```javascript
-// Use a different deployment key for this
+// Use a different release channel public ID for this
 // specific call, instead of the one configured
 // in the Info.plist file
-codePush.sync({ deploymentKey: "KEY" });
+codePush.sync({ releaseChannelPublicId: "KEY" });
 
 // Download the update silently, but install it on
 // the next resume, as long as at least 5 minutes
@@ -476,13 +476,13 @@ Contains details about an update that has been downloaded locally or already ins
 
 ###### Properties
 - __appVersion__: The app binary version that this update is dependent on. This is the value that was specified via the `appStoreVersion` parameter when calling the CLI's `release` command. *(String)*
-- __deploymentKey__: The deployment key that was used to originally download this update. *(String)*
+- __releaseChannelPublicId__: The release channel that was used to originally download this update. *(String)*
 - __description__: The description of the update. This is the same value that you specified in the CLI when you released the update. *(String)*
 - __failedInstall__: Indicates whether this update has been previously installed but was rolled back. The `sync` method will automatically ignore updates which have previously failed, so you only need to worry about this property if using `checkForUpdate`. *(Boolean)*
 - __isFirstRun__: Indicates whether this is the first time the update has been run after being installed. This is useful for determining whether you would like to show a "What's New?" UI to the end user after installing an update. *(Boolean)*
 - __isMandatory__: Indicates whether the update is considered mandatory.  This is the value that was specified in the CLI when the update was released. *(Boolean)*
 - __isPending__: Indicates whether this update is in a "pending" state. When `true`, that means the update has been downloaded and installed, but the app restart needed to apply it hasn't occurred yet, and therefore, it's changes aren't currently visible to the end-user. *(Boolean)*
-- __label__: The internal label automatically given to the update by the CodePush server, such as `v5`. This value uniquely identifies the update within it's deployment. *(String)*
+- __label__: The internal label automatically given to the update by the CodePush server, such as `v5`. This value uniquely identifies the update within its release channel. *(String)*
 - __packageHash__: The SHA hash value of the update. *(String)*
 - __packageSize__: The size of the code contained within the update, in bytes. *(Number)*
 
@@ -534,7 +534,7 @@ This enum specifies when you would like your app to sync with the server for upd
 
 This enum is provided to the `syncStatusChangedCallback` function that can be passed to the `sync` method, in order to hook into the overall update process. It includes the following values:
 
-* __codePush.SyncStatus.UP_TO_DATE__ *(0)* - The app is fully up-to-date with the configured deployment.
+* __codePush.SyncStatus.UP_TO_DATE__ *(0)* - The app is fully up-to-date with the configured release channel.
 * __codePush.SyncStatus.UPDATE_INSTALLED__ *(1)* - An available update has been installed and will be run either immediately after the `syncStatusChangedCallback` function returns or the next time the app resumes/restarts, depending on the `InstallMode` specified in `SyncOptions`.
 * __codePush.SyncStatus.UPDATE_IGNORED__ *(2)* - The app has an optional update, which the end user chose to ignore. (This is only applicable when the `updateDialog` is used)
 * __codePush.SyncStatus.UNKNOWN_ERROR__ *(3)* - The sync operation encountered an unknown error.

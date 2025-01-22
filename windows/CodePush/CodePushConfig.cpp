@@ -36,7 +36,7 @@ namespace winrt::Microsoft::CodePush::ReactNative::implementation
     {
         std::optional<hstring> appVersion;
         std::optional<hstring> buildVersion;
-        std::optional<hstring> deploymentKey;
+        std::optional<hstring> releaseChannelPublicId;
         std::optional<hstring> publicKey;
         std::optional<hstring> serverUrl;
 
@@ -44,7 +44,7 @@ namespace winrt::Microsoft::CodePush::ReactNative::implementation
         {
             appVersion = configMap.TryLookup(AppVersionConfigKey);
             buildVersion = configMap.TryLookup(BuildVersionConfigKey);
-            deploymentKey = configMap.TryLookup(DeploymentKeyConfigKey);
+            releaseChannelPublicId = configMap.TryLookup(ReleaseChannelPublicIdConfigKey);
             publicKey = configMap.TryLookup(PublicKeyKey);
             serverUrl = configMap.TryLookup(ServerURLConfigKey);
         }
@@ -73,7 +73,7 @@ namespace winrt::Microsoft::CodePush::ReactNative::implementation
 
         addToConfiguration(AppVersionConfigKey, appVersion);
         addToConfiguration(BuildVersionConfigKey, buildVersion);
-        addToConfiguration(DeploymentKeyConfigKey, deploymentKey);
+        addToConfiguration(ReleaseChannelPublicIdConfigKey, releaseChannelPublicId);
         addToConfiguration(PublicKeyKey, publicKey);
         addToConfiguration(ServerURLConfigKey, serverUrl);
 

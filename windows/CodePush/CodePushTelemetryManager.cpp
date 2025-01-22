@@ -18,12 +18,12 @@ namespace Microsoft::CodePush::ReactNative
 
     static const std::wstring_view AppVersionKey{ L"appVersion" };
     static const std::wstring_view DeploymentFailed{ L"DeploymentFailed" };
-    static const std::wstring_view DeploymentKeyKey{ L"deploymentKey" };
+    static const std::wstring_view ReleaseChannelPublicIdKey{ L"releaseChannelPublicId" };
     static const std::wstring_view DeploymentSucceeded{ L"DeploymentSucceeded" };
     static const std::wstring_view LabelKey{ L"label" };
     static const std::wstring_view LastDeploymentReportKey{ L"CODE_PUSH_LAST_DEPLOYMENT_REPORT" };
     static const std::wstring_view PackageKey{ L"package" };
-    static const std::wstring_view PreviousDeploymentKeyKey{ L"previousDeploymentKey" };
+    static const std::wstring_view PreviousReleaseChannelPublicIdKey{ L"previousReleaseChannelPublicId" };
     static const std::wstring_view PreviousLabelOrAppVersionKey{ L"previousLabelOrAppVersion" };
     static const std::wstring_view RetryDeploymentReportKey{ L"CODE_PUSH_RETRY_DEPLOYMENT_REPORT" };
     static const std::wstring_view StatusKey{ L"status" };
@@ -42,12 +42,12 @@ namespace Microsoft::CodePush::ReactNative
         {
             if (IsStatusReportIdentifierCodePushLabel(previousStatusReportIdentifier))
             {
-                auto previousDeploymentKey{ GetDeploymentKeyFromStatusReportIdentifier(previousStatusReportIdentifier) };
+                auto previousReleaseChannelPublicId{ GetReleaseChannelPublicIdFromStatusReportIdentifier(previousStatusReportIdentifier) };
                 auto previousLabel{ GetVersionLabelFromStatusReportIdentifier(previousStatusReportIdentifier) };
                 ClearRetryStatusReport();
                 JsonObject out;
                 out.Insert(AppVersionKey, JsonValue::CreateStringValue(appVersion));
-                out.Insert(PreviousDeploymentKeyKey, JsonValue::CreateStringValue(previousDeploymentKey));
+                out.Insert(PreviousReleaseChannelPublicIdKey, JsonValue::CreateStringValue(previousReleaseChannelPublicId));
                 out.Insert(PreviousLabelOrAppVersionKey, JsonValue::CreateStringValue(previousLabel));
                 return out;
             }
@@ -109,12 +109,12 @@ namespace Microsoft::CodePush::ReactNative
                 ClearRetryStatusReport();
                 if (IsStatusReportIdentifierCodePushLabel(previousStatusReportIdentifier))
                 {
-                    auto previousDeploymentKey{ GetDeploymentKeyFromStatusReportIdentifier(previousStatusReportIdentifier) };
+                    auto previousReleaseChannelPublicId{ GetReleaseChannelPublicIdFromStatusReportIdentifier(previousStatusReportIdentifier) };
                     auto previousLabel{ GetVersionLabelFromStatusReportIdentifier(previousStatusReportIdentifier) };
                     JsonObject out;
                     out.Insert(PackageKey, currentPackage);
                     out.Insert(StatusKey, JsonValue::CreateStringValue(DeploymentSucceeded));
-                    out.Insert(PreviousDeploymentKeyKey, JsonValue::CreateStringValue(previousDeploymentKey));
+                    out.Insert(PreviousReleaseChannelPublicIdKey, JsonValue::CreateStringValue(previousReleaseChannelPublicId));
                     out.Insert(PreviousLabelOrAppVersionKey, JsonValue::CreateStringValue(previousLabel));
                     return out;
                 }
@@ -165,22 +165,22 @@ namespace Microsoft::CodePush::ReactNative
         localSettings.Values().Remove(RetryDeploymentReportKey);
     }
 
-    /*static*/ std::wstring_view CodePushTelemetryManager::GetDeploymentKeyFromStatusReportIdentifier(std::wstring_view statusReportIdentifier)
+    /*static*/ std::wstring_view CodePushTelemetryManager::GetReleaseChannelPublicIdFromStatusReportIdentifier(std::wstring_view statusReportIdentifier)
     {
         return statusReportIdentifier.substr(0, statusReportIdentifier.find(':'));
     }
 
     /*static*/ hstring CodePushTelemetryManager::GetPackageStatusReportIdentifier(const JsonObject& package)
     {
-        // Because deploymentKeys can be dynamically switched, we use a
-        // combination of the deploymentKey and label as the packageIdentifier.
-        if (package.HasKey(DeploymentKeyKey) && package.HasKey(LabelKey))
+        // Because release channels can be dynamically switched, we use a
+        // combination of the release channel public ID and label as the packageIdentifier.
+        if (package.HasKey(ReleaseChannelPublicIdKey) && package.HasKey(LabelKey))
         {
             return L"";
         }
-        auto deploymentKey{ package.GetNamedString(DeploymentKeyKey) };
+        auto releaseChannelPublicId{ package.GetNamedString(ReleaseChannelPublicIdKey) };
         auto label{ package.GetNamedString(LabelKey) };
-        return deploymentKey + L":" + label;
+        return releaseChannelPublicId + L":" + label;
     }
 
     /*static*/ hstring CodePushTelemetryManager::GetPreviousStatusReportIdentifier()

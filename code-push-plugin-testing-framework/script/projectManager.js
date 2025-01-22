@@ -16,7 +16,7 @@ var ProjectManager = (function () {
     ProjectManager.prototype.getPluginName = function () { throw ProjectManager.NOT_IMPLEMENTED_ERROR_MSG; };
     /**
      * Creates a new test application at the specified path, and configures it
-     * with the given server URL, android and ios deployment keys.
+     * with the given server URL, android and ios release channels.
      *
      * Overwrite this in your implementation!
      */

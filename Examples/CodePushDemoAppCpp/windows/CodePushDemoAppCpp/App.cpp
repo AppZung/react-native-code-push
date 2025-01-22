@@ -56,7 +56,7 @@ App::App() noexcept
     m_host.InstanceSettings().PackageProviders().Append(make<ReactPackageProvider>()); // Includes all modules in this project
 
     InitializeComponent();
-    
+
     Suspending({ this, &App::OnSuspending });
 
 #if defined _DEBUG && !defined DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION
@@ -81,7 +81,7 @@ void App::OnLaunched(activation::LaunchActivatedEventArgs const& e)
     winrt::Microsoft::CodePush::ReactNative::CodePushConfig::SetHost(Host());
     auto configMap{ winrt::single_threaded_map<hstring, hstring>() };
     configMap.Insert(L"appVersion", L"1.0.0");
-    configMap.Insert(L"deploymentKey", L"<app deployment key>");
+    configMap.Insert(L"releaseChannelPublicId", L"<app release channel public id>");
     winrt::Microsoft::CodePush::ReactNative::CodePushConfig::Init(configMap);
 
     Frame rootFrame{ nullptr };

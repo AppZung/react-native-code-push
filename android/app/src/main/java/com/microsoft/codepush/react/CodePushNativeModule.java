@@ -365,7 +365,7 @@ public class CodePushNativeModule extends ReactContextBaseJavaModule {
             WritableMap configMap =  Arguments.createMap();
             configMap.putString("appVersion", mCodePush.getAppVersion());
             configMap.putString("clientUniqueId", mClientUniqueId);
-            configMap.putString("deploymentKey", mCodePush.getDeploymentKey());
+            configMap.putString("releaseChannelPublicId", mCodePush.getReleaseChannelPublicId());
             configMap.putString("serverUrl", mCodePush.getServerUrl());
 
             // The binary hash may be null in debug builds
@@ -691,7 +691,7 @@ public class CodePushNativeModule extends ReactContextBaseJavaModule {
 
     /**
      * This method clears CodePush's downloaded updates.
-     * It is needed to switch to a different deployment if the current deployment is more recent.
+     * It is needed to switch to a different release channel if the current release channel is more recent.
      * Note: we don’t recommend to use this method in scenarios other than that (CodePush will call
      * this method automatically when needed in other cases) as it could lead to unpredictable
      * behavior.

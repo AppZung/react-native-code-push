@@ -70,6 +70,14 @@ This package is compatible with the new architecture on iOS (tested on 0.76) wit
 
 Windows (UWP) won't be actively supported on v10+ except if there is demand for it (it will get stuck at the basic features of CodePush v9). Please contact hello@appzung.com to help us assess this demand. Thank you for your understanding.
 
+We renamed "deployments" to "release channels" for better clarity between actual release deployments and their release channels.
+
+### Migrating to AppZung CLI
+
+1. Use the AppZung CLI (`@appzung/cli`) instead of AppCenter's. See `npx @appzung/cli@1 welcome` and `npx @appzung/cli@1 --help`
+2. Migrate your apps from AppCenter automatically in order to retain most of your config (project hierarchy, release channels public ID = deployment key...) using `npx @appzung/cli@1 codepush migrate`
+3. Change your deployment process with `npx @appzung/cli@1 releases deploy-react-native` (see section ["Releasing Updates"](#releasing-updates) below)
+
 ### Migration steps to @appzung/react-native-code-push v7,v8,v9 or below
 
 If your app does not meet the requirements of the last version of Microsoft's `react-native-code-push` (iOS 15.5, React Native 0.71+), from which this module is based on, you may still use old versions of `react-native-code-push` and specify `CodePushServerUrl` to `https://codepush.appzung.com`, as our API is compatible with the original module's features.
@@ -79,7 +87,7 @@ You may also use the versions that we published based on the versions v5-v9 with
 1. Replace the `react-native-code-push` version with `npm:@appzung/react-native-code-push@9.0.2` (or 8.3.2, 7.1.1, 6.4.2, 6.3.1, 5.7.1) eg. `"react-native-code-push": "npm:@appzung/react-native-code-push@^8.3.2",`
 2. Run `npm install` (or `yarn` depending on your project)
 3. Run `bundle exec pod install`
-4. See section ["Migrating to AppZung CLI"](#migrating-to-appzung-cli) below
+4. That's it! In these versions you keep the old nomenclature DeploymentKey (vs new ReleaseChannelPublicId).
 
 ### Migration steps to @appzung/react-native-code-push v10+
 
@@ -90,30 +98,25 @@ If you are less in a hurry, you can migrate to `@appzung/react-native-code-push`
 1. Replace `react-native-code-push` in your package.json with `@appzung/react-native-code-push`: `@appzung/react-native-code-push: "^10.0.0"`
 2. Run `npm install` (or `yarn` depending on your project)
 
-#### Change JS imports
+#### Change your JS code
 
 1. Replace every `react-native-code-push` imports with `@appzung/react-native-code-push` imports
 2. (optional) If you use a jest global mock, move the mock from `__mocks__/react-native-code-push.ts` to  `__mocks__/@appzung/react-native-code-push.ts`
+3. (optional) If you use dynamic deployment assignation, rename `deploymentKey` option to `releaseChannelPublicId` (TypeScript should catch that)
 
 #### Change your iOS setup
 
 1. Run `bundle exec pod install`
-2. (optional) If you already use code signing, rename `CodePushPublicKey` to `CodePushSigningPublicKey` in your `Info.plist`
+2. Rename `CodePushDeploymentKey` to `CodePushReleaseChannelPublicId` in your `Info.plist`
+3. (optional) If you already use code signing, rename `CodePushPublicKey` to `CodePushSigningPublicKey` in your `Info.plist`
 
 #### Change your Android setup
 
 1. In `android/settings.gradle` change the lines about CodePush : `include ':appzung_react-native-code-push'` and `project(':appzung_react-native-code-push').projectDir = new File(rootProject.projectDir, '../node_modules/@appzung/react-native-code-push/android/app')`
 2. In `android/app/build.gradle` change the line about CodePush: `apply from: "../../node_modules/@appzung/react-native-code-push/android/codepush.gradle"`
 3. In your Android files (eg. `MainApplication.kt`), rename every `com.microsoft.codepush` prefix imports with `com.appzung.codepush`
-4. (optional) If you already use code signing, rename `CodePushPublicKey` to `CodePushSigningPublicKey` in your strings resources
-
-### Migrating to AppZung CLI
-
-You will also change your deployment process:
-
-1. Use the AppZung CLI (`@appzung/cli`) instead of AppCenter's. See `npx @appzung/cli@1 welcome` and `npx @appzung/cli@1 --help`
-2. Basic command is `npx @appzung/cli@1 releases deploy-react-native`
-3. See section ["Releasing Updates"](#releasing-updates) below
+4. Rename `CodePushDeploymentKey` to `CodePushReleaseChannelPublicId` in your strings resources (located either at strings.xml or app/build.gradle).
+5. (optional) If you already use code signing, rename `CodePushPublicKey` to `CodePushSigningPublicKey` in your strings resources
 
 ## Compatibility table
 
@@ -276,7 +279,7 @@ This is not necessarily the case for `updateDialog`, since it won't force the us
 
 ## Debugging / Troubleshooting
 
-The `sync` method includes a lot of diagnostic logging out-of-the-box, so if you're encountering an issue when using it, the best thing to try first is examining the output logs of your app. This will tell you whether the app is configured correctly (like can the plugin find your deployment key?), if the app is able to reach the server, if an available update is being discovered, if the update is being successfully downloaded/installed, etc. We want to continue improving the logging to be as intuitive/comprehensive as possible, so please [let us know](mailto:support@appzung.com) if you find it to be confusing or missing anything.
+The `sync` method includes a lot of diagnostic logging out-of-the-box, so if you're encountering an issue when using it, the best thing to try first is examining the output logs of your app. This will tell you whether the app is configured correctly (like can the plugin find your release channel public ID?), if the app is able to reach the server, if an available update is being discovered, if the update is being successfully downloaded/installed, etc. We want to continue improving the logging to be as intuitive/comprehensive as possible, so please [let us know](mailto:support@appzung.com) if you find it to be confusing or missing anything.
 
 Start up the Chrome DevTools Console, the Xcode Console (iOS) and/or ADB logcat (Android), and look for messages which are prefixed with `[CodePush]`.
 
@@ -292,12 +295,12 @@ Note that by default, React Native logs are disabled on iOS in release builds, s
 
 Now you'll be able to see CodePush logs in either debug or release mode, on both iOS or Android. If examining the logs don't provide an indication of the issue, please refer to the following common issues for additional resolution ideas:
 
-| Issue / Symptom | Possible Solution                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-|-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Compilation Error | Double-check that your version of React Native is [compatible](#compatibility-table) with the CodePush version you are using.                                                                                                                                                                                                                                                                                                                                         |
-| Network timeout / hang when calling `sync` or `checkForUpdate` in the iOS Simulator | Try resetting the simulator by selecting the `Simulator -> Reset Content and Settings..` menu item, and then re-running your app.                                                                                                                                                                                                                                                                                                                           |
-| Server responds with a `404` when calling `sync` or `checkForUpdate` | Double-check that the deployment key you added to your `Info.plist` (iOS), `build.gradle` (Android) or that you're passing to `sync`/`checkForUpdate`, is in fact correct. You can run `appzung release-channels list` to view the correct keys for your app deployments.                                                                                                                                                                                   |
-| Update not being discovered | Double-check that the version of your running app (like `1.0.0`) matches the version you specified when releasing the update to CodePush. Additionally, make sure that you are releasing to the same deployment that your app is configured to sync with.                                                                                                                                                                                                   |
-| Update not being displayed after restart | If you're not calling `sync` on app start (like within `componentDidMount` of your root component), then you need to explicitly call `notifyApplicationReady` on app start, otherwise, the plugin will think your update failed and roll it back.                                                                                                                                                                                                           |
-| I've released an update for iOS but my Android app also shows an update and it breaks it | Be sure you have different deployment keys for each platform in order to receive updates correctly                                                                                                                                                                                                                                                                                                                                                          |
-| I've released new update but changes are not reflected | Be sure that you are running app in modes other than Debug. In Debug mode, React Native app always downloads JS bundle generated by packager, so JS bundle downloaded by CodePush does not apply.                                                                                                                                                                                                                                                           
+| Issue / Symptom                                                                          | Possible Solution                                                                                                                                                                                                                                                                                                  |
+|------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Compilation Error                                                                        | Double-check that your version of React Native is [compatible](#compatibility-table) with the CodePush version you are using.                                                                                                                                                                                      |
+| Network timeout / hang when calling `sync` or `checkForUpdate` in the iOS Simulator      | Try resetting the simulator by selecting the `Simulator -> Reset Content and Settings..` menu item, and then re-running your app.                                                                                                                                                                                  |
+| Server responds with a `404` when calling `sync` or `checkForUpdate`                     | Double-check that the release channel public ID you added to your `Info.plist` (iOS), `strings.xml` or `app/build.gradle` (Android) or that you're passing to `sync`/`checkForUpdate`, is in fact correct. You can run `appzung release-channels list` to view the correct public ID for your app release channel. |
+| Update not being discovered                                                              | Double-check that the version of your running app (like `1.0.0`) matches the version you specified when releasing the update to CodePush. Additionally, make sure that you are releasing to the same release channel that your app is configured to sync with.                                                     |
+| Update not being displayed after restart                                                 | If you're not calling `sync` on app start (like within `componentDidMount` of your root component), then you need to explicitly call `notifyApplicationReady` on app start, otherwise, the plugin will think your update failed and roll it back.                                                                  |
+| I've released an update for iOS but my Android app also shows an update and it breaks it | Be sure you have different release channels for each platform in order to receive updates correctly                                                                                                                                                                                                                |
+| I've released new update but changes are not reflected                                   | Be sure that you are running app in modes other than Debug. In Debug mode, React Native app always downloads JS bundle generated by packager, so JS bundle downloaded by CodePush does not apply.                                                                                                                  |

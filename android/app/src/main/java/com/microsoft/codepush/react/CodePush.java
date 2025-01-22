@@ -39,7 +39,7 @@ public class CodePush implements ReactPackage {
     private SettingsManager mSettingsManager;
 
     // Config properties.
-    private String mDeploymentKey;
+    private String mReleaseChannelPublicId;
     private static String mServerUrl = "https://codepush.appzung.com/";
 
     private Context mContext;
@@ -50,20 +50,20 @@ public class CodePush implements ReactPackage {
     private static ReactInstanceHolder mReactInstanceHolder;
     private static CodePush mCurrentInstance;
 
-    public CodePush(String deploymentKey, Context context) {
-        this(deploymentKey, context, false);
+    public CodePush(String releaseChannelPublicId, Context context) {
+        this(releaseChannelPublicId, context, false);
     }
 
     public static String getServiceUrl() {
         return mServerUrl;
     }
 
-    public CodePush(String deploymentKey, Context context, boolean isDebugMode) {
+    public CodePush(String releaseChannelPublicId, Context context, boolean isDebugMode) {
         mContext = context.getApplicationContext();
 
         mUpdateManager = new CodePushUpdateManager(context.getFilesDir().getAbsolutePath());
         mTelemetryManager = new CodePushTelemetryManager(mContext);
-        mDeploymentKey = deploymentKey;
+        mReleaseChannelPublicId = releaseChannelPublicId;
         mIsDebugMode = isDebugMode;
         mSettingsManager = new SettingsManager(mContext);
 
@@ -91,19 +91,19 @@ public class CodePush implements ReactPackage {
         initializeUpdateAfterRestart();
     }
 
-    public CodePush(String deploymentKey, Context context, boolean isDebugMode, String serverUrl) {
-        this(deploymentKey, context, isDebugMode);
+    public CodePush(String releaseChannelPublicId, Context context, boolean isDebugMode, String serverUrl) {
+        this(releaseChannelPublicId, context, isDebugMode);
         mServerUrl = serverUrl;
     }
 
-    public CodePush(String deploymentKey, Context context, boolean isDebugMode, int publicKeyResourceDescriptor) {
-        this(deploymentKey, context, isDebugMode);
+    public CodePush(String releaseChannelPublicId, Context context, boolean isDebugMode, int publicKeyResourceDescriptor) {
+        this(releaseChannelPublicId, context, isDebugMode);
 
         mPublicKey = getPublicKeyByResourceDescriptor(publicKeyResourceDescriptor);
     }
 
-    public CodePush(String deploymentKey, Context context, boolean isDebugMode, String serverUrl, Integer publicKeyResourceDescriptor) {
-        this(deploymentKey, context, isDebugMode);
+    public CodePush(String releaseChannelPublicId, Context context, boolean isDebugMode, String serverUrl, Integer publicKeyResourceDescriptor) {
+        this(releaseChannelPublicId, context, isDebugMode);
 
         if (publicKeyResourceDescriptor != null) {
             mPublicKey = getPublicKeyByResourceDescriptor(publicKeyResourceDescriptor);
@@ -236,8 +236,8 @@ public class CodePush implements ReactPackage {
         return mContext;
     }
 
-    public String getDeploymentKey() {
-        return mDeploymentKey;
+    public String getReleaseChannelPublicId() {
+        return mReleaseChannelPublicId;
     }
 
     public static String getJSBundleFile() {
@@ -399,8 +399,8 @@ public class CodePush implements ReactPackage {
         return sTestConfigurationFlag;
     }
 
-    public void setDeploymentKey(String deploymentKey) {
-        mDeploymentKey = deploymentKey;
+    public void setReleaseChannelPublicId(String releaseChannelPublicId) {
+        mReleaseChannelPublicId = releaseChannelPublicId;
     }
 
     public static void setUsingTestConfiguration(boolean shouldUseTestConfiguration) {

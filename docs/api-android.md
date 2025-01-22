@@ -2,9 +2,9 @@
 
 You can customize CodePush by placing these values in string resources.
 
-* __Deployment Key__ - The default release channel's **public ID** that will be used to check updates. For example:
+* __Release channel Public ID__ - The default release channel's **public ID** that will be used to check updates. For example:
     ```xml
-    <string moduleConfig="true" name="CodePushDeploymentKey">sU0Eikse9JFCDLZmAT-_lUSwDWACrSGgTKCXyWqcE0</string>
+    <string moduleConfig="true" name="CodePushReleaseChannelPublicId">sU0Eikse9JFCDLZmAT-_lUSwDWACrSGgTKCXyWqcE0</string>
     ```
 
 * __Public Key__ - used for bundle verification in the Code Signing Feature. Please refer to [Code Signing](setup-android.md#code-signing-setup) section for more details about the Code Signing Feature.

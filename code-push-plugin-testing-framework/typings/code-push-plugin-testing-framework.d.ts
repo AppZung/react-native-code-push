@@ -22,9 +22,9 @@ declare module 'code-push-plugin-testing-framework/script/platform' {
 	     */
 	    getEmulatorManager(): IEmulatorManager;
 	    /**
-	     * Gets the default deployment key.
+	     * Gets the default release channel public ID.
 	     */
-	    getDefaultDeploymentKey(): string;
+	    getDefaultReleaseChannelPublicId(): string;
 	}
 	/**
 	 * Manages the interaction with the emulator.
@@ -89,9 +89,9 @@ declare module 'code-push-plugin-testing-framework/script/platform' {
 	     */
 	    getEmulatorManager(): IEmulatorManager;
 	    /**
-	     * Gets the default deployment key.
+	     * Gets the default release channel public ID.
 	     */
-	    getDefaultDeploymentKey(): string;
+	    getDefaultReleaseChannelPublicId(): string;
 	}
 	/**
 	 * IOS implementation of IPlatform.
@@ -119,9 +119,9 @@ declare module 'code-push-plugin-testing-framework/script/platform' {
 	     */
 	    getEmulatorManager(): IEmulatorManager;
 	    /**
-	     * Gets the default deployment key.
+	     * Gets the default release channel public ID.
 	     */
-	    getDefaultDeploymentKey(): string;
+	    getDefaultReleaseChannelPublicId(): string;
 	}
 	export class AndroidEmulatorManager implements IEmulatorManager {
 	    private targetEmulator;
@@ -212,7 +212,7 @@ declare module 'code-push-plugin-testing-framework/script/projectManager' {
 	    getPluginName(): string;
 	    /**
 	     * Creates a new test application at the specified path, and configures it
-	     * with the given server URL, android and ios deployment keys.
+	     * with the given server URL, android and ios release channel public IDs.
 	     *
 	     * Overwrite this in your implementation!
 	     */
@@ -310,7 +310,7 @@ declare module 'code-push-plugin-testing-framework/script/serverUtil' {
 	 * The model class of the codePush.checkForUpdate() request to the server.
 	 */
 	export class UpdateCheckRequestMock {
-	    deploymentKey: string;
+		releaseChannelPublicId: string;
 	    appVersion: string;
 	    packageHash: string;
 	    isCompanion: boolean;
@@ -419,8 +419,8 @@ declare module 'code-push-plugin-testing-framework/script/testConfig' {
 declare module 'code-push-plugin-testing-framework/script/testUtil' {
 	import Q = require("q");
 	export class TestUtil {
-	    static ANDROID_KEY_PLACEHOLDER: string;
-	    static IOS_KEY_PLACEHOLDER: string;
+	    static ANDROID_RELEASE_CHANNEL_PUBLIC_ID_PLACEHOLDER: string;
+	    static IOS_RELEASE_CHANNEL_PUBLIC_ID_PLACEHOLDER: string;
 	    static SERVER_URL_PLACEHOLDER: string;
 	    static INDEX_JS_PLACEHOLDER: string;
 	    static CODE_PUSH_APP_VERSION_PLACEHOLDER: string;

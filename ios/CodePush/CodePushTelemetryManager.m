@@ -2,12 +2,12 @@
 
 static NSString *const AppVersionKey = @"appVersion";
 static NSString *const DeploymentFailed = @"DeploymentFailed";
-static NSString *const DeploymentKeyKey = @"deploymentKey";
+static NSString *const ReleaseChannelPublicIDKey = @"releaseChannelPublicId";
 static NSString *const DeploymentSucceeded = @"DeploymentSucceeded";
 static NSString *const LabelKey = @"label";
 static NSString *const LastDeploymentReportKey = @"CODE_PUSH_LAST_DEPLOYMENT_REPORT";
 static NSString *const PackageKey = @"package";
-static NSString *const PreviousDeploymentKeyKey = @"previousDeploymentKey";
+static NSString *const PreviousReleaseChannelPublicIDKey = @"previousReleaseChannelPublicId";
 static NSString *const PreviousLabelOrAppVersionKey = @"previousLabelOrAppVersion";
 static NSString *const RetryDeploymentReportKey = @"CODE_PUSH_RETRY_DEPLOYMENT_REPORT";
 static NSString *const StatusKey = @"status";
@@ -22,12 +22,12 @@ static NSString *const StatusKey = @"status";
         return @{ AppVersionKey: appVersion };
     } else if (![previousStatusReportIdentifier isEqualToString:appVersion]) {
         if ([self isStatusReportIdentifierCodePushLabel:previousStatusReportIdentifier]) {
-            NSString *previousDeploymentKey = [self getDeploymentKeyFromStatusReportIdentifier:previousStatusReportIdentifier];
+            NSString *previousReleaseChannelPublicId = [self getReleaseChannelPublicIdFromStatusReportIdentifier:previousStatusReportIdentifier];
             NSString *previousLabel = [self getVersionLabelFromStatusReportIdentifier:previousStatusReportIdentifier];
             [self clearRetryStatusReport];
             return @{
                       AppVersionKey: appVersion,
-                      PreviousDeploymentKeyKey: previousDeploymentKey,
+                      PreviousReleaseChannelPublicIDKey: previousReleaseChannelPublicId,
                       PreviousLabelOrAppVersionKey: previousLabel
                     };
         } else {
@@ -77,12 +77,12 @@ static NSString *const StatusKey = @"status";
         } else if (![previousStatusReportIdentifier isEqualToString:currentPackageIdentifier]) {
             [self clearRetryStatusReport];
             if ([self isStatusReportIdentifierCodePushLabel:previousStatusReportIdentifier]) {
-                NSString *previousDeploymentKey = [self getDeploymentKeyFromStatusReportIdentifier:previousStatusReportIdentifier];
+                NSString *previousReleaseChannelPublicId = [self getReleaseChannelPublicIdFromStatusReportIdentifier:previousStatusReportIdentifier];
                 NSString *previousLabel = [self getVersionLabelFromStatusReportIdentifier:previousStatusReportIdentifier];
                 return @{
                           PackageKey: currentPackage,
                           StatusKey: DeploymentSucceeded,
-                          PreviousDeploymentKeyKey: previousDeploymentKey,
+                          PreviousReleaseChannelPublicIDKey: previousReleaseChannelPublicId,
                           PreviousLabelOrAppVersionKey: previousLabel
                         };
             } else {
@@ -105,7 +105,7 @@ static NSString *const StatusKey = @"status";
     if ([DeploymentFailed isEqualToString:statusReport[StatusKey]]) {
         return;
     }
-    
+
     if (statusReport[AppVersionKey]) {
         [self saveStatusReportedForIdentifier:statusReport[AppVersionKey]];
     } else if (statusReport[PackageKey]) {
@@ -130,19 +130,19 @@ static NSString *const StatusKey = @"status";
     [preferences synchronize];
 }
 
-+ (NSString *)getDeploymentKeyFromStatusReportIdentifier:(NSString *)statusReportIdentifier
++ (NSString *)getReleaseChannelPublicIdFromStatusReportIdentifier:(NSString *)statusReportIdentifier
 {
     return [[statusReportIdentifier componentsSeparatedByString:@":"] firstObject];
 }
 
 + (NSString *)getPackageStatusReportIdentifier:(NSDictionary *)package
 {
-    // Because deploymentKeys can be dynamically switched, we use a
-    // combination of the deploymentKey and label as the packageIdentifier.
-    NSString *deploymentKey = [package objectForKey:DeploymentKeyKey];
+    // Because release channels can be dynamically switched, we use a
+    // combination of the release channel and label as the packageIdentifier.
+    NSString *releaseChannelPublicId = [package objectForKey:ReleaseChannelPublicIDKey];
     NSString *label = [package objectForKey:LabelKey];
-    if (deploymentKey && label) {
-        return [[deploymentKey stringByAppendingString:@":"] stringByAppendingString:label];
+    if (releaseChannelPublicId && label) {
+        return [[releaseChannelPublicId stringByAppendingString:@":"] stringByAppendingString:label];
     } else {
         return nil;
     }

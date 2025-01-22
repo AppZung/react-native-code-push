@@ -38,10 +38,10 @@ var Android = (function () {
         return this.emulatorManager;
     };
     /**
-     * Gets the default deployment key.
+     * Gets the default release channel public ID.
      */
-    Android.prototype.getDefaultDeploymentKey = function () {
-        return "mock-android-deployment-key";
+    Android.prototype.getDefaultReleaseChannelPublicId = function () {
+        return "mock-android-release-channel-public-id";
     };
     Android.DEFAULT_ANDROID_SERVER_URL = "http://10.0.2.2:3001";
     return Android;
@@ -83,10 +83,10 @@ var IOS = (function () {
         return this.emulatorManager;
     };
     /**
-     * Gets the default deployment key.
+     * Gets the default release channel public ID.
      */
-    IOS.prototype.getDefaultDeploymentKey = function () {
-        return "mock-ios-deployment-key";
+    IOS.prototype.getDefaultReleaseChannelPublicId = function () {
+        return "mock-ios-release-channel-public-id";
     };
     IOS.DEFAULT_IOS_SERVER_URL = "http://127.0.0.1:3000";
     return IOS;
@@ -327,7 +327,7 @@ var IOSEmulatorManager = (function () {
         function checkIOSEmulator(iOSEmulatorId) {
             // A command that does nothing but only succeeds if the emulator is running.
             return testUtil_1.TestUtil.getProcessOutput("xcrun simctl getenv booted SIMULATOR_UDID", { noLogCommand: true, noLogStdOut: true, noLogStdErr: true }).then(function (simUdid) {
-                return simUdid.trim() == iOSEmulatorId.trim() ? true : Promise.reject(new Error('Waiting for device to boot')); 
+                return simUdid.trim() == iOSEmulatorId.trim() ? true : Promise.reject(new Error('Waiting for device to boot'));
             });
         }
         function startIOSEmulator(iOSEmulatorId) {

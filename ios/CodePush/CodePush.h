@@ -51,10 +51,10 @@
 
 /*
  * This method allows dynamically setting the app's
- * deployment key, in addition to setting it via
- * the Info.plist file's CodePushDeploymentKey setting.
+ * release channel public ID, in addition to setting it via
+ * the Info.plist file's CodePushReleaseChannelPublicId setting.
  */
-+ (void)setDeploymentKey:(NSString *)deploymentKey;
++ (void)setReleaseChannelPublicId:(NSString *)releaseChannelPublicId;
 
 /*
  * This method checks to see whether a specific package hash
@@ -100,7 +100,7 @@
 @property (copy) NSString *appVersion;
 @property (readonly) NSString *buildVersion;
 @property (readonly) NSDictionary *configuration;
-@property (copy) NSString *deploymentKey;
+@property (copy) NSString *releaseChannelPublicId;
 @property (copy) NSString *serverURL;
 @property (copy) NSString *publicKey;
 

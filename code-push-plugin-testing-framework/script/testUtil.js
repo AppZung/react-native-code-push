@@ -147,13 +147,13 @@ var TestUtil = (function () {
         if (variable) {
             return variable.toLowerCase() === 'true';
         }
-    
+
         return false;
     }
     //// Placeholders
     // Used in the template to represent data that needs to be added by the testing framework at runtime.
-    TestUtil.ANDROID_KEY_PLACEHOLDER = "CODE_PUSH_ANDROID_DEPLOYMENT_KEY";
-    TestUtil.IOS_KEY_PLACEHOLDER = "CODE_PUSH_IOS_DEPLOYMENT_KEY";
+    TestUtil.ANDROID_RELEASE_CHANNEL_PUBLIC_ID_PLACEHOLDER = "CODE_PUSH_ANDROID_RELEASE_CHANNEL_PUBLIC_ID";
+    TestUtil.IOS_RELEASE_CHANNEL_PUBLIC_ID_PLACEHOLDER = "CODE_PUSH_IOS_RELEASE_CHANNEL_PUBLIC_ID";
     TestUtil.SERVER_URL_PLACEHOLDER = "CODE_PUSH_SERVER_URL";
     TestUtil.INDEX_JS_PLACEHOLDER = "CODE_PUSH_INDEX_JS_PATH";
     TestUtil.CODE_PUSH_APP_VERSION_PLACEHOLDER = "CODE_PUSH_APP_VERSION";
