@@ -6,6 +6,7 @@
   * [iOS Setup](docs/setup-ios.md)
   * [Android Setup](docs/setup-android.md)
   * [Windows Setup](docs/setup-windows.md)
+  * [Code signing](docs/code-signing.md)
 * [Migrating to AppZung CodePush](#migrating-to-appzung-codepush)
 * [Compatibility table](#compatibility-table)
 * [Usage](#usage)

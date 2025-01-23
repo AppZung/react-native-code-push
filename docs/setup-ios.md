@@ -1,7 +1,6 @@
 ## iOS Setup
 
 * [Plugin Installation and Configuration](#plugin-installation-and-configuration)
-* [Code Signing setup](#code-signing-setup)
 
 ### Plugin Installation and Configuration
 
@@ -51,26 +50,7 @@
 
    *Note: If you need to dynamically use a different release channel, you can also override your release channel public ID in JS code using [Code-Push options](./api-js.md#CodePushOptions)*
 
-### Code Signing setup
-
-You can self sign bundles during release and verify its signature before installation of update.
-
-In order to configure Public Key for bundle verification you need to add record in `Info.plist` with name `CodePushSigningPublicKey` and string value of public key content. Example:
-
-```xml
-<plist version="1.0">
-  <dict>
-    <!-- ...other configs... -->
-
-    <key>CodePushSigningPublicKey</key>
-        <string>-----BEGIN PUBLIC KEY-----
-MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBANkWYydPuyOumR/sn2agNBVDnzyRpM16NAUpYPGxNgjSEp0etkDNgzzdzyvyl+OsAGBYF3jCxYOXozum+uV5hQECAwEAAQ==
------END PUBLIC KEY-----</string>
-
-    <!-- ...other configs... -->
-  </dict>
-</plist>
-```
+6. [Configure code signing](./code-signing.md), this is optional but recommended for security
 
 ### (optional) HTTP exception domains configuration
 
@@ -79,7 +59,7 @@ CodePush plugin makes HTTPS requests to the following domains:
 - codepush.appzung.com
 - release-package-files-eu.appzung.com
 
-If you want to change the default HTTP security configuration for any of these domains, you have to define the [`NSAppTransportSecurity` (ATS)][ats] configuration inside your __Info.plist__ file:
+If you want to change the default HTTP security configuration for any of these domains (most of the time you don't), you have to define the [`NSAppTransportSecurity` (ATS)][ats] configuration inside your __Info.plist__ file:
 
 ```xml
 <plist version="1.0">

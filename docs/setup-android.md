@@ -86,23 +86,5 @@
 
     *Note: If you need to dynamically use a different release channel, you can also override your release channel public ID in JS code using [Code-Push options](./api-js.md#CodePushOptions)*
 
-### Code Signing setup
+5. [Configure code signing](./code-signing.md), this is optional but recommended for security
 
-You can self sign bundles during release and verify its signature before installation of update. In order to use Public Key for Code Signing you need to do following steps:
-
-Add the `CodePushSigningPublicKey` string resource in `/android/app/src/main/res/values/strings.xml`. It may looks like this:
-
- ```xml
- <resources>
-    <string name="app_name">my_app</string>
-    <string name="CodePushSigningPublicKey">-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtPSR9lkGzZ4FR0lxF+ZA
-P6jJ8+Xi5L601BPN4QESoRVSrJM08roOCVrs4qoYqYJy3Of2cQWvNBEh8ti3FhHu
-tiuLFpNdfzM4DjAw0Ti5hOTfTixqVBXTJPYpSjDh7K6tUvp9MV0l5q/Ps3se1vud
-M1/X6g54lIX/QoEXTdMgR+SKXvlUIC13T7GkDHT6Z4RlwxkWkOmf2tGguRcEBL6j
-ww7w/3g0kWILz7nNPtXyDhIB9WLH7MKSJWdVCZm+cAqabUfpCFo7sHiyHLnUxcVY
-OTw3sz9ceaci7z2r8SZdsfjyjiDJrq69eWtvKVUpredy9HtyALtNuLjDITahdh8A
-zwIDAQAB
------END PUBLIC KEY-----</string>
-</resources>
- ```
