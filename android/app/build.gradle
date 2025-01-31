@@ -62,10 +62,16 @@ repositories {
   google()
 }
 
+def isInDevelopment = project.hasProperty('CodePush_development') && project.property('CodePush_development') == "true"
+
 dependencies {
-  // For < 0.71, this will be from the local maven repo
-  // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
-  //noinspection GradleDynamicVersion
-  implementation "com.facebook.react:react-native:+"
+  if (isInDevelopment) {
+    implementation("com.facebook.react:react-android:0.71.+")
+  } else {
+    // For < 0.71, this will be from the local maven repo
+    // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
+    //noinspection GradleDynamicVersion
+    implementation "com.facebook.react:react-native:+"
+  }
   implementation "com.nimbusds:nimbus-jose-jwt:9.37.3"
 }
