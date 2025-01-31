@@ -5,15 +5,7 @@
 
 ### Plugin Installation and Configuration
 
-1. In your `android/settings.gradle` file, make the following additions at the end of the file:
-
-    ```gradle
-    ...
-    include ':app', ':react-native-code-push'
-    project(':react-native-code-push').projectDir = new File(rootProject.projectDir, '../node_modules/@appzung/react-native-code-push/android/app')
-    ```
-    
-2. In your `android/app/build.gradle` file, add the `codepush.gradle` file as an additional build task definition to the end of the file:
+1. In your `android/app/build.gradle` file, add the `codepush.gradle` file as an additional build task definition to the end of the file:
 
     ```gradle
     ...
@@ -21,7 +13,7 @@
     ...
     ```
 
-3. Update the `MainApplication` file to use CodePush via the following changes:
+2. Update the `MainApplication` file to use CodePush via the following changes:
 
     For React Native 0.73 and above: update the `MainApplication.kt`
 
@@ -69,7 +61,7 @@
     }
     ```
 
-4. Add the release channel public ID to `strings.xml`:
+3. Add the release channel public ID to `strings.xml`:
 
    To let the CodePush runtime know which release channel it should query for updates, open your app's `strings.xml` file and add a new string named `CodePushReleaseChannelPublicId`, whose value is the public ID of the release channel you want to configure this app against. You can retrieve this value by running `appzung release-channels list` in the AppZung CLI and copying the value of the `Public ID` column. 
 
@@ -86,5 +78,5 @@
 
     *Note: If you need to dynamically use a different release channel, you can also override your release channel public ID in JS code using [Code-Push options](./api-js.md#CodePushOptions)*
 
-5. [Configure code signing](./code-signing.md), this is optional but recommended for security
+4. [Configure code signing](./code-signing.md), this is optional but recommended for security
 
