@@ -278,8 +278,8 @@ public class CodePushUpdateManager {
                         throw new CodePushInvalidUpdateException(
                                 "Error! Public key was provided but there is no JWT signature within app bundle to verify. " +
                                 "Possible reasons, why that might happen: \n" +
-                                "1. You've been released CodePush bundle update using version of CodePush CLI that is not support code signing.\n" +
-                                "2. You've been released CodePush bundle update without providing --privateKeyPath option."
+                                "1. You released a CodePush bundle update using version of CodePush CLI that does not support code signing.\n" +
+                                "2. You released a CodePush bundle update without providing --privateKeyPath option."
                         );
                     }
                 } else {
