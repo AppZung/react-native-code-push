@@ -1,4 +1,4 @@
-const packageJson = require("./package.json");
+const packageJson = require("../package.json");
 
 module.exports = {
   async request(verb, url, requestBody, callback) {

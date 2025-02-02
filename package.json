@@ -8,7 +8,7 @@
   "bugs": {
     "email": "support@appzung.com"
   },
-  "main": "CodePush.js",
+  "main": "src/CodePush.js",
   "typings": "typings/react-native-code-push.d.ts",
   "scripts": {
     "clean": "shx rm -rf bin",
