@@ -1,7 +1,18 @@
-const packageJson = require("../package.json");
+import { Http } from "code-push/script/acquisition-sdk";
+import { version } from "../version";
 
-module.exports = {
-  async request(verb, url, requestBody, callback) {
+interface ResponseCallback {
+  (error: Error | null, response?: Http.Response): void;
+}
+
+export const requestFetchAdapter: Http.Requester = {
+  // @ts-expect-error SDK typing is wrong about error callback
+  async request(
+    verb: Http.Verb,
+    url: string,
+    requestBody: any | ResponseCallback,
+    callback?: ResponseCallback
+  ): Promise<void> {
     if (typeof requestBody === "function") {
       callback = requestBody;
       requestBody = null;
@@ -10,9 +21,8 @@ module.exports = {
     const headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
-      "X-CodePush-Plugin-Name": packageJson.name,
-      "X-CodePush-Plugin-Version": packageJson.version,
-      "X-CodePush-SDK-Version": packageJson.dependencies["code-push"]
+      "X-CodePush-Plugin-Name": "@appzung/react-native-code-push",
+      "X-CodePush-Plugin-Version": version,
     };
 
     if (requestBody && typeof requestBody === "object") {
@@ -28,17 +38,17 @@ module.exports = {
 
       const statusCode = response.status;
       const body = await response.text();
-      callback(null, { statusCode, body });
+      callback!(null, { statusCode, body });
     } catch (err) {
-      callback(err);
+      callback!(err as Error);
     }
   }
 };
 
-function getHttpMethodName(verb) {
+function getHttpMethodName(verb: Http.Verb): string {
   // Note: This should stay in sync with the enum definition in
   // https://github.com/microsoft/code-push/blob/master/sdk/script/acquisition-sdk.ts#L6
-  return [
+  const methodName = [
     "GET",
     "HEAD",
     "POST",
@@ -49,4 +59,10 @@ function getHttpMethodName(verb) {
     "CONNECT",
     "PATCH"
   ][verb];
+
+  if (!methodName) {
+    throw new Error("Invalid method name verb");
+  }
+
+  return methodName;
 }
