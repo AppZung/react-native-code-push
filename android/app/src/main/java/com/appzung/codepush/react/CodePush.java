@@ -427,11 +427,9 @@ public class CodePush implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactApplicationContext) {
         CodePushNativeModule codePushModule = new CodePushNativeModule(reactApplicationContext, this, mUpdateManager, mTelemetryManager, mSettingsManager);
-        CodePushDialog dialogModule = new CodePushDialog(reactApplicationContext);
 
         List<NativeModule> nativeModules = new ArrayList<>();
         nativeModules.add(codePushModule);
-        nativeModules.add(dialogModule);
         return nativeModules;
     }
 

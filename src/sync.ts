@@ -6,13 +6,13 @@ import type {
     UpdateDialog
 } from "./types";
 import { log } from "./internals/utils/log";
-import {Alert, type Button} from "./internals/AlertAdapter";
 import { SyncStatus } from "./enums/SyncStatus.enum";
 import { shouldUpdateBeIgnored } from "./internals/shouldUpdateBeIgnored";
 import { checkForUpdate } from "./checkForUpdates";
 import { InstallMode } from "./enums/InstallMode.enum";
 import { getCurrentPackage } from "./internals/getCurrentPackage";
 import { notifyAppReady } from "./notifyAppReady";
+import { Alert, type AlertButton, Platform } from "react-native";
 
 /**
  * Represents the default settings that will be used by the sync method if
@@ -137,7 +137,7 @@ async function syncInternal(options?: SyncOptions, syncStatusChangeCallback?: Sy
                 let message: string | undefined;
                 let installButtonText: string | undefined;
 
-                const dialogButtons: Button[] = [];
+                const dialogButtons: AlertButton[] = [];
 
                 if (remotePackage.isMandatory) {
                     message = updateDialogConfig.mandatoryUpdateMessage;
@@ -173,7 +173,7 @@ async function syncInternal(options?: SyncOptions, syncStatusChangeCallback?: Sy
                 }
 
                 syncStatusChangeCallback(SyncStatus.AWAITING_USER_ACTION);
-                Alert.alert(updateDialogConfig.title || "", message || "", dialogButtons);
+                Alert.alert(updateDialogConfig.title || "", message || "", Platform.OS === "android" ? [...dialogButtons.reverse()] : dialogButtons);
             });
         } else {
             return await doDownloadAndInstall();
