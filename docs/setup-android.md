@@ -15,7 +15,7 @@
 
 2. Update the `MainApplication` file to use CodePush via the following changes:
 
-    For React Native 0.73 and above: update the `MainApplication.kt`
+   If your MainApplication is a Kotlin file, update the `MainApplication.kt`
 
     ```kotlin
     ...
@@ -38,7 +38,7 @@
     }
     ```
 
-    For React Native 0.72 and below: update the `MainApplication.java`
+    If your MainApplication is a Java file: update the `MainApplication.java`
 
     ```java
     ...

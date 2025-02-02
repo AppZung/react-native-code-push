@@ -6,10 +6,14 @@
 
 1. Run `cd ios && pod install && cd ..` to install all the necessary CocoaPods dependencies.
 
-2. Open up the `AppDelegate.m` file, and add an import statement for the CodePush headers:
+2. Open up the `AppDelegate.m`/`AppDelegate.swift` file, and add an import statement for the CodePush headers:
 
    ```objective-c
    #import <CodePush/CodePush.h>
+   ```
+   
+   ```swift
+   import CodePush
    ```
 
 3. Find the following line of code, which sets the source URL for bridge for production releases:
@@ -17,12 +21,21 @@
    ```objective-c
    return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
    ```
+   
+   ```swift
+   Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+   ```
 
 4. Replace it with this line:
    
    ```objective-c
    return [CodePush bundleURL];
    ```
+   
+   ```swift
+   CodePush.bundleURL()
+   ```
+
    This change configures your app to always load the most recent version of your app's JS bundle. On the first launch, this will correspond to the file that was compiled with the app. However, after an update has been pushed via CodePush, this will return the location of the most recently installed update.
   
    *NOTE: The `bundleURL` method assumes your app's JS bundle is named `main.jsbundle`. If you have configured your app to use a different file name, simply call the `bundleURLForResource:` method (which assumes you're using the `.jsbundle` extension) or `bundleURLForResource:withExtension:` method instead, in order to overwrite that default behavior*
@@ -40,6 +53,16 @@
        return [CodePush bundleURL];
      #endif
    }
+   ```
+   
+   ```swift
+     override func bundleURL() -> URL? {
+   #if DEBUG
+       RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+   #else
+       CodePush.bundleURL()
+   #endif
+     }
    ```
 
 5. Add the Release channel public ID to `Info.plist`:

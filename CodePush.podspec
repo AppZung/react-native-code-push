@@ -16,6 +16,7 @@ Pod::Spec.new do |s|
   s.library        = 'z'
   s.source_files = 'ios/CodePush/*.{h,m}'
   s.public_header_files = ['ios/CodePush/CodePush.h']
+  s.pod_target_xcconfig = { "DEFINES_MODULE" => "YES" }
 
   # Note: Even though there are copy/pasted versions of some of these dependencies in the repo,
   # we explicitly let CocoaPods pull in the versions below so all dependencies are resolved and
