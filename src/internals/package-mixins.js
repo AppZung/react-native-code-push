@@ -1,5 +1,5 @@
 import { NativeEventEmitter } from "react-native";
-import log from "./logging";
+import { log } from "./utils/log";
 
 // This function is used to augment remote and local
 // package objects with additional functionality/properties
@@ -52,12 +52,18 @@ module.exports = (NativeCodePush) => {
       const localPackage = this;
       const localPackageCopy = Object.assign({}, localPackage); // In dev mode, React Native deep freezes any object queued over the bridge
       await NativeCodePush.installUpdate(localPackageCopy, installMode, minimumBackgroundDuration);
-      updateInstalledCallback && updateInstalledCallback();
-      if (installMode == NativeCodePush.codePushInstallModeImmediate) {
+      if (installMode === NativeCodePush.codePushInstallModeImmediate) {
+        if (updateInstalledCallback) {
+          await updateInstalledCallback();
+        }
         NativeCodePush.restartApp(false);
-      } else {
-        NativeCodePush.clearPendingRestart();
-        localPackage.isPending = true; // Mark the package as pending since it hasn't been applied yet
+        return;
+      }
+
+      NativeCodePush.clearPendingRestart();
+      localPackage.isPending = true; // Mark the package as pending since it hasn't been applied yet
+      if (updateInstalledCallback) {
+        await updateInstalledCallback();
       }
     },
 

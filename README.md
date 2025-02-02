@@ -49,6 +49,8 @@ In order to ensure that your end users always have a functioning version of your
 
 If you are migrating from `react-native-code-push`, see below ["Migrating to AppZung CodePush"](#migrating-to-appzung-codepush).
 
+Otherwise:
+
 ```shell
 npm install --save @appzung/react-native-code-push
 ```
@@ -102,8 +104,9 @@ If you are less in a hurry, you can migrate to `@appzung/react-native-code-push`
 #### Change your JS code
 
 1. Replace every `react-native-code-push` imports with `@appzung/react-native-code-push` imports
-2. (optional) If you use a jest global mock, move the mock from `__mocks__/react-native-code-push.ts` to  `__mocks__/@appzung/react-native-code-push.ts`
-3. (optional) If you use dynamic deployment assignation, rename `deploymentKey` option to `releaseChannelPublicId` (TypeScript should catch that)
+2. (optional) As the package is now compatible with ESM, if you call CodePush functions like `CodePush.sync()` or import types/interfaces, you may have to replace your imports `import CodePush from` to selective imports `import withCodePush, { sync, DownloadProgress } from` (or `import * as CodePush from`)
+3. (optional) If you use a jest global mock, move the mock from `__mocks__/react-native-code-push.ts` to  `__mocks__/@appzung/react-native-code-push.ts`
+4. (optional) If you use dynamic deployment assignation, rename `deploymentKey` option to `releaseChannelPublicId` (TypeScript should catch that)
 
 #### Change your iOS setup
 

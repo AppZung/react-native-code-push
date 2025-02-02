@@ -1,14 +1,31 @@
 {
-    "compilerOptions": {
-        "target": "ES5",
-        "module": "commonjs",
-        "lib": ["es6"],
-        "noImplicitAny": true,
-        "noEmitOnError": true,
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "rootDir": "test",
-        "outDir": "bin",
-        "removeComments": true
-    }
+  "exclude": ["test"],
+  "compilerOptions": {
+    "rootDir": ".",
+    "paths": {
+      "@appzung/react-native-code-push": ["./src/index"]
+    },
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-jsx",
+    "lib": ["ESNext"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noImplicitUseStrict": false,
+    "noStrictGenericChecks": false,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "resolvePackageJsonImports": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ESNext",
+    "verbatimModuleSyntax": true
+  }
 }

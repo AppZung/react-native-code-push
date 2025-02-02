@@ -1,6 +1,4 @@
 /* Logs messages to console with the [CodePush] prefix */
-function log(message) {
+export function log(message: string): void {
   console.log(`[CodePush] ${message}`);
 }
-
-module.exports = log;
