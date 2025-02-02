@@ -8,8 +8,21 @@
   "bugs": {
     "email": "support@appzung.com"
   },
-  "main": "src/CodePush.js",
+  "main": "./lib/commonjs/index.js",
+  "source": "./src/index.js",
+  "module": "./lib/module/index.js",
   "typings": "typings/react-native-code-push.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "default": "./lib/module/index.js"
+      },
+      "require": {
+        "default": "./lib/commonjs/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "clean": "shx rm -rf bin",
     "setup": "npm install --quiet --no-progress",
@@ -26,7 +39,8 @@
     "test:fast:ios": "mocha --recursive bin/test --ios",
     "test:debugger:android": "mocha --recursive --inspect-brk=0.0.0.0 bin/test --android",
     "test:debugger:ios": "mocha --recursive --inspect-brk=0.0.0.0 bin/test --ios",
-    "tslint": "tslint -c tslint.json test/**/*.ts"
+    "tslint": "tslint -c tslint.json test/**/*.ts",
+    "prepare": "bob build"
   },
   "repository": {
     "type": "git",
@@ -50,11 +64,30 @@
     "mkdirp": "latest",
     "mocha": "^9.2.0",
     "q": "^1.5.1",
+    "react-native-builder-bob": "^0.36.0",
     "run-sequence": "latest",
     "shx": "^0.3.4",
     "slash": "^3.0.0",
     "tslint": "^6.1.3",
     "typescript": "^4.4.3"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      [
+        "commonjs",
+        {
+          "esm": true
+        }
+      ],
+      [
+        "module",
+        {
+          "esm": true
+        }
+      ]
+    ]
   },
   "keywords": [
     "appzung",
