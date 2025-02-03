@@ -7,6 +7,14 @@ declare module "react-native" {
     export interface NativeEventSubscription {
         remove(): void;
     }
+    export class NativeEventEmitter {
+        constructor(nativeModule?: any);
+        addListener(
+            eventType: string,
+            listener: (event: any) => void,
+            context?: Object,
+        ): NativeEventSubscription;
+    }
 
     type AppStateStatus = string;
     export interface AppStateStatic {
