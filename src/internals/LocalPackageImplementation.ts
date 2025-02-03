@@ -1,10 +1,29 @@
+import type { InstallMode } from '../enums/InstallMode.enum';
 import type { LocalPackage } from '../types';
 import { NativeRNAppZungCodePushModule } from './NativeRNAppZungCodePushModule';
-import { cloneWithoutFunctions } from './utils/cloneWithoutFunctions';
 
 export class LocalPackageImplementation implements LocalPackage {
-  constructor(localPackageData: LocalPackage) {
+  constructor(localPackageData: Omit<LocalPackage, 'install'>) {
     Object.assign(this, localPackageData);
+
+    this.install = async (
+      installMode = NativeRNAppZungCodePushModule.getConstants().codePushInstallModeOnNextRestart,
+      minimumBackgroundDuration = 0,
+      updateInstalledCallback?: () => Promise<void> | void,
+    ) => {
+      const { ...localPackageCopy } = localPackageData;
+      await NativeRNAppZungCodePushModule.installUpdate(localPackageCopy, installMode, minimumBackgroundDuration);
+
+      if (installMode === NativeRNAppZungCodePushModule.getConstants().codePushInstallModeImmediate) {
+        await updateInstalledCallback?.();
+        await NativeRNAppZungCodePushModule.restartApp(false);
+        return;
+      }
+
+      await NativeRNAppZungCodePushModule.clearPendingRestart();
+      this.isPending = true; // Mark the package as pending since it hasn't been applied yet
+      await updateInstalledCallback?.();
+    };
   }
 
   appVersion!: string;
@@ -18,22 +37,9 @@ export class LocalPackageImplementation implements LocalPackage {
   packageSize!: number;
   releaseChannelPublicId!: string;
 
-  async install(
-    installMode = NativeRNAppZungCodePushModule.codePushInstallModeOnNextRestart,
-    minimumBackgroundDuration = 0,
-    updateInstalledCallback?: () => Promise<void> | void,
-  ) {
-    const localPackageCopy = cloneWithoutFunctions(this); // In dev mode, React Native deep freezes any object queued over the bridge
-    await NativeRNAppZungCodePushModule.installUpdate(localPackageCopy, installMode, minimumBackgroundDuration);
-
-    if (installMode === NativeRNAppZungCodePushModule.codePushInstallModeImmediate) {
-      await updateInstalledCallback?.();
-      NativeRNAppZungCodePushModule.restartApp(false);
-      return;
-    }
-
-    NativeRNAppZungCodePushModule.clearPendingRestart();
-    this.isPending = true; // Mark the package as pending since it hasn't been applied yet
-    await updateInstalledCallback?.();
-  }
+  install: (
+    installMode?: InstallMode,
+    minimumBackgroundDuration?: number,
+    onUpdateInstalled?: () => Promise<void> | void,
+  ) => Promise<void>;
 }
