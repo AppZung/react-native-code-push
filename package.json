@@ -41,6 +41,7 @@
     "test:fast:ios": "mocha --recursive bin/test --ios",
     "test:debugger:android": "mocha --recursive --inspect-brk=0.0.0.0 bin/test --android",
     "test:debugger:ios": "mocha --recursive --inspect-brk=0.0.0.0 bin/test --ios",
+    "test:types": "tsc --noEmit",
     "test:format": "prettier --check \"{src,docs}/**/*.{ts,js,md}\" README.md react-native.config.js",
     "tslint": "tslint -c tslint.json test/**/*.ts",
     "prepare": "genversion src/internals/version.ts --esm -s && bob build"
@@ -97,6 +98,7 @@
       [
         "typescript",
         {
+          "project": "tsconfig.build.json",
           "esm": true
         }
       ]

@@ -27,4 +27,8 @@ declare module 'react-native' {
     alert(title: string, message?: string, buttons?: AlertButton[]): void;
   }
   export const Alert: AlertStatic;
+
+  export interface TurboModule {
+    getConstants?(): {};
+  }
 }

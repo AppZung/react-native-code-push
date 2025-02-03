@@ -1,5 +1,6 @@
 import type { RemotePackage, RollbackRetryOptions, SyncOptions } from '../types';
 import { NativeRNAppZungCodePushModule } from './NativeRNAppZungCodePushModule';
+import type { LatestRollbackInfo } from './types';
 import { log } from './utils/log';
 
 const DEFAULT_ROLLBACK_RETRY_OPTIONS = {
@@ -7,8 +8,7 @@ const DEFAULT_ROLLBACK_RETRY_OPTIONS = {
   maxRetryAttempts: 1,
 };
 
-// TODO type latestRollbackInfo
-function validateLatestRollbackInfo(latestRollbackInfo: any, packageHash: string) {
+function validateLatestRollbackInfo(latestRollbackInfo: LatestRollbackInfo, packageHash: string) {
   return (
     latestRollbackInfo &&
     latestRollbackInfo.time &&
