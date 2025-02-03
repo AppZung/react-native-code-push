@@ -1,4 +1,4 @@
-import { NativeRNAppZungCodePushModule } from "./internals/NativeRNAppZungCodePushModule";
+import { NativeRNAppZungCodePushModule } from './internals/NativeRNAppZungCodePushModule';
 
 /**
  * Clears all downloaded CodePush updates.

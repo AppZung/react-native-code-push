@@ -1,1 +1,1 @@
-export const NativeRNAppZungCodePushModule = require("react-native").NativeModules.CodePush;
+export const NativeRNAppZungCodePushModule = require('react-native').NativeModules.CodePush;

@@ -1,20 +1,20 @@
 # React Native Module for AppZung CodePush
 
-* [AppZung](#appzung)
-* [How does it work?](#how-does-it-work)
-* [Getting started](#getting-started)
-  * [iOS Setup](docs/setup-ios.md)
-  * [Android Setup](docs/setup-android.md)
-  * [Windows Setup](docs/setup-windows.md)
-  * [Code signing](docs/code-signing.md)
-* [Migrating to AppZung CodePush](#migrating-to-appzung-codepush)
-* [Compatibility table](#compatibility-table)
-* [Usage](#usage)
-  * [Advanced usage](./docs/advanced-usage.md)
-* [Releasing updates](#releasing-updates)
-* [Store guidelines compliance](#store-guidelines-compliance)
-* [API Reference](#api-reference)
-* [Debugging / Troubleshooting](#debugging--troubleshooting)
+- [AppZung](#appzung)
+- [How does it work?](#how-does-it-work)
+- [Getting started](#getting-started)
+  - [iOS Setup](docs/setup-ios.md)
+  - [Android Setup](docs/setup-android.md)
+  - [Windows Setup](docs/setup-windows.md)
+  - [Code signing](docs/code-signing.md)
+- [Migrating to AppZung CodePush](#migrating-to-appzung-codepush)
+- [Compatibility table](#compatibility-table)
+- [Usage](#usage)
+  - [Advanced usage](./docs/advanced-usage.md)
+- [Releasing updates](#releasing-updates)
+- [Store guidelines compliance](#store-guidelines-compliance)
+- [API Reference](#api-reference)
+- [Debugging / Troubleshooting](#debugging--troubleshooting)
 
 ## AppZung
 
@@ -43,7 +43,7 @@ The CodePush plugin helps get product improvements in front of your end users in
 
 In order to ensure that your end users always have a functioning version of your app, the CodePush plugin maintains a copy of the previous update, so that in the event that you accidentally push an update which includes a crash, it can automatically roll back. This way, you can rest assured that your newfound release agility won't result in users becoming blocked before you have a chance to roll back on the server. It's a win-win-win!
 
-*Note: Any product changes which touch native code (e.g. modifying your `AppDelegate.mm`/`MainActivity.kt` file, adding a new plugin, or changing an image or video not using `require()` syntax) cannot be distributed via CodePush, and therefore, must be updated via the appropriate store(s).*
+_Note: Any product changes which touch native code (e.g. modifying your `AppDelegate.mm`/`MainActivity.kt` file, adding a new plugin, or changing an image or video not using `require()` syntax) cannot be distributed via CodePush, and therefore, must be updated via the appropriate store(s)._
 
 ## Getting started
 
@@ -55,13 +55,13 @@ Otherwise:
 npm install --save @appzung/react-native-code-push
 ```
 
-*NOTE: For Expo apps a plugin will be made available soon. In the meantime, you may eject.*
+_NOTE: For Expo apps a plugin will be made available soon. In the meantime, you may eject._
 
 Then continue with installing the native module:
 
-* [iOS Setup](docs/setup-ios.md)
-* [Android Setup](docs/setup-android.md)
-* [Windows Setup](docs/setup-windows.md)
+- [iOS Setup](docs/setup-ios.md)
+- [Android Setup](docs/setup-android.md)
+- [Windows Setup](docs/setup-windows.md)
 
 ## Migrating to AppZung CodePush
 
@@ -105,7 +105,7 @@ If you are less in a hurry, you can migrate to `@appzung/react-native-code-push`
 
 1. Replace every `react-native-code-push` imports with `@appzung/react-native-code-push` imports
 2. (optional) As the package is now compatible with ESM, if you call CodePush functions like `CodePush.sync()` or import types/interfaces, you may have to replace your imports `import CodePush from` to selective imports `import withCodePush, { sync, DownloadProgress } from` (or `import * as CodePush from`)
-3. (optional) If you use a jest global mock, move the mock from `__mocks__/react-native-code-push.ts` to  `__mocks__/@appzung/react-native-code-push.ts`
+3. (optional) If you use a jest global mock, move the mock from `__mocks__/react-native-code-push.ts` to `__mocks__/@appzung/react-native-code-push.ts`
 4. (optional) If you use dynamic deployment assignation, rename `deploymentKey` option to `releaseChannelPublicId` (TypeScript should catch that)
 
 #### Change your iOS setup
@@ -127,7 +127,7 @@ If you are less in a hurry, you can migrate to `@appzung/react-native-code-push`
 We try our best to maintain backwards compatibility of our plugin with previous versions of React Native, but due to the nature of the platform, and the existence of breaking changes between releases, it is possible that you need to use a specific version of the CodePush plugin in order to support the exact version of React Native you are using. The following table outlines which CodePush plugin versions officially support the respective React Native versions:
 
 | React Native version(s) | Android         | iOS  | Supporting CodePush version(s) |
-|-------------------------|-----------------|------|--------------------------------|
+| ----------------------- | --------------- | ---- | ------------------------------ |
 | <0.59                   | -               | -    | **Unsupported**                |
 | v0.59                   | 4.1+ (TLS 1.2+) | 7    | v5.7.1                         |
 | v0.60-v0.61             | 4.1+ (TLS 1.2+) | 7    | v6.3.1                         |
@@ -152,10 +152,9 @@ With the CodePush plugin downloaded and linked, and your app asking CodePush whe
 The simplest way to do this is to "CodePush-ify" your app's root component:
 
 ```javascript
-import codePush from "@appzung/react-native-code-push";
+import codePush from '@appzung/react-native-code-push';
 
-const MyApp = () => {
-}
+const MyApp = () => {};
 
 export default codePush(MyApp);
 ```
@@ -171,25 +170,25 @@ codePush({ checkFrequency: codePush.CheckFrequency.ON_APP_RESUME })(MyApp);
 Alternatively, if you want fine-grained control over when the check happens (like a button press or timer interval), eg. in a staging environment, you can call [`CodePush.sync()`](docs/api-js.md#codepushsync) at any time with your desired `SyncOptions`, and turn off CodePush's automatic checking by specifying a manual `checkFrequency`:
 
 ```javascript
-import codePush from "@appzung/react-native-code-push";
+import codePush from '@appzung/react-native-code-push';
 
 class MyApp extends Component {
-    onButtonPress() {
-        codePush.sync({
-            updateDialog: true,
-            installMode: codePush.InstallMode.IMMEDIATE
-        });
-    }
+  onButtonPress() {
+    codePush.sync({
+      updateDialog: true,
+      installMode: codePush.InstallMode.IMMEDIATE,
+    });
+  }
 
-    render() {
-        return (
-            <View>
-                <TouchableOpacity onPress={this.onButtonPress}>
-                    <Text>Check for updates</Text>
-                </TouchableOpacity>
-            </View>
-        )
-    }
+  render() {
+    return (
+      <View>
+        <TouchableOpacity onPress={this.onButtonPress}>
+          <Text>Check for updates</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 }
 
 export default codePush({ checkFrequency: codePush.CheckFrequency.MANUAL })(MyApp);
@@ -203,7 +202,7 @@ Once your app is configured and distributed to your users, and you have made som
 
 ### Locally
 
-*NOTE: Before you can start releasing updates, please log into AppZung by running the `appzung auth login` command.*
+_NOTE: Before you can start releasing updates, please log into AppZung by running the `appzung auth login` command._
 
 In its most basic form, this command looks like this:
 
@@ -233,7 +232,7 @@ For more details about how the `appzung releases deploy-react-native` command wo
 
 If you run into any issues, or have any questions/comments/feedback, you can check out the [troubleshooting](#debugging--troubleshooting) details below or email us at support@appzung.com.
 
-*NOTE: CodePush updates should be tested in modes other than Debug mode. In Debug mode, React Native app always downloads JS bundle generated by packager, so JS bundle downloaded by CodePush does not apply.*
+_NOTE: CodePush updates should be tested in modes other than Debug mode. In Debug mode, React Native app always downloads JS bundle generated by packager, so JS bundle downloaded by CodePush does not apply._
 
 ### On CI
 
@@ -257,13 +256,14 @@ Android Google Play and iOS App Store have corresponding guidelines that have ru
 ### Google play
 
 Third paragraph of [Device and Network Abuse](https://support.google.com/googleplay/android-developer/answer/9888379?hl=en) topic describe that updating source code by any method other than Google Play's update mechanism is restricted. But this restriction does not apply to updating javascript bundles.
+
 > This restriction does not apply to code that runs in a virtual machine and has limited access to Android APIs (such as JavaScript in a webview or browser).
 
 That fully allow CodePush as it updates just JS bundles and can't update native code part.
 
 ### App Store
 
-Paragraph **3.3.2**, since back in 2015's [Apple Developer Program License Agreement](https://developer.apple.com/programs/ios/information/) fully allowed performing over-the-air updates of JavaScript and assets -  and in its latest version (20170605) [downloadable here](https://developer.apple.com/terms/) this ruling is even broader:
+Paragraph **3.3.2**, since back in 2015's [Apple Developer Program License Agreement](https://developer.apple.com/programs/ios/information/) fully allowed performing over-the-air updates of JavaScript and assets - and in its latest version (20170605) [downloadable here](https://developer.apple.com/terms/) this ruling is even broader:
 
 > Interpreted code may be downloaded to an Application but only so long as such code: (a) does not change the primary purpose of the Application by providing features or functionality that are inconsistent with the intended and advertised purpose of the Application as submitted to the App Store, (b) does not create a store or storefront for other code or applications, and (c) does not bypass signing, sandbox, or other security features of the OS.
 
@@ -277,9 +277,9 @@ This is not necessarily the case for `updateDialog`, since it won't force the us
 
 ## API Reference
 
-* [JavaScript API](docs/api-js.md)
-* [Objective-C API Reference (iOS)](docs/api-ios.md)
-* [Java API Reference (Android)](docs/api-android.md)
+- [JavaScript API](docs/api-js.md)
+- [Objective-C API Reference (iOS)](docs/api-ios.md)
+- [Java API Reference (Android)](docs/api-android.md)
 
 ## Debugging / Troubleshooting
 
@@ -293,14 +293,14 @@ Note that by default, React Native logs are disabled on iOS in release builds, s
 
 2. Add the following statement to the top of your `application:didFinishLaunchingWithOptions` method:
 
-    ```objective-c
-    RCTSetLogThreshold(RCTLogLevelInfo);
-    ```
+   ```objective-c
+   RCTSetLogThreshold(RCTLogLevelInfo);
+   ```
 
 Now you'll be able to see CodePush logs in either debug or release mode, on both iOS or Android. If examining the logs don't provide an indication of the issue, please refer to the following common issues for additional resolution ideas:
 
 | Issue / Symptom                                                                          | Possible Solution                                                                                                                                                                                                                                                                                                  |
-|------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Compilation Error                                                                        | Double-check that your version of React Native is [compatible](#compatibility-table) with the CodePush version you are using.                                                                                                                                                                                      |
 | Network timeout / hang when calling `sync` or `checkForUpdate` in the iOS Simulator      | Try resetting the simulator by selecting the `Simulator -> Reset Content and Settings..` menu item, and then re-running your app.                                                                                                                                                                                  |
 | Server responds with a `404` when calling `sync` or `checkForUpdate`                     | Double-check that the release channel public ID you added to your `Info.plist` (iOS), `strings.xml` or `app/build.gradle` (Android) or that you're passing to `sync`/`checkForUpdate`, is in fact correct. You can run `appzung release-channels list` to view the correct public ID for your app release channel. |

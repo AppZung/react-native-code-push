@@ -1,6 +1,6 @@
 ## iOS Setup
 
-* [Plugin Installation and Configuration](#plugin-installation-and-configuration)
+- [Plugin Installation and Configuration](#plugin-installation-and-configuration)
 
 ### Plugin Installation and Configuration
 
@@ -11,7 +11,7 @@
    ```objective-c
    #import <CodePush/CodePush.h>
    ```
-   
+
    ```swift
    import CodePush
    ```
@@ -21,24 +21,24 @@
    ```objective-c
    return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
    ```
-   
+
    ```swift
    Bundle.main.url(forResource: "main", withExtension: "jsbundle")
    ```
 
 4. Replace it with this line:
-   
+
    ```objective-c
    return [CodePush bundleURL];
    ```
-   
+
    ```swift
    CodePush.bundleURL()
    ```
 
    This change configures your app to always load the most recent version of your app's JS bundle. On the first launch, this will correspond to the file that was compiled with the app. However, after an update has been pushed via CodePush, this will return the location of the most recently installed update.
-  
-   *NOTE: The `bundleURL` method assumes your app's JS bundle is named `main.jsbundle`. If you have configured your app to use a different file name, simply call the `bundleURLForResource:` method (which assumes you're using the `.jsbundle` extension) or `bundleURLForResource:withExtension:` method instead, in order to overwrite that default behavior*
+
+   _NOTE: The `bundleURL` method assumes your app's JS bundle is named `main.jsbundle`. If you have configured your app to use a different file name, simply call the `bundleURLForResource:` method (which assumes you're using the `.jsbundle` extension) or `bundleURLForResource:withExtension:` method instead, in order to overwrite that default behavior_
 
    Typically, you're only going to want to use CodePush to resolve your JS bundle location within release builds, and therefore, we recommend using the `DEBUG` pre-processor macro to dynamically switch between using the packager server and CodePush, depending on whether you are debugging or not. This will make it much simpler to ensure you get the right behavior you want in production, while still being able to use the Chrome Dev Tools, live reload, etc. at debug-time.
 
@@ -54,7 +54,7 @@
      #endif
    }
    ```
-   
+
    ```swift
      override func bundleURL() -> URL? {
    #if DEBUG
@@ -71,7 +71,7 @@
 
    You may want to refer to the [multiple environments](./advanced-usage.md#multiple-environments) docs before actually moving your app's usage of CodePush into production.
 
-   *Note: If you need to dynamically use a different release channel, you can also override your release channel public ID in JS code using [Code-Push options](./api-js.md#CodePushOptions)*
+   _Note: If you need to dynamically use a different release channel, you can also override your release channel public ID in JS code using [Code-Push options](./api-js.md#CodePushOptions)_
 
 6. [Configure code signing](./code-signing.md), this is optional but recommended for security
 
@@ -82,7 +82,7 @@ CodePush plugin makes HTTPS requests to the following domains:
 - codepush.appzung.com
 - release-package-files-eu.appzung.com
 
-If you want to change the default HTTP security configuration for any of these domains (most of the time you don't), you have to define the [`NSAppTransportSecurity` (ATS)][ats] configuration inside your __Info.plist__ file:
+If you want to change the default HTTP security configuration for any of these domains (most of the time you don't), you have to define the [`NSAppTransportSecurity` (ATS)][ats] configuration inside your **Info.plist** file:
 
 ```xml
 <plist version="1.0">

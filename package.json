@@ -41,6 +41,7 @@
     "test:fast:ios": "mocha --recursive bin/test --ios",
     "test:debugger:android": "mocha --recursive --inspect-brk=0.0.0.0 bin/test --android",
     "test:debugger:ios": "mocha --recursive --inspect-brk=0.0.0.0 bin/test --ios",
+    "test:format": "prettier --check \"{src,docs}/**/*.{ts,js,md}\" README.md react-native.config.js",
     "tslint": "tslint -c tslint.json test/**/*.ts",
     "prepare": "genversion src/internals/version.ts --esm -s && bob build"
   },
@@ -53,6 +54,7 @@
     "hoist-non-react-statics": "^3.3.2"
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/assert": "^1.5.2",
     "@types/hoist-non-react-statics": "^3.3.6",
     "@types/mkdirp": "^1.0.1",
@@ -67,6 +69,7 @@
     "genversion": "^3.2.0",
     "mkdirp": "latest",
     "mocha": "^9.2.0",
+    "prettier": "^3.4.2",
     "q": "^1.5.1",
     "react-native-builder-bob": "^0.36.0",
     "run-sequence": "latest",
