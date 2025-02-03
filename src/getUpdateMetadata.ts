@@ -1,7 +1,7 @@
 import { UpdateState } from "./enums/UpdateState.enum";
 import { NativeRNAppZungCodePushModule } from "./internals/NativeRNAppZungCodePushModule";
-import { packageMixins } from "./internals/packageMixins";
 import type { LocalPackage } from "./types";
+import { LocalPackageImplementation } from "./internals/LocalPackageImplementation";
 
 /**
  * Retrieves the metadata for an installed update (e.g. description, mandatory).
@@ -14,7 +14,7 @@ export async function getUpdateMetadata(updateState?: UpdateState): Promise<Loca
         return null;
     }
 
-    const localPackage: LocalPackage = {...packageMixins.local, ...nativeUpdateMetadata };
+    const localPackage = new LocalPackageImplementation(nativeUpdateMetadata);
     localPackage.failedInstall = await NativeRNAppZungCodePushModule.isFailedUpdate(nativeUpdateMetadata.packageHash);
     localPackage.isFirstRun = await NativeRNAppZungCodePushModule.isFirstRun(nativeUpdateMetadata.packageHash);
     return localPackage;

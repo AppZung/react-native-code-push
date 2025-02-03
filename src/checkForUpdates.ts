@@ -1,13 +1,13 @@
 import { requestFetchAdapter } from "./internals/utils/request-fetch-adapter";
 import { Platform } from "react-native";
 import { log } from "./internals/utils/log";
-import type {HandleBinaryVersionMismatchCallback, RemotePackage} from "./types";
+import type { HandleBinaryVersionMismatchCallback, RemotePackage } from "./types";
 import { NativeRNAppZungCodePushModule } from "./internals/NativeRNAppZungCodePushModule";
-import { packageMixins } from "./internals/packageMixins";
 import { getConfiguration } from "./internals/getConfiguration";
 import { getPromisifiedSdk, type PromisifiedSdkQueryPackage } from "./internals/getPromisifiedSdk";
 import type { Configuration } from "./internals/types";
 import { getCurrentPackage } from "./internals/getCurrentPackage";
+import { RemotePackageImpl } from "./internals/RemotePackageImplementation";
 
 /**
  * Asks the CodePush service whether the configured app release channel has an update available.
@@ -92,7 +92,8 @@ export async function checkForUpdate(releaseChannelPublicId?: string, handleBina
         return null;
     }
 
-    const remotePackage = { ...update, ...packageMixins.remote(sdk.reportStatusDownload) };
+    // @ts-expect-error sdk typing is wrong
+    const remotePackage = new RemotePackageImpl(update, sdk.reportStatusDownload);
     remotePackage.failedInstall = await NativeRNAppZungCodePushModule.isFailedUpdate(remotePackage.packageHash);
     remotePackage.releaseChannelPublicId = releaseChannelPublicId || nativeConfig.releaseChannelPublicId;
     return remotePackage;
