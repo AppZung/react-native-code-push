@@ -101,3 +101,5 @@ packages/
 
 .watchmanconfig
 
+tslint.json
+.prettierrc.json

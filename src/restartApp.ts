@@ -1,4 +1,4 @@
-import { NativeRNAppZungCodePushModule } from "./internals/NativeRNAppZungCodePushModule";
+import { NativeRNAppZungCodePushModule } from './internals/NativeRNAppZungCodePushModule';
 
 /**
  * Immediately restarts the app.
@@ -6,5 +6,5 @@ import { NativeRNAppZungCodePushModule } from "./internals/NativeRNAppZungCodePu
  * @param onlyIfUpdateIsPending Indicates whether you want the restart to no-op if there isn't currently a pending update.
  */
 export async function restartApp(onlyIfUpdateIsPending = false) {
-    NativeRNAppZungCodePushModule.restartApp(onlyIfUpdateIsPending);
+  NativeRNAppZungCodePushModule.restartApp(onlyIfUpdateIsPending);
 }

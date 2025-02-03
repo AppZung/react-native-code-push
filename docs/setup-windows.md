@@ -9,6 +9,7 @@ Once the plugin has been downloaded, run `npx react-native autolink-windows` in 
 ### Plugin Configuration (Windows)
 
 1. Replace the following files located at `windows/<app name>` with those in the CodePushDemoAppCpp example app in this repo found at `Examples/CodePushDemoAppCpp/windows/CodePushDemoAppCpp`:
+
    1. app.h
    2. app.cpp
    3. app.xaml

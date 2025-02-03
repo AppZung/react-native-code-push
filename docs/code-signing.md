@@ -1,8 +1,8 @@
 ## Code signing
 
-* [Configure your release process](#configure-your-release-process)
-* [Setup Android](#setup-android)
-* [Setup iOS](#setup-ios)
+- [Configure your release process](#configure-your-release-process)
+- [Setup Android](#setup-android)
+- [Setup iOS](#setup-ios)
 
 Code signing is a security feature that helps ensure the integrity and authenticity of your app updates.
 It means no attacker can alter your bundled code sent to AppZung.
@@ -27,10 +27,10 @@ You should see `Code signing: true` in the confirmation text in interactive mode
 
 Add the `CodePushSigningPublicKey` string resource in `/android/app/src/main/res/values/strings.xml`. It may look like this:
 
- ```xml
- <resources>
-    <string name="app_name">my_app</string>
-    <string name="CodePushSigningPublicKey">-----BEGIN PUBLIC KEY-----
+```xml
+<resources>
+   <string name="app_name">my_app</string>
+   <string name="CodePushSigningPublicKey">-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtPSR9lkGzZ4FR0lxF+ZA
 P6jJ8+Xi5L601BPN4QESoRVSrJM08roOCVrs4qoYqYJy3Of2cQWvNBEh8ti3FhHu
 tiuLFpNdfzM4DjAw0Ti5hOTfTixqVBXTJPYpSjDh7K6tUvp9MV0l5q/Ps3se1vud
@@ -40,7 +40,7 @@ OTw3sz9ceaci7z2r8SZdsfjyjiDJrq69eWtvKVUpredy9HtyALtNuLjDITahdh8A
 zwIDAQAB
 -----END PUBLIC KEY-----</string>
 </resources>
- ```
+```
 
 ### Setup iOS
 
