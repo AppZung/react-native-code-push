@@ -1,4 +1,3 @@
-#if __has_include(<React/RCTAssert.h>)
 #import <React/RCTAssert.h>
 #import <React/RCTBridgeModule.h>
 #import <React/RCTConvert.h>
@@ -6,18 +5,10 @@
 #import <React/RCTRootView.h>
 #import <React/RCTUtils.h>
 #import <React/RCTReloadCommand.h>
-#else // back compatibility for RN version < 0.40
-#import "RCTAssert.h"
-#import "RCTBridgeModule.h"
-#import "RCTConvert.h"
-#import "RCTEventDispatcher.h"
-#import "RCTRootView.h"
-#import "RCTUtils.h"
-#endif
 
 #import "CodePush.h"
 
-@interface CodePush () <RCTBridgeModule, RCTFrameUpdateObserver>
+@interface CodePush () <RCTBridgeModule>
 @end
 
 @implementation CodePush {
@@ -30,8 +21,8 @@
 
     // Used to coordinate the dispatching of download progress events to JS.
     long long _latestExpectedContentLength;
-    long long _latestReceivedConentLength;
-    BOOL _didUpdateProgress;
+    long long _latestReceivedContentLength;
+    NSTimeInterval _lastProgressEmitTimestamp;
 
     BOOL _allowed;
     BOOL _restartInProgress;
@@ -255,19 +246,6 @@ static NSString *const LatestRollbackCountKey = @"count";
 #pragma mark - Private API methods
 
 @synthesize methodQueue = _methodQueue;
-@synthesize pauseCallback = _pauseCallback;
-@synthesize paused = _paused;
-
-- (void)setPaused:(BOOL)paused
-{
-    if (_paused != paused) {
-        _paused = paused;
-        if (_pauseCallback) {
-            _pauseCallback();
-        }
-    }
-}
-
 /*
  * This method is used to clear updates that are installed
  * under a different app version and hence don't apply anymore,
@@ -332,7 +310,7 @@ static NSString *const LatestRollbackCountKey = @"count";
                        @"totalBytes" : [NSNumber
                            numberWithLongLong:_latestExpectedContentLength],
                        @"receivedBytes" : [NSNumber
-                           numberWithLongLong:_latestReceivedConentLength]
+                           numberWithLongLong:_latestReceivedContentLength]
                      }];
 }
 
@@ -396,7 +374,6 @@ static NSString *const LatestRollbackCountKey = @"count";
 #ifdef DEBUG
     [self clearDebugUpdates];
 #endif
-    self.paused = YES;
     NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
     NSDictionary *pendingUpdate = [preferences objectForKey:PendingUpdateKey];
     if (pendingUpdate) {
@@ -718,13 +695,6 @@ RCT_EXPORT_METHOD(downloadUpdate:(NSDictionary*)updatePackage
                                 forKey:BinaryBundleDateKey];
     }
 
-    if (notifyProgress) {
-        // Set up and unpause the frame observer so that it can emit
-        // progress events every frame if the progress is updated.
-        _didUpdateProgress = NO;
-        self.paused = NO;
-    }
-
     NSString * publicKey = [[CodePushConfig current] publicKey];
 
     [CodePushPackage
@@ -734,17 +704,18 @@ RCT_EXPORT_METHOD(downloadUpdate:(NSDictionary*)updatePackage
         operationQueue:_methodQueue
         // The download is progressing forward
         progressCallback:^(long long expectedContentLength, long long receivedContentLength) {
-            // Update the download progress so that the frame observer can notify the JS side
-            _latestExpectedContentLength = expectedContentLength;
-            _latestReceivedConentLength = receivedContentLength;
-            _didUpdateProgress = YES;
+            // Update the download progress
+            self->_latestExpectedContentLength = expectedContentLength;
+            self->_latestReceivedContentLength = receivedContentLength;
 
-            // If the download is completed, stop observing frame
-            // updates and synchronously send the last event.
             if (expectedContentLength == receivedContentLength) {
-                _didUpdateProgress = NO;
-                self.paused = YES;
                 [self dispatchDownloadProgressEvent];
+            } else if (notifyProgress) {
+                NSTimeInterval timestamp = [[NSDate date] timeIntervalSince1970];
+                if (timestamp - self->_lastProgressEmitTimestamp > 30.0 / 1000.0) {
+                    self->_lastProgressEmitTimestamp = timestamp;
+                    [self dispatchDownloadProgressEvent];
+                }
             }
         }
         // The download completed
@@ -763,9 +734,6 @@ RCT_EXPORT_METHOD(downloadUpdate:(NSDictionary*)updatePackage
                 [self saveFailedUpdate:mutableUpdatePackage];
             }
 
-            // Stop observing frame updates if the download fails.
-            _didUpdateProgress = NO;
-            self.paused = YES;
             reject([NSString stringWithFormat: @"%lu", (long)err.code], err.localizedDescription, err);
         }];
 }
@@ -1105,18 +1073,6 @@ RCT_EXPORT_METHOD(recordStatusReported:(NSDictionary *)statusReport)
 RCT_EXPORT_METHOD(saveStatusReportForRetry:(NSDictionary *)statusReport)
 {
     [CodePushTelemetryManager saveStatusReportForRetry:statusReport];
-}
-
-#pragma mark - RCTFrameUpdateObserver Methods
-
-- (void)didUpdateFrame:(RCTFrameUpdate *)update
-{
-    if (!_didUpdateProgress) {
-        return;
-    }
-
-    [self dispatchDownloadProgressEvent];
-    _didUpdateProgress = NO;
 }
 
 @end
