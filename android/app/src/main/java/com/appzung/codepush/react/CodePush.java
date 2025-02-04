@@ -3,11 +3,9 @@ package com.appzung.codepush.react;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactPackage;
-import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.devsupport.interfaces.DevSupportManager;
@@ -43,29 +41,34 @@ public class CodePush implements ReactPackage {
     private static String mServerUrl = "https://codepush.appzung.com/";
 
     private Context mContext;
-    private final boolean mIsDebugMode;
+    private final boolean mIsDebugMode = BuildConfig.DEBUG;
 
     private static String mPublicKey;
 
     private static ReactInstanceHolder mReactInstanceHolder;
     private static CodePush mCurrentInstance;
 
-    public CodePush(String releaseChannelPublicId, Context context) {
-        this(releaseChannelPublicId, context, false);
-    }
-
     public static String getServiceUrl() {
         return mServerUrl;
     }
 
-    public CodePush(String releaseChannelPublicId, Context context, boolean isDebugMode) {
+    public CodePush(Context context) {
         mContext = context.getApplicationContext();
+
+        String releaseChannelPublicIdFromStrings = getCustomPropertyFromStringsIfExist("ReleaseChannelPublicId");
+        if (releaseChannelPublicIdFromStrings == null) {
+            throw new CodePushUnknownException("Missing release channel public ID in strings resource");
+        }
+
+        mReleaseChannelPublicId = releaseChannelPublicIdFromStrings;
 
         mUpdateManager = new CodePushUpdateManager(context.getFilesDir().getAbsolutePath());
         mTelemetryManager = new CodePushTelemetryManager(mContext);
-        mReleaseChannelPublicId = releaseChannelPublicId;
-        mIsDebugMode = isDebugMode;
         mSettingsManager = new SettingsManager(mContext);
+
+        if (mIsDebugMode) {
+            CodePushUtils.log("Running in DEBUG mode");
+        }
 
         if (sAppVersion == null) {
             try {
@@ -85,52 +88,13 @@ public class CodePush implements ReactPackage {
         }
 
         String serverUrlFromStrings = getCustomPropertyFromStringsIfExist("ServerUrl");
-        if (serverUrlFromStrings != null) mServerUrl = serverUrlFromStrings;
+        if (serverUrlFromStrings != null) {
+            CodePushUtils.log("Executing CodePush with a custom server URL.");
+            mServerUrl = serverUrlFromStrings;
+        }
 
         clearDebugCacheIfNeeded(null);
         initializeUpdateAfterRestart();
-    }
-
-    public CodePush(String releaseChannelPublicId, Context context, boolean isDebugMode, String serverUrl) {
-        this(releaseChannelPublicId, context, isDebugMode);
-        mServerUrl = serverUrl;
-    }
-
-    public CodePush(String releaseChannelPublicId, Context context, boolean isDebugMode, int publicKeyResourceDescriptor) {
-        this(releaseChannelPublicId, context, isDebugMode);
-
-        mPublicKey = getPublicKeyByResourceDescriptor(publicKeyResourceDescriptor);
-    }
-
-    public CodePush(String releaseChannelPublicId, Context context, boolean isDebugMode, String serverUrl, Integer publicKeyResourceDescriptor) {
-        this(releaseChannelPublicId, context, isDebugMode);
-
-        if (publicKeyResourceDescriptor != null) {
-            mPublicKey = getPublicKeyByResourceDescriptor(publicKeyResourceDescriptor);
-        }
-
-        mServerUrl = serverUrl;
-    }
-
-    private String getPublicKeyByResourceDescriptor(int publicKeyResourceDescriptor){
-        String publicKey;
-        try {
-            publicKey = mContext.getString(publicKeyResourceDescriptor);
-        } catch (Resources.NotFoundException e) {
-            throw new CodePushInvalidPublicKeyException(
-                    "Unable to get public key, related resource descriptor " +
-                            publicKeyResourceDescriptor +
-                            " can not be found", e
-            );
-        }
-
-        if (publicKey.isEmpty()) {
-            throw new CodePushInvalidPublicKeyException("Specified public key is empty");
-        }
-
-        CodePushUtils.log("Executing CodePush with a signing public key.");
-
-        return publicKey;
     }
 
     private String getCustomPropertyFromStringsIfExist(String propertyName) {
@@ -431,11 +395,6 @@ public class CodePush implements ReactPackage {
         List<NativeModule> nativeModules = new ArrayList<>();
         nativeModules.add(codePushModule);
         return nativeModules;
-    }
-
-    // Deprecated in RN v0.47.
-    public List<Class<? extends JavaScriptModule>> createJSModules() {
-        return new ArrayList<>();
     }
 
     @Override
