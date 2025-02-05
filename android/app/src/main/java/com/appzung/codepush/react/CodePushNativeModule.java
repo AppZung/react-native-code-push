@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.Settings;
 import android.view.View;
 
 import com.facebook.react.ReactApplication;
@@ -20,9 +19,11 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.devsupport.interfaces.DevSupportManager;
 import com.facebook.react.modules.core.ChoreographerCompat;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.modules.core.ReactChoreographer;
+import com.facebook.react.modules.debug.interfaces.DeveloperSettings;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +31,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -132,10 +134,17 @@ public class CodePushNativeModule extends ReactContextBaseJavaModule {
     private void loadBundle() {
         clearLifecycleEventListener();
         try {
-            mCodePush.clearDebugCacheIfNeeded(resolveInstanceManager());
+            DevSupportManager devSupportManager = null;
+            ReactInstanceManager reactInstanceManager = resolveInstanceManager();
+            if (reactInstanceManager != null) {
+                devSupportManager = reactInstanceManager.getDevSupportManager();
+            }
+            boolean isLiveReloadEnabled = isLiveReloadEnabled(devSupportManager);
+
+            mCodePush.clearDebugCacheIfNeeded(isLiveReloadEnabled);
         } catch(Exception e) {
             // If we got error in out reflection we should clear debug cache anyway.
-            mCodePush.clearDebugCacheIfNeeded(null);
+            mCodePush.clearDebugCacheIfNeeded(false);
         }
 
         try {
@@ -177,6 +186,26 @@ public class CodePushNativeModule extends ReactContextBaseJavaModule {
             CodePushUtils.log("Failed to load the bundle, falling back to restarting the Activity (if it exists). " + e.getMessage());
             loadBundleLegacy();
         }
+    }
+
+    private boolean isLiveReloadEnabled(DevSupportManager devSupportManager) {
+        if (devSupportManager == null) {
+            return false;
+        }
+
+        DeveloperSettings devSettings = devSupportManager.getDevSettings();
+        Method[] methods = devSettings.getClass().getMethods();
+        for (Method m : methods) {
+            if (m.getName().equals("isReloadOnJSChangeEnabled")) {
+                try {
+                    return (boolean) m.invoke(devSettings);
+                } catch (Exception x) {
+                    return false;
+                }
+            }
+        }
+
+        return false;
     }
 
     // This workaround has been implemented in order to fix https://github.com/facebook/react-native/issues/14533
