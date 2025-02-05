@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import com.facebook.react.ReactHost;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
@@ -43,6 +44,9 @@ public class CodePush implements ReactPackage {
     private static String mPublicKey;
 
     private static ReactInstanceHolder mReactInstanceHolder;
+
+    private static ReactHostHolder mReactHostHolder;
+
     private static CodePush mCurrentInstance;
 
     public static String getServiceUrl() {
@@ -361,6 +365,18 @@ public class CodePush implements ReactPackage {
             return null;
         }
         return mReactInstanceHolder.getReactInstanceManager();
+    }
+
+    public static void setReactHost(ReactHostHolder reactHostHolder) {
+        mReactHostHolder = reactHostHolder;
+    }
+
+    static ReactHost getReactHost() {
+        if (mReactHostHolder == null) {
+            return null;
+        }
+
+        return mReactHostHolder.getReactHost();
     }
 
     @Override
