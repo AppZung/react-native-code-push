@@ -2,7 +2,7 @@ module.exports = {
   dependency: {
     platforms: {
       android: {
-        packageInstance: 'new CodePush(getApplicationContext())',
+        packageInstance: 'CodePush.getInstance(getApplicationContext())',
         sourceDir: './android/app',
       },
     },

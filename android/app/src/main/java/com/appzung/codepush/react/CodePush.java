@@ -19,6 +19,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CodePush implements ReactPackage {
+    private static final Object LOCK = new Object();
+    private static volatile CodePush mCurrentInstance;
+
+    public static CodePush getInstance(Context context) {
+        if (mCurrentInstance == null) {
+            synchronized (LOCK) {
+                if (mCurrentInstance == null) {
+                    mCurrentInstance = new CodePush(context);
+                }
+            }
+        }
+        return mCurrentInstance;
+    }
 
     private static boolean sIsRunningBinaryVersion = false;
     private static boolean sNeedToReportRollback = false;
@@ -47,13 +60,11 @@ public class CodePush implements ReactPackage {
 
     private static ReactHostHolder mReactHostHolder;
 
-    private static CodePush mCurrentInstance;
-
     public static String getServiceUrl() {
         return mServerUrl;
     }
 
-    public CodePush(Context context) {
+    private CodePush(Context context) {
         mContext = context.getApplicationContext();
 
         String releaseChannelPublicIdFromStrings = getCustomPropertyFromStringsIfExist("ReleaseChannelPublicId");
