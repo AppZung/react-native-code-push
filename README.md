@@ -69,7 +69,7 @@ This `@appzung/react-native-code-push` package aims to be a drop-in replacement 
 
 This package will be updated with new features, that will only be available on `@appzung/react-native-code-push` v10+ (not the original `react-native-code-push` module).
 
-This package is compatible with the new architecture on iOS (tested on 0.76) with the interop layer, but not yet on Android. We started some work, but we are not focusing on it right now since there is no demand from our private clients for the moment. Note that there is ongoing work by the community on the original `react-native-code-push` repository so we will be able to integrate this faster in case it gets finished.
+This package is compatible with the new architecture (iOS and Android) on v11+.
 
 Windows (UWP) won't be actively supported on v10+ except if there is demand for it (it will get stuck at the basic features of CodePush v9). Please contact hello@appzung.com to help us assess this demand. Thank you for your understanding.
 
@@ -102,17 +102,16 @@ See the [corresponding steps](./docs/migrating-to-v10.md).
 
 We try our best to maintain backwards compatibility of our plugin with previous versions of React Native, but due to the nature of the platform, and the existence of breaking changes between releases, it is possible that you need to use a specific version of the CodePush plugin in order to support the exact version of React Native you are using. The following table outlines which CodePush plugin versions officially support the respective React Native versions:
 
-| React Native version(s) | Android         | iOS  | Supporting CodePush version(s) |
-| ----------------------- | --------------- | ---- | ------------------------------ |
-| <0.59                   | -               | -    | **Unsupported**                |
-| v0.59                   | 4.1+ (TLS 1.2+) | 7    | v5.7.1                         |
-| v0.60-v0.61             | 4.1+ (TLS 1.2+) | 7    | v6.3.1                         |
-| v0.62-v0.64             | 4.1+ (TLS 1.2+) | 7    | v6.4.2                         |
-| v0.65-v0.70             | 4.1+ (TLS 1.2+) | 9    | v7.1.1                         |
-| v0.71+                  | 4.1+ (TLS 1.2+) | 9    | v8.3.2                         |
-| v0.71+                  | 4.1+ (TLS 1.2+) | 15.5 | v9.0.2 or v10+                 |
-
-Our plugin will support new architecture but for the moment starting from 0.76 you will need to [opt out](https://reactnative.dev/blog/2024/10/23/the-new-architecture-is-here#opt-out) from new architecture.
+| React Native version(s) | Android         | iOS  | Old arch | New arch | Supporting CodePush version(s) |
+| ----------------------- | --------------- | ---- | -------- | -------- | ------------------------------ |
+| <0.59                   | -               | -    | ✅       | ❌       | **Unsupported**                |
+| v0.59                   | 4.1+ (TLS 1.2+) | 7    | ✅       | ❌       | v5.7.1                         |
+| v0.60-v0.61             | 4.1+ (TLS 1.2+) | 7    | ✅       | ❌       | v6.3.1                         |
+| v0.62-v0.64             | 4.1+ (TLS 1.2+) | 7    | ✅       | ❌       | v6.4.2                         |
+| v0.65-v0.70             | 4.1+ (TLS 1.2+) | 9    | ✅       | ❌       | v7.1.1                         |
+| v0.71+                  | 4.1+ (TLS 1.2+) | 9    | ✅       | ❌       | v8.3.2                         |
+| v0.71+                  | 4.1+ (TLS 1.2+) | 15.5 | ✅       | ❌       | v9.0.2 or v10+                 |
+| v0.74+                  | 4.1+ (TLS 1.2+) | 15.5 | ✅       | ✅       | v11+                           |
 
 We work hard to respond to new RN releases, but they do occasionally break us. We will update this chart with each RN release, so that users can check to see what our "official" support is.
 
@@ -128,11 +127,11 @@ With the CodePush plugin downloaded and linked, and your app asking CodePush whe
 The simplest way to do this is to "CodePush-ify" your app's root component:
 
 ```javascript
-import codePush from '@appzung/react-native-code-push';
+import withCodePush from '@appzung/react-native-code-push';
 
 const MyApp = () => {};
 
-export default codePush(MyApp);
+export default withCodePush(MyApp);
 ```
 
 By default, and this is recommended for production environments, CodePush will check for updates on every app start. If an update is available, it will be silently downloaded, and installed the next time the app is restarted (either explicitly by the end user or by the OS), which ensures the least invasive experience for your end users. If an available update is mandatory, then it will be installed immediately, ensuring that the end user gets it as soon as possible.
@@ -140,19 +139,19 @@ By default, and this is recommended for production environments, CodePush will c
 If you would like your app to discover updates more quickly, you can also choose to sync up with the CodePush server every time the app resumes from the background.
 
 ```javascript
-codePush({ checkFrequency: codePush.CheckFrequency.ON_APP_RESUME })(MyApp);
+withCodePush({ checkFrequency: CheckFrequency.ON_APP_RESUME })(MyApp);
 ```
 
 Alternatively, if you want fine-grained control over when the check happens (like a button press or timer interval), eg. in a staging environment, you can call [`CodePush.sync()`](docs/api-js.md#codepushsync) at any time with your desired `SyncOptions`, and turn off CodePush's automatic checking by specifying a manual `checkFrequency`:
 
 ```javascript
-import codePush from '@appzung/react-native-code-push';
+import withCodePush, { CheckFrequency, InstallMode } from '@appzung/react-native-code-push';
 
 class MyApp extends Component {
   onButtonPress() {
-    codePush.sync({
+    CodePush.sync({
       updateDialog: true,
-      installMode: codePush.InstallMode.IMMEDIATE,
+      installMode: InstallMode.IMMEDIATE,
     });
   }
 
@@ -167,7 +166,7 @@ class MyApp extends Component {
   }
 }
 
-export default codePush({ checkFrequency: codePush.CheckFrequency.MANUAL })(MyApp);
+export default withCodePush({ checkFrequency: CheckFrequency.MANUAL })(MyApp);
 ```
 
 If you would like to display an update confirmation dialog (an "active install"), configure when an available update is installed (like force an immediate restart) or customize the update experience in any other way, refer to the [`codePush()`](docs/api-js.md#codepush) API reference for information on how to tweak this default behavior.
@@ -277,10 +276,10 @@ Now you'll be able to see CodePush logs in either debug or release mode, on both
 
 | Issue / Symptom                                                                          | Possible Solution                                                                                                                                                                                                                                                                                                  |
 | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Compilation Error                                                                        | Double-check that your version of React Native is [compatible](#compatibility-table) with the CodePush version you are using.                                                                                                                                                                                      |
+| Compilation Error                                                                        | Clean your build folders and double-check that your version of React Native is [compatible](#compatibility-table) with the CodePush version you are using.                                                                                                                                                         |
 | Network timeout / hang when calling `sync` or `checkForUpdate` in the iOS Simulator      | Try resetting the simulator by selecting the `Simulator -> Reset Content and Settings..` menu item, and then re-running your app.                                                                                                                                                                                  |
 | Server responds with a `404` when calling `sync` or `checkForUpdate`                     | Double-check that the release channel public ID you added to your `Info.plist` (iOS), `strings.xml` or `app/build.gradle` (Android) or that you're passing to `sync`/`checkForUpdate`, is in fact correct. You can run `appzung release-channels list` to view the correct public ID for your app release channel. |
 | Update not being discovered                                                              | Double-check that the version of your running app (like `1.0.0`) matches the version you specified when releasing the update to CodePush. Additionally, make sure that you are releasing to the same release channel that your app is configured to sync with.                                                     |
-| Update not being displayed after restart                                                 | If you're not calling `sync` on app start (like within `componentDidMount` of your root component), then you need to explicitly call `notifyApplicationReady` on app start, otherwise, the plugin will think your update failed and roll it back.                                                                  |
+| Update not being displayed after restart                                                 | If you're not using the withCodePush HOC or calling `sync` on app start (like within `componentDidMount` of your root component), then you need to explicitly call `notifyAppReady` on app start, otherwise, the plugin will think your update failed and roll it back.                                            |
 | I've released an update for iOS but my Android app also shows an update and it breaks it | Be sure you have different release channels for each platform in order to receive updates correctly                                                                                                                                                                                                                |
 | I've released new update but changes are not reflected                                   | Be sure that you are running app in modes other than Debug. In Debug mode, React Native app always downloads JS bundle generated by packager, so JS bundle downloaded by CodePush does not apply.                                                                                                                  |
