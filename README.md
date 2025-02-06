@@ -18,10 +18,10 @@
 
 ## AppZung
 
-AppZung is a robust solution for CodePush functionality, created in response to AppCenter's retirement.
-CodePush allows you to easily add a dynamic update experience to your React Native app(s).
+[AppZung](https://appzung.com) is a robust solution for CodePush functionality, created in response to AppCenter's retirement.
+CodePush allows you to easily add a dynamic update experience to your React Native apps.
 
-We will offer feature-parity with the original CodePush and introduce advanced capabilities in:
+We offer feature-parity with the original CodePush and will introduce advanced capabilities in:
 
 - Hosting
 - Delivery
@@ -33,7 +33,7 @@ Currently, AppZung is used in production by several private clients, serving ove
 
 AppZung may or may not expand the scope beyond CodePush features in the future.
 
-It is not yet available publicly - Email hello@appzung.com to join the platform.
+Join the platform now: login and subscribe on the [AppZung console](https://console.appzung.com).
 
 ## How does it work?
 
