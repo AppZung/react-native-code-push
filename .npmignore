@@ -103,3 +103,6 @@ packages/
 
 tslint.json
 .prettierrc.json
+
+CONTRIBUTING.md
+
