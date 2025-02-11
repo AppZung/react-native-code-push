@@ -1,4 +1,4 @@
-[**@appzung/react-native-code-push**](../README.md)
+[**@appzung/react-native-code-push v10.1.0**](../README.md)
 
 ---
 
@@ -6,15 +6,11 @@
 
 # Interface: UpdateDialog
 
-Defined in: [types.ts:6](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L6)
-
 ## Properties
 
 ### appendReleaseDescription?
 
 > `optional` **appendReleaseDescription**: `boolean`
-
-Defined in: [types.ts:13](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L13)
 
 Indicates whether you would like to append the description of an available release to the
 notification message which is displayed to the end user.
@@ -27,8 +23,6 @@ Defaults to false.
 
 > `optional` **descriptionPrefix**: `string`
 
-Defined in: [types.ts:21](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L21)
-
 Indicates the string you would like to prefix the release description with, if any, when
 displaying the update notification to the end user.
 
@@ -40,8 +34,6 @@ Defaults to " Description: "
 
 > `optional` **mandatoryContinueButtonLabel**: `string`
 
-Defined in: [types.ts:28](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L28)
-
 The text to use for the button the end user must press in order to install a mandatory update.
 
 Defaults to "Continue".
@@ -51,8 +43,6 @@ Defaults to "Continue".
 ### mandatoryUpdateMessage?
 
 > `optional` **mandatoryUpdateMessage**: `string`
-
-Defined in: [types.ts:35](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L35)
 
 The text used as the body of an update notification, when the update is specified as mandatory.
 
@@ -64,8 +54,6 @@ Defaults to "An update is available that must be installed.".
 
 > `optional` **optionalIgnoreButtonLabel**: `string`
 
-Defined in: [types.ts:42](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L42)
-
 The text to use for the button the end user can press in order to ignore an optional update that is available.
 
 Defaults to "Ignore".
@@ -75,8 +63,6 @@ Defaults to "Ignore".
 ### optionalInstallButtonLabel?
 
 > `optional` **optionalInstallButtonLabel**: `string`
-
-Defined in: [types.ts:49](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L49)
 
 The text to use for the button the end user can press in order to install an optional update.
 
@@ -88,8 +74,6 @@ Defaults to "Install".
 
 > `optional` **optionalUpdateMessage**: `string`
 
-Defined in: [types.ts:56](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L56)
-
 The text used as the body of an update notification, when the update is optional.
 
 Defaults to "An update is available. Would you like to install it?".
@@ -99,8 +83,6 @@ Defaults to "An update is available. Would you like to install it?".
 ### title?
 
 > `optional` **title**: `string`
-
-Defined in: [types.ts:63](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L63)
 
 The text used as the header of an update notification that is displayed to the end user.
 

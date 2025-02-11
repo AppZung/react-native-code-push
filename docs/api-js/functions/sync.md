@@ -1,4 +1,4 @@
-[**@appzung/react-native-code-push**](../README.md)
+[**@appzung/react-native-code-push v10.1.0**](../README.md)
 
 ---
 
@@ -7,8 +7,6 @@
 # Function: sync()
 
 > **sync**(`options`?, `syncStatusChangedCallback`?, `downloadProgressCallback`?, `handleBinaryVersionMismatchCallback`?): `Promise`\<[`SyncStatus`](../enumerations/SyncStatus.md)\>
-
-Defined in: [sync.ts:225](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/sync.ts#L225)
 
 Allows checking for an update, downloading it and installing it, all with a single call.
 

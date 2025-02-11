@@ -1,4 +1,4 @@
-[**@appzung/react-native-code-push**](../README.md)
+[**@appzung/react-native-code-push v10.1.0**](../README.md)
 
 ---
 
@@ -7,8 +7,6 @@
 # Function: clearUpdates()
 
 > **clearUpdates**(): `void`
-
-Defined in: [clearUpdates.ts:10](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/clearUpdates.ts#L10)
 
 Clears all downloaded CodePush updates.
 

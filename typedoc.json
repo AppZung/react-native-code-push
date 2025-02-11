@@ -3,5 +3,7 @@
   "entryPoints": ["./src/index.ts"],
   "out": "./docs/api-js",
   "readme": "none",
-  "formatWithPrettier": true
+  "formatWithPrettier": true,
+  "includeVersion": true,
+  "disableSources": true
 }
