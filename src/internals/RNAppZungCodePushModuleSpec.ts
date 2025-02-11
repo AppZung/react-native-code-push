@@ -20,6 +20,7 @@ export interface Spec extends TurboModule {
   };
 
   getConfiguration(): Promise<Configuration>;
+  resetClientUniqueId(): Promise<string>;
 
   getUpdateMetadata(updateState: UpdateState): Promise<OmitFunctions<LocalPackage>>;
   installUpdate(

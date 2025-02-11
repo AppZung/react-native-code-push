@@ -1042,6 +1042,13 @@ RCT_EXPORT_METHOD(clearUpdates) {
     [CodePush clearUpdates];
 }
 
+RCT_EXPORT_METHOD(resetClientUniqueId:(RCTPromiseResolveBlock)resolve
+                    rejecter:(RCTPromiseRejectBlock)reject)
+{
+    CPLog(@"On iOS, resetting client device ID does nothing as it is the iOS IDFV.");
+    resolve([[CodePushConfig current] clientUniqueId]);
+}
+
 #pragma mark - JavaScript-exported module methods (Private)
 
 /*

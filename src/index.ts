@@ -8,6 +8,8 @@ export * from './getUpdateMetadata';
 export * from './notifyAppReady';
 export * from './restartApp';
 export * from './sync';
+export * from './getClientUniqueId';
+export * from './resetClientUniqueId';
 
 export * from './types';
 
