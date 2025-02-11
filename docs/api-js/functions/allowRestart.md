@@ -1,4 +1,4 @@
-[**@appzung/react-native-code-push**](../README.md)
+[**@appzung/react-native-code-push v11.0.0-rc3**](../README.md)
 
 ---
 
@@ -7,8 +7,6 @@
 # Function: allowRestart()
 
 > **allowRestart**(): `void`
-
-Defined in: [allowRestart.ts:8](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/allowRestart.ts#L8)
 
 Allow CodePush to restart the app.
 

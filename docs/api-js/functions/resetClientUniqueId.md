@@ -1,4 +1,4 @@
-[**@appzung/react-native-code-push**](../README.md)
+[**@appzung/react-native-code-push v11.0.0-rc3**](../README.md)
 
 ---
 
@@ -7,8 +7,6 @@
 # Function: resetClientUniqueId()
 
 > **resetClientUniqueId**(): `Promise`\<`string`\>
-
-Defined in: [resetClientUniqueId.ts:7](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/resetClientUniqueId.ts#L7)
 
 Resets the client's unique ID. You may use this in some GDPR compliance scenarios. Note that this will create a new MAU if a new request is sent later.
 

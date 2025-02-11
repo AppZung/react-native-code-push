@@ -1,4 +1,4 @@
-[**@appzung/react-native-code-push**](../README.md)
+[**@appzung/react-native-code-push v11.0.0-rc3**](../README.md)
 
 ---
 
@@ -9,8 +9,6 @@
 ## Call Signature
 
 > **withCodePush**\<`P`\>(`component`): `ComponentType`
-
-Defined in: [CodePush.tsx:31](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/CodePush.tsx#L31)
 
 Wraps a React component inside a "higher order" React component that knows how to synchronize your app's JavaScript bundle and image assets when it is mounted.
 
@@ -35,8 +33,6 @@ the React Component that will be decorated
 ## Call Signature
 
 > **withCodePush**\<`P`\>(`options`): (`component`) => `ComponentType`
-
-Defined in: [CodePush.tsx:40](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/CodePush.tsx#L40)
 
 Wraps a React component inside a "higher order" React component that knows how to synchronize your app's JavaScript bundle and image assets when it is mounted.
 
