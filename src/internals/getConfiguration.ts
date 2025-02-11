@@ -10,3 +10,7 @@ export async function getConfiguration() {
 
   return config;
 }
+
+export async function reloadCachedConfiguration() {
+  config = await NativeRNAppZungCodePushModule.getConfiguration();
+}
