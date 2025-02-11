@@ -2,5 +2,7 @@ import { NativeRNAppZungCodePushModule } from './internals/NativeRNAppZungCodePu
 
 /**
  * Allow CodePush to restart the app.
+ *
+ * This is an advanced API and is only necessary if your app explicitly disallowed restarts via the `disallowRestart` method.
  */
 export const allowRestart: () => void = NativeRNAppZungCodePushModule.allow;

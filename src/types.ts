@@ -6,50 +6,78 @@ import type { SyncStatus } from './enums/SyncStatus.enum';
 export interface UpdateDialog {
   /**
    * Indicates whether you would like to append the description of an available release to the
-   * notification message which is displayed to the end user. Defaults to false.
+   * notification message which is displayed to the end user.
+   *
+   * Defaults to false.
    */
   appendReleaseDescription?: boolean;
 
   /**
    * Indicates the string you would like to prefix the release description with, if any, when
-   * displaying the update notification to the end user. Defaults to " Description: "
+   * displaying the update notification to the end user.
+   *
+   * Defaults to " Description: "
    */
   descriptionPrefix?: string;
 
   /**
-   * The text to use for the button the end user must press in order to install a mandatory update. Defaults to "Continue".
+   * The text to use for the button the end user must press in order to install a mandatory update.
+   *
+   * Defaults to "Continue".
    */
   mandatoryContinueButtonLabel?: string;
 
   /**
    * The text used as the body of an update notification, when the update is specified as mandatory.
+   *
    * Defaults to "An update is available that must be installed.".
    */
   mandatoryUpdateMessage?: string;
 
   /**
-   * The text to use for the button the end user can press in order to ignore an optional update that is available. Defaults to "Ignore".
+   * The text to use for the button the end user can press in order to ignore an optional update that is available.
+   *
+   * Defaults to "Ignore".
    */
   optionalIgnoreButtonLabel?: string;
 
   /**
-   * The text to use for the button the end user can press in order to install an optional update. Defaults to "Install".
+   * The text to use for the button the end user can press in order to install an optional update.
+   *
+   * Defaults to "Install".
    */
   optionalInstallButtonLabel?: string;
 
   /**
-   * The text used as the body of an update notification, when the update is optional. Defaults to "An update is available. Would you like to install it?".
+   * The text used as the body of an update notification, when the update is optional.
+   *
+   * Defaults to "An update is available. Would you like to install it?".
    */
   optionalUpdateMessage?: string;
 
   /**
-   * The text used as the header of an update notification that is displayed to the end user. Defaults to "Update available".
+   * The text used as the header of an update notification that is displayed to the end user.
+   *
+   * Defaults to "Update available".
    */
   title?: string;
 }
 
+/**
+ * Called periodically when an available update is being downloaded from the CodePush server.
+ */
 export type DownloadProgressCallback = (progress: DownloadProgress) => void;
+
+/**
+ * Called when the sync process moves from one stage to another in the overall update process.
+ *
+ * The method is called with a status code which represents the current state, and can be any of the `SyncStatus` values.
+ */
 export type SyncStatusChangedCallback = (status: SyncStatus) => void;
+
+/**
+ * Called when there are any binary update available.
+ */
 export type HandleBinaryVersionMismatchCallback = (update: NativeUpdateNotification) => void;
 
 export interface DownloadProgress {
@@ -64,6 +92,9 @@ export interface DownloadProgress {
   receivedBytes: number;
 }
 
+/**
+ * Represents a downloaded update that is either already running, or has been installed and is pending an app restart.
+ */
 export interface LocalPackage extends Package {
   /**
    * Installs the update by saving it to the location on disk where the runtime expects to find the latest version of the app.
@@ -82,7 +113,7 @@ export interface LocalPackage extends Package {
 export interface Package {
   /**
    * The app binary version that this update is dependent on. This is the value that was
-   * specified via the appStoreVersion parameter when calling the CLI's release command.
+   * specified via the --target-binary-version parameter when calling the CLI's release command.
    */
   appVersion: string;
 
@@ -98,11 +129,15 @@ export interface Package {
 
   /**
    * Indicates whether this update has been previously installed but was rolled back.
+   *
+   * The `sync` method will automatically ignore updates which have previously failed, so you only need to worry about this property if using `checkForUpdate`.
    */
   failedInstall: boolean;
 
   /**
    * Indicates whether this is the first time the update has been run after being installed.
+   *
+   * This is useful for determining whether you would like to show a "What's New?" UI to the end user after installing an update.
    */
   isFirstRun: boolean;
 
@@ -133,6 +168,9 @@ export interface Package {
   packageSize: number;
 }
 
+/**
+ * Represents an available update on the CodePush server that hasn't been downloaded yet.
+ */
 export interface RemotePackage extends Package {
   /**
    * Downloads the available update from the CodePush service.
@@ -143,27 +181,31 @@ export interface RemotePackage extends Package {
 
   /**
    * The URL at which the package is available for download.
+   *
+   * This property is only needed for advanced usage, since the `download` method will automatically handle the acquisition of updates for you.
    */
   downloadUrl: string;
 }
 
 export interface SyncOptions {
   /**
-   * Specifies the release channel you want to query for an update against. By default, this value is derived from the Info.plist
-   * file (iOS) and strings resources (Android), but this option allows you to override it from the script-side if you need to
-   * dynamically use a different release channel for a specific call to sync.
+   * Specifies the release channel you want to query for an update against.
+   *
+   * By default, this value is derived from the Info.plist file (iOS) and strings resources (Android), but this option allows you to override it from the JS-side if you need to dynamically use a different release channel for a specific call to sync.
    */
   releaseChannelPublicId?: string;
 
   /**
-   * Specifies when you would like to install optional updates (i.e. those that aren't marked as mandatory).
-   * Defaults to codePush.InstallMode.ON_NEXT_RESTART.
+   * Specifies when you would like to install regular updates (i.e. those that aren't marked as mandatory).
+   *
+   * Defaults to InstallMode.ON_NEXT_RESTART.
    */
   installMode?: InstallMode;
 
   /**
    * Specifies when you would like to install updates which are marked as mandatory.
-   * Defaults to codePush.InstallMode.IMMEDIATE.
+   *
+   * Defaults to InstallMode.IMMEDIATE.
    */
   mandatoryInstallMode?: InstallMode;
 
@@ -176,19 +218,18 @@ export interface SyncOptions {
   minimumBackgroundDuration?: number;
 
   /**
-   * An "options" object used to determine whether a confirmation dialog should be displayed to the end user when an update is available,
-   * and if so, what strings to use. Defaults to null, which has the effect of disabling the dialog completely. Setting this to any truthy
-   * value will enable the dialog with the default strings, and passing an object to this parameter allows enabling the dialog as well as
-   * overriding one or more of the default strings.
+   * Used to determine whether a confirmation dialog should be displayed to the end user when an update is available, and if so, what strings to use.
+   *
+   * Defaults to null, which has the effect of disabling the dialog completely.
+   * Setting this to true will enable the dialog with the default strings, and passing an object to this parameter allows enabling the dialog as well as overriding one or more of the default strings.
    */
   updateDialog?: UpdateDialog | true;
 
   /**
-   * The rollback retry mechanism allows the application to attempt to reinstall an update that was previously rolled back (with the restrictions
-   * specified in the options). It is an "options" object used to determine whether a rollback retry should occur, and if so, what settings to use
-   * for the rollback retry. This defaults to null, which has the effect of disabling the retry mechanism. Setting this to true will enable
-   * the retry mechanism with the default settings, and passing an object to this parameter allows enabling the rollback retry as well as overriding
-   * one or more of the default values.
+   * The rollback retry mechanism allows the application to attempt to reinstall an update that was previously rolled back (with the restrictions specified in the options).
+   *
+   * This defaults to null, which has the effect of disabling the retry mechanism.
+   * Setting this to true will enable the retry mechanism with the default settings, and passing an object to this parameter allows enabling the rollback retry as well as overriding one or more of the default values.
    */
   rollbackRetryOptions?: RollbackRetryOptions | true;
 
@@ -197,14 +238,17 @@ export interface SyncOptions {
 
 export interface RollbackRetryOptions {
   /**
-   * Specifies the minimum time in hours that the app will wait after the latest rollback
-   * before attempting to reinstall same rolled-back package. Defaults to `24`.
+   * Specifies the minimum time in hours that the app will wait after the latest rollback before attempting to reinstall same rolled-back package.
+   *
+   * Defaults to `24`.
    */
   delayInHours?: number;
 
   /**
    * Specifies the maximum number of retry attempts that the app can make before it stops trying.
-   * Cannot be less than `1`. Defaults to `1`.
+   * Cannot be less than `1`.
+   *
+   * Defaults to `1`.
    */
   maxRetryAttempts?: number;
 }
