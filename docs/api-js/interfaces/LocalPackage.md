@@ -6,7 +6,7 @@
 
 # Interface: LocalPackage
 
-Defined in: [types.ts:98](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L98)
+Defined in: [types.ts:98](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L98)
 
 Represents a downloaded update that is either already running, or has been installed and is pending an app restart.
 
@@ -20,7 +20,7 @@ Represents a downloaded update that is either already running, or has been insta
 
 > **appVersion**: `string`
 
-Defined in: [types.ts:118](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L118)
+Defined in: [types.ts:118](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L118)
 
 The app binary version that this update is dependent on. This is the value that was
 specified via the --target-binary-version parameter when calling the CLI's release command.
@@ -35,7 +35,7 @@ specified via the --target-binary-version parameter when calling the CLI's relea
 
 > **description**: `string`
 
-Defined in: [types.ts:128](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L128)
+Defined in: [types.ts:128](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L128)
 
 The description of the update. This is the same value that you specified in the CLI when you released the update.
 
@@ -49,7 +49,7 @@ The description of the update. This is the same value that you specified in the 
 
 > **failedInstall**: `boolean`
 
-Defined in: [types.ts:135](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L135)
+Defined in: [types.ts:135](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L135)
 
 Indicates whether this update has been previously installed but was rolled back.
 
@@ -65,7 +65,7 @@ The `sync` method will automatically ignore updates which have previously failed
 
 > **isFirstRun**: `boolean`
 
-Defined in: [types.ts:142](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L142)
+Defined in: [types.ts:142](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L142)
 
 Indicates whether this is the first time the update has been run after being installed.
 
@@ -81,7 +81,7 @@ This is useful for determining whether you would like to show a "What's New?" UI
 
 > **isMandatory**: `boolean`
 
-Defined in: [types.ts:147](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L147)
+Defined in: [types.ts:147](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L147)
 
 Indicates whether the update is considered mandatory. This is the value that was specified in the CLI when the update was released.
 
@@ -95,7 +95,7 @@ Indicates whether the update is considered mandatory. This is the value that was
 
 > **isPending**: `boolean`
 
-Defined in: [types.ts:153](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L153)
+Defined in: [types.ts:153](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L153)
 
 Indicates whether this update is in a "pending" state. When true, that means the update has been downloaded and installed, but the app restart
 needed to apply it hasn't occurred yet, and therefore, its changes aren't currently visible to the end-user.
@@ -110,7 +110,7 @@ needed to apply it hasn't occurred yet, and therefore, its changes aren't curren
 
 > **label**: `string`
 
-Defined in: [types.ts:158](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L158)
+Defined in: [types.ts:158](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L158)
 
 The internal label automatically given to the update by the CodePush server. This value uniquely identifies the update within its release channel.
 
@@ -124,7 +124,7 @@ The internal label automatically given to the update by the CodePush server. Thi
 
 > **packageHash**: `string`
 
-Defined in: [types.ts:163](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L163)
+Defined in: [types.ts:163](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L163)
 
 The SHA hash value of the update.
 
@@ -138,7 +138,7 @@ The SHA hash value of the update.
 
 > **packageSize**: `number`
 
-Defined in: [types.ts:168](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L168)
+Defined in: [types.ts:168](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L168)
 
 The size of the code contained within the update, in bytes.
 
@@ -152,7 +152,7 @@ The size of the code contained within the update, in bytes.
 
 > **releaseChannelPublicId**: `string`
 
-Defined in: [types.ts:123](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L123)
+Defined in: [types.ts:123](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L123)
 
 The release channel public ID that was used to originally download this update.
 
@@ -166,7 +166,7 @@ The release channel public ID that was used to originally download this update.
 
 > **install**(`installMode`?, `minimumBackgroundDuration`?, `onUpdateInstalled`?): `Promise`\<`void`\>
 
-Defined in: [types.ts:106](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L106)
+Defined in: [types.ts:106](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L106)
 
 Installs the update by saving it to the location on disk where the runtime expects to find the latest version of the app.
 

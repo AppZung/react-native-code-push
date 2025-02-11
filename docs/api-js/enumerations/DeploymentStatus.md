@@ -6,7 +6,7 @@
 
 # Enumeration: DeploymentStatus
 
-Defined in: [enums/DeploymentStatus.enum.ts:4](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/enums/DeploymentStatus.enum.ts#L4)
+Defined in: [enums/DeploymentStatus.enum.ts:4](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/enums/DeploymentStatus.enum.ts#L4)
 
 Indicates the status of a deployment (after installing and restarting).
 
@@ -16,7 +16,7 @@ Indicates the status of a deployment (after installing and restarting).
 
 > **FAILED**: `"DeploymentFailed"`
 
-Defined in: [enums/DeploymentStatus.enum.ts:8](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/enums/DeploymentStatus.enum.ts#L8)
+Defined in: [enums/DeploymentStatus.enum.ts:8](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/enums/DeploymentStatus.enum.ts#L8)
 
 The deployment failed (and was rolled back).
 
@@ -26,6 +26,6 @@ The deployment failed (and was rolled back).
 
 > **SUCCEEDED**: `"DeploymentSucceeded"`
 
-Defined in: [enums/DeploymentStatus.enum.ts:13](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/enums/DeploymentStatus.enum.ts#L13)
+Defined in: [enums/DeploymentStatus.enum.ts:13](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/enums/DeploymentStatus.enum.ts#L13)
 
 The deployment succeeded.

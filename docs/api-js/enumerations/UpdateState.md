@@ -6,7 +6,7 @@
 
 # Enumeration: UpdateState
 
-Defined in: [enums/UpdateState.enum.ts:6](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/enums/UpdateState.enum.ts#L6)
+Defined in: [enums/UpdateState.enum.ts:6](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/enums/UpdateState.enum.ts#L6)
 
 Indicates the state that an update is currently in.
 
@@ -16,7 +16,7 @@ Indicates the state that an update is currently in.
 
 > **LATEST**: `number`
 
-Defined in: [enums/UpdateState.enum.ts:24](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/enums/UpdateState.enum.ts#L24)
+Defined in: [enums/UpdateState.enum.ts:24](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/enums/UpdateState.enum.ts#L24)
 
 Indicates than an update represents the latest available release, and can be either currently running or pending.
 
@@ -26,7 +26,7 @@ Indicates than an update represents the latest available release, and can be eit
 
 > **PENDING**: `number`
 
-Defined in: [enums/UpdateState.enum.ts:19](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/enums/UpdateState.enum.ts#L19)
+Defined in: [enums/UpdateState.enum.ts:19](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/enums/UpdateState.enum.ts#L19)
 
 Indicates than an update has been installed, but the app hasn't been restarted yet in order to apply it.
 
@@ -38,7 +38,7 @@ This can be useful for determining whether there is a pending update, which you 
 
 > **RUNNING**: `number`
 
-Defined in: [enums/UpdateState.enum.ts:12](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/enums/UpdateState.enum.ts#L12)
+Defined in: [enums/UpdateState.enum.ts:12](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/enums/UpdateState.enum.ts#L12)
 
 Indicates that an update represents the version of the app that is currently running.
 

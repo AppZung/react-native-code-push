@@ -6,7 +6,7 @@
 
 # Enumeration: InstallMode
 
-Defined in: [enums/InstallMode.enum.ts:6](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/enums/InstallMode.enum.ts#L6)
+Defined in: [enums/InstallMode.enum.ts:6](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/enums/InstallMode.enum.ts#L6)
 
 Indicates when you would like an installed update to actually be applied.
 
@@ -16,7 +16,7 @@ Indicates when you would like an installed update to actually be applied.
 
 > **IMMEDIATE**: `number`
 
-Defined in: [enums/InstallMode.enum.ts:12](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/enums/InstallMode.enum.ts#L12)
+Defined in: [enums/InstallMode.enum.ts:12](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/enums/InstallMode.enum.ts#L12)
 
 Indicates that you want to install the update and restart the app immediately.
 
@@ -28,7 +28,7 @@ This value is appropriate for debugging scenarios as well as when displaying an 
 
 > **ON_NEXT_RESTART**: `number`
 
-Defined in: [enums/InstallMode.enum.ts:19](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/enums/InstallMode.enum.ts#L19)
+Defined in: [enums/InstallMode.enum.ts:19](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/enums/InstallMode.enum.ts#L19)
 
 Indicates that you want to install the update, but not forcibly restart the app.
 
@@ -40,7 +40,7 @@ When the app is "naturally" restarted (due the OS or end user killing it), the u
 
 > **ON_NEXT_RESUME**: `number`
 
-Defined in: [enums/InstallMode.enum.ts:27](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/enums/InstallMode.enum.ts#L27)
+Defined in: [enums/InstallMode.enum.ts:27](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/enums/InstallMode.enum.ts#L27)
 
 Indicates that you want to install the update, but don't want to restart the app until the next time the end user resumes it from the background.
 
@@ -53,7 +53,7 @@ This value is appropriate for silent installs that can be applied on resume in a
 
 > **ON_NEXT_SUSPEND**: `number`
 
-Defined in: [enums/InstallMode.enum.ts:34](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/enums/InstallMode.enum.ts#L34)
+Defined in: [enums/InstallMode.enum.ts:34](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/enums/InstallMode.enum.ts#L34)
 
 Indicates that you want to install the update when the app is in the background,
 but only after it has been in the background for "minimumBackgroundDuration" seconds (0 by default),

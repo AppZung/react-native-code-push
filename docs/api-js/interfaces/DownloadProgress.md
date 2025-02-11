@@ -6,7 +6,7 @@
 
 # Interface: DownloadProgress
 
-Defined in: [types.ts:83](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L83)
+Defined in: [types.ts:83](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L83)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [types.ts:83](https://github.com/AppZung/react-native-code-push/blob
 
 > **receivedBytes**: `number`
 
-Defined in: [types.ts:92](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L92)
+Defined in: [types.ts:92](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L92)
 
 The number of bytes downloaded thus far.
 
@@ -24,6 +24,6 @@ The number of bytes downloaded thus far.
 
 > **totalBytes**: `number`
 
-Defined in: [types.ts:87](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L87)
+Defined in: [types.ts:87](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L87)
 
 The total number of bytes expected to be received for this update.

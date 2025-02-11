@@ -8,7 +8,7 @@
 
 > **allowRestart**(): `void`
 
-Defined in: [allowRestart.ts:8](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/allowRestart.ts#L8)
+Defined in: [allowRestart.ts:8](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/allowRestart.ts#L8)
 
 Allow CodePush to restart the app.
 

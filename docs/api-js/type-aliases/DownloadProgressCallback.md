@@ -8,7 +8,7 @@
 
 > **DownloadProgressCallback**: (`progress`) => `void`
 
-Defined in: [types.ts:69](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L69)
+Defined in: [types.ts:69](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L69)
 
 Called periodically when an available update is being downloaded from the CodePush server.
 

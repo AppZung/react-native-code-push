@@ -6,7 +6,7 @@
 
 # Interface: CodePushOptions
 
-Defined in: [CodePush.tsx:14](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/CodePush.tsx#L14)
+Defined in: [CodePush.tsx:14](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/CodePush.tsx#L14)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [CodePush.tsx:14](https://github.com/AppZung/react-native-code-push/
 
 > `optional` **checkFrequency**: [`CheckFrequency`](../enumerations/CheckFrequency.md)
 
-Defined in: [CodePush.tsx:20](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/CodePush.tsx#L20)
+Defined in: [CodePush.tsx:20](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/CodePush.tsx#L20)
 
 Specifies when you would like to synchronize updates with the CodePush server.
 
@@ -30,7 +30,7 @@ Defaults to CheckFrequency.ON_APP_START.
 
 > `optional` **ignoreFailedUpdates**: `boolean`
 
-Defined in: [types.ts:236](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L236)
+Defined in: [types.ts:236](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L236)
 
 #### Inherited from
 
@@ -42,7 +42,7 @@ Defined in: [types.ts:236](https://github.com/AppZung/react-native-code-push/blo
 
 > `optional` **installMode**: [`InstallMode`](../enumerations/InstallMode.md)
 
-Defined in: [types.ts:203](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L203)
+Defined in: [types.ts:203](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L203)
 
 Specifies when you would like to install regular updates (i.e. those that aren't marked as mandatory).
 
@@ -58,7 +58,7 @@ Defaults to InstallMode.ON_NEXT_RESTART.
 
 > `optional` **mandatoryInstallMode**: [`InstallMode`](../enumerations/InstallMode.md)
 
-Defined in: [types.ts:210](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L210)
+Defined in: [types.ts:210](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L210)
 
 Specifies when you would like to install updates which are marked as mandatory.
 
@@ -74,7 +74,7 @@ Defaults to InstallMode.IMMEDIATE.
 
 > `optional` **minimumBackgroundDuration**: `number`
 
-Defined in: [types.ts:218](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L218)
+Defined in: [types.ts:218](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L218)
 
 Specifies the minimum number of seconds that the app needs to have been in the background before restarting the app. This property
 only applies to updates which are installed using `InstallMode.ON_NEXT_RESUME` or `InstallMode.ON_NEXT_SUSPEND`, and can be useful
@@ -91,7 +91,7 @@ the update immediately after a resume or unless the app suspension is long enoug
 
 > `optional` **releaseChannelPublicId**: `string`
 
-Defined in: [types.ts:196](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L196)
+Defined in: [types.ts:196](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L196)
 
 Specifies the release channel you want to query for an update against.
 
@@ -107,7 +107,7 @@ By default, this value is derived from the Info.plist file (iOS) and strings res
 
 > `optional` **rollbackRetryOptions**: `true` \| [`RollbackRetryOptions`](RollbackRetryOptions.md)
 
-Defined in: [types.ts:234](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L234)
+Defined in: [types.ts:234](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L234)
 
 The rollback retry mechanism allows the application to attempt to reinstall an update that was previously rolled back (with the restrictions specified in the options).
 
@@ -124,7 +124,7 @@ Setting this to true will enable the retry mechanism with the default settings, 
 
 > `optional` **updateDialog**: `true` \| [`UpdateDialog`](UpdateDialog.md)
 
-Defined in: [types.ts:226](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/types.ts#L226)
+Defined in: [types.ts:226](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/types.ts#L226)
 
 Used to determine whether a confirmation dialog should be displayed to the end user when an update is available, and if so, what strings to use.
 
