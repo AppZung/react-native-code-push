@@ -71,7 +71,7 @@
 
    You may want to refer to the [multiple environments](./advanced-usage.md#multiple-environments) docs before actually moving your app's usage of CodePush into production.
 
-   _Note: If you need to dynamically use a different release channel, you can also override your release channel public ID in JS code using [Code-Push options](./api-js.md#CodePushOptions)_
+   _Note: If you need to dynamically use a different release channel, you can also override your release channel public ID in JS code using [Code-Push options](./api-js/interfaces/CodePushOptions.mds)_
 
 6. [Configure code signing](./code-signing.md), this is optional but recommended for security
 

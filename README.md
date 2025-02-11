@@ -142,7 +142,7 @@ If you would like your app to discover updates more quickly, you can also choose
 withCodePush({ checkFrequency: CheckFrequency.ON_APP_RESUME })(MyApp);
 ```
 
-Alternatively, if you want fine-grained control over when the check happens (like a button press or timer interval), eg. in a staging environment, you can call [`CodePush.sync()`](docs/api-js.md#codepushsync) at any time with your desired `SyncOptions`, and turn off CodePush's automatic checking by specifying a manual `checkFrequency`:
+Alternatively, if you want fine-grained control over when the check happens (like a button press or timer interval), eg. in a staging environment, you can call [`CodePush.sync()`](docs/api-js/functions/sync.md) at any time with your desired `SyncOptions`, and turn off CodePush's automatic checking by specifying a manual `checkFrequency`:
 
 ```javascript
 import withCodePush, { CheckFrequency, InstallMode } from '@appzung/react-native-code-push';
@@ -169,7 +169,7 @@ class MyApp extends Component {
 export default withCodePush({ checkFrequency: CheckFrequency.MANUAL })(MyApp);
 ```
 
-If you would like to display an update confirmation dialog (an "active install"), configure when an available update is installed (like force an immediate restart) or customize the update experience in any other way, refer to the [`codePush()`](docs/api-js.md#codepush) API reference for information on how to tweak this default behavior.
+If you would like to display an update confirmation dialog (an "active install"), configure when an available update is installed (like force an immediate restart) or customize the update experience in any other way, refer to the [`withCodePush()`](docs/api-js/functions/withCodePush.md) API reference for information on how to tweak this default behavior.
 
 ## Releasing updates
 
@@ -252,7 +252,7 @@ This is not necessarily the case for `updateDialog`, since it won't force the us
 
 ## API Reference
 
-- [JavaScript API](docs/api-js.md)
+- [JavaScript API](docs/api-js/README.md)
 - [Objective-C API Reference (iOS)](docs/api-ios.md)
 - [Java API Reference (Android)](docs/api-android.md)
 

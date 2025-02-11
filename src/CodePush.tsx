@@ -14,13 +14,16 @@ import type {
 export interface CodePushOptions extends SyncOptions {
   /**
    * Specifies when you would like to synchronize updates with the CodePush server.
-   * Defaults to codePush.CheckFrequency.ON_APP_START.
+   *
+   * Defaults to CheckFrequency.ON_APP_START.
    */
   checkFrequency?: CheckFrequency;
 }
 
 /**
- * Decorates a React Component configuring it to sync for updates with the CodePush server.
+ * Wraps a React component inside a "higher order" React component that knows how to synchronize your app's JavaScript bundle and image assets when it is mounted.
+ *
+ * Internally, the higher-order component calls `sync` inside its `componentDidMount` lifecycle handle, which in turns performs an update check, downloads the update if it exists and installs the update for you.
  *
  * @param component the React Component that will be decorated
  */
@@ -28,7 +31,9 @@ export interface CodePushOptions extends SyncOptions {
 export function withCodePush<P extends object>(component: React.ComponentType<P>): React.ComponentType;
 
 /**
- * Decorates a React Component configuring it to sync for updates with the CodePush server.
+ * Wraps a React component inside a "higher order" React component that knows how to synchronize your app's JavaScript bundle and image assets when it is mounted.
+ *
+ * Internally, the higher-order component calls `sync` inside its `componentDidMount` lifecycle handle, which in turns performs an update check, downloads the update if it exists and installs the update for you.
  *
  * @param options Options used to configure the end-user sync and update experience (e.g. when to check for updates?, show a prompt?, install the update immediately?).
  */
