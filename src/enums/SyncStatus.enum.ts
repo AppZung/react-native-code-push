@@ -3,30 +3,30 @@
  */
 export enum SyncStatus {
   /**
-   * The app is up-to-date with the CodePush server.
+   * The app is fully up-to-date with the configured release channel.
    */
   UP_TO_DATE,
 
   /**
    * An available update has been installed and will be run either immediately after the
-   * syncStatusChangedCallback function returns or the next time the app resumes/restarts,
-   * depending on the InstallMode specified in SyncOptions
+   * `syncStatusChangedCallback` function returns or the next time the app resumes/restarts,
+   * depending on the `InstallMode` specified in `SyncOptions`
    */
   UPDATE_INSTALLED,
 
   /**
    * The app had an optional update which the end user chose to ignore.
-   * (This is only applicable when the updateDialog is used)
+   * (This is only applicable when the `updateDialog` is used)
    */
   UPDATE_IGNORED,
 
   /**
-   * The sync operation encountered an unknown error.
+   * The `sync` operation encountered an unknown error.
    */
   UNKNOWN_ERROR,
 
   /**
-   * There is an ongoing sync operation running which prevents the current call from being executed.
+   * There is an ongoing `sync` operation running which prevents the current call from being executed.
    */
   SYNC_IN_PROGRESS,
 
@@ -37,7 +37,7 @@ export enum SyncStatus {
 
   /**
    * An update is available, and a confirmation dialog was shown
-   * to the end user. (This is only applicable when the updateDialog is used)
+   * to the end user. (This is only applicable when the `updateDialog` is used)
    */
   AWAITING_USER_ACTION,
 

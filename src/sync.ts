@@ -206,6 +206,8 @@ async function syncInternal(
 /**
  * Allows checking for an update, downloading it and installing it, all with a single call.
  *
+ * Unless you need custom UI and/or behavior, we recommend most developers to use this method when integrating CodePush into their apps, if they are not using the `withCodePush` HOC.
+ *
  * @param options Options used to configure the end-user update experience (e.g. show a prompt?, install the update immediately?).
  * @param syncStatusChangedCallback An optional callback that allows tracking the status of the sync operation, as opposed to simply checking the resolved state via the returned Promise.
  * @param downloadProgressCallback An optional callback that allows tracking the progress of an update while it is being downloaded.
@@ -222,17 +224,17 @@ export const sync = (() => {
 
   return (
     options?: SyncOptions,
-    syncStatusChangeCallback?: SyncStatusChangedCallback,
+    syncStatusChangedCallback?: SyncStatusChangedCallback,
     downloadProgressCallback?: DownloadProgressCallback,
     handleBinaryVersionMismatchCallback?: HandleBinaryVersionMismatchCallback,
   ): Promise<SyncStatus> => {
     let syncStatusCallbackWithTryCatch: SyncStatusChangedCallback | undefined;
     let downloadProgressCallbackWithTryCatch: DownloadProgressCallback | undefined;
 
-    if (typeof syncStatusChangeCallback === 'function') {
+    if (typeof syncStatusChangedCallback === 'function') {
       syncStatusCallbackWithTryCatch = (...args) => {
         try {
-          syncStatusChangeCallback(...args);
+          syncStatusChangedCallback(...args);
         } catch (error) {
           log(`An error has occurred : ${error instanceof Error ? error.stack : 'unknown'}`);
         }
