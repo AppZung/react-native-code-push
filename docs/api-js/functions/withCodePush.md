@@ -8,35 +8,43 @@
 
 ## Call Signature
 
-> **withCodePush**(`component`): `FunctionComponent`
+> **withCodePush**\<`P`\>(`component`): `ComponentType`
 
-Defined in: [CodePush.tsx:31](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/CodePush.tsx#L31)
+Defined in: [CodePush.tsx:31](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/CodePush.tsx#L31)
 
 Wraps a React component inside a "higher order" React component that knows how to synchronize your app's JavaScript bundle and image assets when it is mounted.
 
 Internally, the higher-order component calls `sync` inside its `componentDidMount` lifecycle handle, which in turns performs an update check, downloads the update if it exists and installs the update for you.
+
+### Type Parameters
+
+• **P** _extends_ `object`
 
 ### Parameters
 
 #### component
 
-`any`
+`ComponentType`\<`P`\>
 
 the React Component that will be decorated
 
 ### Returns
 
-`FunctionComponent`
+`ComponentType`
 
 ## Call Signature
 
-> **withCodePush**(`options`): (`component`) => `FunctionComponent`
+> **withCodePush**\<`P`\>(`options`): (`component`) => `ComponentType`
 
-Defined in: [CodePush.tsx:40](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/CodePush.tsx#L40)
+Defined in: [CodePush.tsx:40](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/CodePush.tsx#L40)
 
 Wraps a React component inside a "higher order" React component that knows how to synchronize your app's JavaScript bundle and image assets when it is mounted.
 
 Internally, the higher-order component calls `sync` inside its `componentDidMount` lifecycle handle, which in turns performs an update check, downloads the update if it exists and installs the update for you.
+
+### Type Parameters
+
+• **P** _extends_ `object`
 
 ### Parameters
 
@@ -54,8 +62,8 @@ Options used to configure the end-user sync and update experience (e.g. when to 
 
 ##### component
 
-`any`
+`ComponentType`\<`P`\>
 
 #### Returns
 
-`FunctionComponent`
+`ComponentType`

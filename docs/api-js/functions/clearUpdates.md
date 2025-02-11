@@ -8,7 +8,7 @@
 
 > **clearUpdates**(): `void`
 
-Defined in: [clearUpdates.ts:10](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/clearUpdates.ts#L10)
+Defined in: [clearUpdates.ts:10](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/clearUpdates.ts#L10)
 
 Clears all downloaded CodePush updates.
 

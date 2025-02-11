@@ -8,7 +8,7 @@
 
 > **checkForUpdate**(`releaseChannelPublicId`?, `handleBinaryVersionMismatchCallback`?): `Promise`\<`null` \| [`RemotePackage`](../interfaces/RemotePackage.md)\>
 
-Defined in: [checkForUpdates.ts:18](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/checkForUpdates.ts#L18)
+Defined in: [checkForUpdates.ts:18](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/checkForUpdates.ts#L18)
 
 Asks the CodePush service whether the configured app release channel has an update available.
 

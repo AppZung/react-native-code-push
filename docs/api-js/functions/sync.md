@@ -8,7 +8,7 @@
 
 > **sync**(`options`?, `syncStatusChangedCallback`?, `downloadProgressCallback`?, `handleBinaryVersionMismatchCallback`?): `Promise`\<[`SyncStatus`](../enumerations/SyncStatus.md)\>
 
-Defined in: [sync.ts:225](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/sync.ts#L225)
+Defined in: [sync.ts:225](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/sync.ts#L225)
 
 Allows checking for an update, downloading it and installing it, all with a single call.
 

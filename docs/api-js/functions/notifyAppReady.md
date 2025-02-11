@@ -8,7 +8,7 @@
 
 > **notifyAppReady**(): `Promise`\<`void` \| [`StatusReport`](../interfaces/StatusReport.md)\>
 
-Defined in: [notifyAppReady.ts:19](https://github.com/AppZung/react-native-code-push/blob/5f900017beec34f1e037ac881585c7f5fb00d5dd/src/notifyAppReady.ts#L19)
+Defined in: [notifyAppReady.ts:19](https://github.com/AppZung/react-native-code-push/blob/c18933fc82ce614eded3156d1f391ab8a21d21d7/src/notifyAppReady.ts#L19)
 
 Notifies the CodePush runtime that an installed update is considered successful.
 
