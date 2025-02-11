@@ -25,14 +25,16 @@ export interface CodePushOptions extends SyncOptions {
  * @param component the React Component that will be decorated
  */
 // @ts-ignore
-export function withCodePush(component: any): React.FunctionComponent;
+export function withCodePush<P extends object>(component: React.ComponentType<P>): React.ComponentType;
 
 /**
  * Decorates a React Component configuring it to sync for updates with the CodePush server.
  *
  * @param options Options used to configure the end-user sync and update experience (e.g. when to check for updates?, show a prompt?, install the update immediately?).
  */
-export function withCodePush(options: CodePushOptions): (component: any) => React.FunctionComponent;
+export function withCodePush<P extends object>(
+  options: CodePushOptions,
+): (component: React.ComponentType<P>) => React.ComponentType;
 
 export function withCodePush<P extends object>(optionsOrComponent: CodePushOptions | React.ComponentType<P>) {
   const options: CodePushOptions = typeof optionsOrComponent === 'function' ? {} : optionsOrComponent;
