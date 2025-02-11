@@ -101,6 +101,7 @@
 @property (readonly) NSString *buildVersion;
 @property (readonly) NSDictionary *configuration;
 @property (copy) NSString *releaseChannelPublicId;
+@property (readonly) NSString *clientUniqueId;
 @property (copy) NSString *serverURL;
 @property (copy) NSString *publicKey;
 

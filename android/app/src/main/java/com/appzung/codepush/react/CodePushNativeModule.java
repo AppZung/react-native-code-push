@@ -732,6 +732,20 @@ public class CodePushNativeModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void resetClientUniqueId(Promise promise) {
+        try {
+            String newClientUniqueId = UUID.randomUUID().toString();
+            SharedPreferences preferences = mCodePush.getContext().getSharedPreferences(CodePushConstants.CODE_PUSH_PREFERENCES, 0);
+            preferences.edit().putString(CodePushConstants.CLIENT_UNIQUE_ID_KEY, newClientUniqueId).apply();
+            mClientUniqueId = newClientUniqueId;
+            promise.resolve(mClientUniqueId);
+        } catch (Exception e) {
+            CodePushUtils.log(e);
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
     public void addListener(String eventName) {
         // Set up any upstream listeners or background tasks as necessary
     }
