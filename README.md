@@ -55,13 +55,13 @@ Otherwise:
 npm install --save @appzung/react-native-code-push
 ```
 
-_NOTE: For Expo apps a plugin will be made available soon. In the meantime, you may eject._
-
 Then continue with installing the native module:
 
-- [iOS Setup](docs/setup-ios.md)
-- [Android Setup](docs/setup-android.md)
-- [Windows Setup](docs/setup-windows.md)
+- [iOS setup](docs/setup-ios.md)
+- [Android setup](docs/setup-android.md)
+- [Windows setup](docs/setup-windows.md)
+
+Or if your app is managed by the Expo framework, install and configure [@appzung/expo-config-code-push](https://github.com/AppZung/expo-config-code-push).
 
 ## Migrating to AppZung CodePush
 
