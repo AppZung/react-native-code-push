@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 
-import CodePush from "react-native-code-push";
+import * as CodePush from "@appzung/react-native-code-push";
 
 class App extends Component<{}> {
   constructor() {
@@ -157,6 +157,6 @@ const styles = StyleSheet.create({
  */
 let codePushOptions = { checkFrequency: CodePush.CheckFrequency.MANUAL };
 
-App = CodePush(codePushOptions)(App);
+App = CodePush.withCodePush(codePushOptions)(App);
 
 export default App;
