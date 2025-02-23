@@ -100,6 +100,9 @@ public class CodePush implements ReactPackage {
         }
 
         String serverUrlFromStrings = getCustomPropertyFromStringsIfExist("ServerUrl");
+        if (serverUrlFromStrings == null) {
+            serverUrlFromStrings = getCustomPropertyFromStringsIfExist("ServerURL");
+        }
         if (serverUrlFromStrings != null) {
             CodePushUtils.log("Executing CodePush with a custom server URL.");
             mServerUrl = serverUrlFromStrings;

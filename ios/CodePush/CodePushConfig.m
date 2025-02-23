@@ -35,6 +35,10 @@ static NSString * const PublicKeyKey = @"publicKey";
     NSString *buildVersion = [infoDictionary objectForKey:(NSString *)kCFBundleVersionKey];
     NSString *releaseChannelPublicId = [infoDictionary objectForKey:@"CodePushReleaseChannelPublicId"];
     NSString *serverURL = [infoDictionary objectForKey:@"CodePushServerURL"];
+    if (!serverURL) {
+        serverURL = [infoDictionary objectForKey:@"CodePushServerUrl"];
+    }
+
     NSString *publicKey = [infoDictionary objectForKey:@"CodePushSigningPublicKey"];
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
