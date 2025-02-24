@@ -10,9 +10,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@appzung/react-native-code-push": "^8.3.2",
     "react": "17.0.2",
-    "react-native": "0.68.5",
-    "react-native-code-push": "8.1.0"
+    "react-native": "0.68.5"
   },
   "resolutions": {
     "strip-ansi": "^6.0.1",
