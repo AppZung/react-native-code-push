@@ -1,7 +1,6 @@
 ## Android Setup
 
 - [Plugin Installation and Configuration](#plugin-installation-and-configuration)
-- [Code Signing setup](#code-signing-setup)
 
 ### Plugin Installation and Configuration
 
