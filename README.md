@@ -145,11 +145,11 @@ withCodePush({ checkFrequency: CheckFrequency.ON_APP_RESUME })(MyApp);
 Alternatively, if you want fine-grained control over when the check happens (like a button press or timer interval), eg. in a staging environment, you can call [`CodePush.sync()`](docs/api-js/functions/sync.md) at any time with your desired `SyncOptions`, and turn off CodePush's automatic checking by specifying a manual `checkFrequency`:
 
 ```javascript
-import withCodePush, { CheckFrequency, InstallMode } from '@appzung/react-native-code-push';
+import withCodePush, { CheckFrequency, InstallMode, sync } from '@appzung/react-native-code-push';
 
 class MyApp extends Component {
   onButtonPress() {
-    CodePush.sync({
+    sync({
       updateDialog: true,
       installMode: InstallMode.IMMEDIATE,
     });
