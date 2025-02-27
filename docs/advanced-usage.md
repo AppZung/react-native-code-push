@@ -54,3 +54,18 @@ With that change in place, now it's just a matter of choosing how your app deter
 _NOTE: If needed, you could also implement a hybrid solution that allowed your end-users to toggle between different release channels, while also allowing your server to override that decision. This way, you have a hierarchy of "release channel resolution" that ensures your app has the ability to update itself out-of-the-box, your end users can feel rewarded by getting early access to bits, but you also have the ability to run A/B tests on your users as needed._
 
 Are you using dynamic release channel assignments? Contact us at hello@appzung.com so that we may provide better integration.
+
+### Using a custom server URL
+
+This module lets you change the targeted CodePush server URL, this can be used by:
+
+- People who use a self-hosted basic CodePush server like the open source Microsoft's code-push-server. Note that you won't be able to use most features of AppZung with these self-hosted servers. We're committed to keep this module compatible with the basic CodePush features so that our users are not locked in.
+- Enterprise clients with a custom AppZung infrastructure
+
+#### iOS
+
+Add a `CodePushServerURL` in the `Info.plist` targeting your code-push server.
+
+#### Android
+
+Add a `CodePushServerUrl` in your strings resources targeting your code-push server.
