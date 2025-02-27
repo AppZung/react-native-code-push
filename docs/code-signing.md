@@ -23,6 +23,8 @@ Store the private key securely.
 In the `appzung releases deploy-react-native` command that you run during your release process, add the `--private-key-path` flag pointing to the private key path.
 You should see `Code signing: true` in the confirmation text in interactive mode.
 
+After following the setup for your app below, if you previously sent a CodePush release without code-signing (the `--private-key-path` CLI flag), it is expected that when you check for updates CodePush doesn't present you this update, since it now expects a code signed release. Make sure when you test your integration that you sent a code-signed release.
+
 ### Setup Android
 
 Add the `CodePushSigningPublicKey` string resource in `/android/app/src/main/res/values/strings.xml`. It may look like this:
