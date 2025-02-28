@@ -1,6 +1,6 @@
-import type { Configuration as BaseConfiguration } from 'code-push/script/acquisition-sdk';
+import type { ApiSdkConfiguration } from './CodePushApiSdk.types';
 
-export interface Configuration extends BaseConfiguration {
+export interface Configuration extends ApiSdkConfiguration {
   releaseChannelPublicId: string;
   packageHash?: string;
 }

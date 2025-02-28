@@ -1,9 +1,10 @@
 import { Platform } from 'react-native';
+import { CodePushApiSdk } from './internals/CodePushApiSdk';
+import type { ApiSdkQueryUpdatePackageInfo } from './internals/CodePushApiSdk.types';
 import { NativeRNAppZungCodePushModule } from './internals/NativeRNAppZungCodePushModule';
 import { RemotePackageImpl } from './internals/RemotePackageImplementation';
 import { getConfiguration } from './internals/getConfiguration';
 import { getCurrentPackage } from './internals/getCurrentPackage';
-import { type PromisifiedSdkQueryPackage, getPromisifiedSdk } from './internals/getPromisifiedSdk';
 import type { Configuration } from './internals/types';
 import { log } from './internals/utils/log';
 import { requestFetchAdapter } from './internals/utils/request-fetch-adapter';
@@ -36,10 +37,8 @@ export async function checkForUpdate(
    * dynamically "redirecting" end-users at different
    * release channels (e.g. an early access release channel for insiders).
    */
-  const config: Configuration = releaseChannelPublicId
-    ? { ...nativeConfig, ...{ releaseChannelPublicId } }
-    : nativeConfig;
-  const sdk = getPromisifiedSdk(requestFetchAdapter, config);
+  const config: Configuration = releaseChannelPublicId ? { ...nativeConfig, releaseChannelPublicId } : nativeConfig;
+  const sdk = new CodePushApiSdk(requestFetchAdapter, config);
 
   const localPackage = await getCurrentPackage();
 
@@ -51,15 +50,10 @@ export async function checkForUpdate(
    * to send the app version to the server, since we are interested
    * in any updates for current binary version, regardless of hash.
    */
-  let queryPackage: PromisifiedSdkQueryPackage;
-  if (localPackage) {
-    queryPackage = localPackage;
-  } else {
-    queryPackage = { appVersion: config.appVersion };
-    if (Platform.OS === 'ios' && config.packageHash) {
-      queryPackage.packageHash = config.packageHash;
-    }
-  }
+  const queryPackage: ApiSdkQueryUpdatePackageInfo = localPackage ?? {
+    appVersion: config.appVersion,
+    ...(Platform.OS === 'ios' && config.packageHash ? { packageHash: config.packageHash } : {}),
+  };
 
   const update = await sdk.queryUpdateWithCurrentPackage(queryPackage);
 
@@ -85,7 +79,11 @@ export async function checkForUpdate(
     return null;
   }
 
-  if ('updateAppVersion' in update && update.updateAppVersion) {
+  if ('updateAppVersion' in update) {
+    if (!update.updateAppVersion) {
+      throw new Error('updateAppVersion should never be false');
+    }
+
     log('An update is available but it is not targeting the binary version of your app.');
     handleBinaryVersionMismatchCallback?.(update);
 
@@ -93,17 +91,20 @@ export async function checkForUpdate(
   }
 
   if (
-    (localPackage && 'packageHash' in update && update.packageHash === localPackage.packageHash) ||
+    (localPackage && update.packageHash === localPackage.packageHash) ||
     ((!localPackage || ('_isDebugOnly' in localPackage && localPackage._isDebugOnly)) &&
-      'packageHash' in update &&
       config.packageHash === update.packageHash)
   ) {
     return null;
   }
 
-  // @ts-expect-error sdk typing is wrong
-  const remotePackage = new RemotePackageImpl(update, sdk.reportStatusDownload);
-  remotePackage.failedInstall = await NativeRNAppZungCodePushModule.isFailedUpdate(remotePackage.packageHash);
-  remotePackage.releaseChannelPublicId = releaseChannelPublicId || nativeConfig.releaseChannelPublicId;
-  return remotePackage;
+  const remotePackageData: Omit<RemotePackage, 'download'> = {
+    ...update,
+    releaseChannelPublicId: releaseChannelPublicId || nativeConfig.releaseChannelPublicId,
+    failedInstall: await NativeRNAppZungCodePushModule.isFailedUpdate(update.packageHash),
+    isFirstRun: false,
+    isPending: false,
+  };
+
+  return new RemotePackageImpl(remotePackageData, (packageInfo) => sdk.reportStatusDownload(packageInfo));
 }

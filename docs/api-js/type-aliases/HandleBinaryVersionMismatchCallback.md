@@ -14,7 +14,9 @@ Called when there are any binary update available.
 
 ### update
 
-`NativeUpdateNotification`
+#### appVersion
+
+`string`
 
 ## Returns
 

@@ -1,6 +1,6 @@
-import type { Package } from 'code-push/script/acquisition-sdk';
 import { NativeEventEmitter } from 'react-native';
 import type { DownloadProgressCallback, LocalPackage, RemotePackage } from '../types';
+import type { ApiSdkDownloadReportPackageInfo } from './CodePushApiSdk.types';
 import { LocalPackageImplementation } from './LocalPackageImplementation';
 import { NativeRNAppZungCodePushModule } from './NativeRNAppZungCodePushModule';
 import { log } from './utils/log';
@@ -8,7 +8,7 @@ import { log } from './utils/log';
 export class RemotePackageImpl implements RemotePackage {
   constructor(
     remotePackageData: Omit<RemotePackage, 'download'>,
-    reportStatusDownload?: (downloadedPackage: Package) => Promise<void>,
+    reportStatusDownload: (downloadedPackage: ApiSdkDownloadReportPackageInfo) => Promise<void>,
   ) {
     Object.assign(this, remotePackageData);
 
@@ -38,12 +38,13 @@ export class RemotePackageImpl implements RemotePackage {
         );
 
         if (reportStatusDownload) {
-          reportStatusDownload({
-            ...this,
-            deploymentKey: this.releaseChannelPublicId,
-          }).catch((err) => {
-            log(`Report download status failed: ${err}`);
+          const timeoutPromise = new Promise<void>((resolve) => setTimeout(resolve, 250));
+          const reportPromise = reportStatusDownload({
+            label: this.label,
+          }).catch((error) => {
+            log(`Report download status failed: ${error}`);
           });
+          await Promise.race([timeoutPromise, reportPromise]);
         }
 
         return new LocalPackageImplementation(downloadedPackage);
