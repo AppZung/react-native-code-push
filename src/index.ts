@@ -16,5 +16,5 @@ export * from './types';
 export * from './enums/SyncStatus.enum';
 export * from './enums/InstallMode.enum';
 export * from './enums/UpdateState.enum';
-export * from './enums/DeploymentStatus.enum';
+export { DeploymentStatus } from './internals/CodePushApiSdk.types';
 export * from './enums/CheckFrequency.enum';

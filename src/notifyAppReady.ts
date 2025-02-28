@@ -1,7 +1,7 @@
 import { AppState, type NativeEventSubscription } from 'react-native';
+import { CodePushApiSdk } from './internals/CodePushApiSdk';
 import { NativeRNAppZungCodePushModule } from './internals/NativeRNAppZungCodePushModule';
 import { getConfiguration } from './internals/getConfiguration';
-import { getPromisifiedSdk } from './internals/getPromisifiedSdk';
 import { log } from './internals/utils/log';
 import { requestFetchAdapter } from './internals/utils/request-fetch-adapter';
 import type { StatusReport } from './types';
@@ -35,7 +35,7 @@ async function notifyApplicationReadyInternal() {
 
 async function tryReportStatus(statusReport: StatusReport, retryOnAppResume?: NativeEventSubscription) {
   const config = await getConfiguration();
-  const previousLabelOrAppVersion = statusReport.previousLabelOrAppVersion;
+  const previousLabelOrAppVersion = statusReport.previousLabelOrAppVersion ?? null;
   const previousReleaseChannelPublicId = statusReport.previousReleaseChannelPublicId || config.releaseChannelPublicId;
   try {
     if (statusReport.appVersion) {
@@ -45,13 +45,8 @@ async function tryReportStatus(statusReport: StatusReport, retryOnAppResume?: Na
         throw new Error('Release channel is missing');
       }
 
-      const sdk = getPromisifiedSdk(requestFetchAdapter, config);
-      await sdk.reportStatusDeploy(
-        /* deployedPackage */ undefined,
-        /* status */ undefined,
-        previousLabelOrAppVersion,
-        previousReleaseChannelPublicId,
-      );
+      const sdk = new CodePushApiSdk(requestFetchAdapter, config);
+      await sdk.reportStatusDeploy(null, previousLabelOrAppVersion, previousReleaseChannelPublicId);
     } else {
       if (!statusReport.package) {
         throw new Error('Missing package in status report');
@@ -66,10 +61,12 @@ async function tryReportStatus(statusReport: StatusReport, retryOnAppResume?: Na
       }
 
       config.releaseChannelPublicId = statusReport.package.releaseChannelPublicId;
-      const sdk = getPromisifiedSdk(requestFetchAdapter, config);
+      const sdk = new CodePushApiSdk(requestFetchAdapter, config);
       await sdk.reportStatusDeploy(
-        { ...statusReport.package, deploymentKey: statusReport.package.releaseChannelPublicId },
-        statusReport.status,
+        {
+          package: statusReport.package,
+          status: statusReport.status,
+        },
         previousLabelOrAppVersion,
         previousReleaseChannelPublicId,
       );

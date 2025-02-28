@@ -1,7 +1,6 @@
-import type { NativeUpdateNotification } from 'code-push/script/acquisition-sdk';
-import type { DeploymentStatus } from './enums/DeploymentStatus.enum';
 import type { InstallMode } from './enums/InstallMode.enum';
 import type { SyncStatus } from './enums/SyncStatus.enum';
+import { DeploymentStatus } from './internals/CodePushApiSdk.types';
 
 export interface UpdateDialog {
   /**
@@ -78,7 +77,7 @@ export type SyncStatusChangedCallback = (status: SyncStatus) => void;
 /**
  * Called when there are any binary update available.
  */
-export type HandleBinaryVersionMismatchCallback = (update: NativeUpdateNotification) => void;
+export type HandleBinaryVersionMismatchCallback = (update: { appVersion: string }) => void;
 
 export interface DownloadProgress {
   /**
