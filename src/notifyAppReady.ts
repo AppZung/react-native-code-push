@@ -3,7 +3,7 @@ import { CodePushApiSdk } from './internals/CodePushApiSdk';
 import { NativeRNAppZungCodePushModule } from './internals/NativeRNAppZungCodePushModule';
 import { getConfiguration } from './internals/getConfiguration';
 import { log } from './internals/utils/log';
-import { requestFetchAdapter } from './internals/utils/request-fetch-adapter';
+import { requestFetchAdapter } from './internals/utils/requestFetchAdapter';
 import type { StatusReport } from './types';
 
 /**
