@@ -1,5 +1,6 @@
 import type { Http } from '../CodePushApiSdk.types';
 import { version } from '../version';
+import { fetchRetry } from './fetchRetry';
 
 export const requestFetchAdapter: Http.Requester = {
   async request(method, url, requestBody) {
@@ -14,7 +15,7 @@ export const requestFetchAdapter: Http.Requester = {
       requestBody = JSON.stringify(requestBody);
     }
 
-    const response = await fetch(url, {
+    const response = await fetchRetry(url, {
       method,
       headers,
       body: requestBody,

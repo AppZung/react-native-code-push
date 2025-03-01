@@ -7,7 +7,7 @@ import { getConfiguration } from './internals/getConfiguration';
 import { getCurrentPackage } from './internals/getCurrentPackage';
 import type { Configuration } from './internals/types';
 import { log } from './internals/utils/log';
-import { requestFetchAdapter } from './internals/utils/request-fetch-adapter';
+import { requestFetchAdapter } from './internals/utils/requestFetchAdapter';
 import type { HandleBinaryVersionMismatchCallback, RemotePackage } from './types';
 
 /**
