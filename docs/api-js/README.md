@@ -1,8 +1,8 @@
-**@appzung/react-native-code-push v10.1.0**
+**@appzung/react-native-code-push v10.1.1**
 
 ---
 
-# @appzung/react-native-code-push v10.1.0
+# @appzung/react-native-code-push v10.1.1
 
 ## Enumerations
 
