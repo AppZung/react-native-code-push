@@ -1,6 +1,8 @@
+import { LogLevel } from '../../enums/LogLevel.enum';
 import type { Http } from '../CodePushApiSdk.types';
 import { version } from '../version';
 import { fetchRetry } from './fetchRetry';
+import { log } from './log';
 
 export const requestFetchAdapter: Http.Requester = {
   async request(method, url, requestBody) {
@@ -15,6 +17,9 @@ export const requestFetchAdapter: Http.Requester = {
       requestBody = JSON.stringify(requestBody);
     }
 
+    const requestId = Math.round(Math.random() * 10000);
+    log(LogLevel.DEBUG, `[${requestId}] Will fetch ${method} ${url}`);
+
     const response = await fetchRetry(url, {
       method,
       headers,
@@ -22,6 +27,9 @@ export const requestFetchAdapter: Http.Requester = {
     });
 
     const statusCode = response.status;
+
+    log(LogLevel.DEBUG, `[${requestId}] Done fetching with status code ${statusCode}`);
+
     const body = await response.text();
     return { statusCode, body };
   },

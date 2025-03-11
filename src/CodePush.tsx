@@ -2,6 +2,8 @@ import hoistStatics from 'hoist-non-react-statics';
 import React from 'react';
 import { AppState } from 'react-native';
 import { CheckFrequency } from './enums/CheckFrequency.enum';
+import { LogLevel } from './enums/LogLevel.enum';
+import { log } from './internals/utils/log';
 import { notifyAppReady } from './notifyAppReady';
 import { sync } from './sync';
 import type {
@@ -54,6 +56,8 @@ export function withCodePush<P extends object>(optionsOrComponent: CodePushOptio
       }
 
       componentDidMount() {
+        log(LogLevel.DEBUG, `withCodePush ${JSON.stringify(options)}`);
+
         if (options.checkFrequency === CheckFrequency.MANUAL) {
           notifyAppReady();
         } else {
@@ -75,11 +79,13 @@ export function withCodePush<P extends object>(optionsOrComponent: CodePushOptio
               rootComponentInstance.codePushOnBinaryVersionMismatch.bind(rootComponentInstance);
           }
 
+          log(LogLevel.DEBUG, `sync on mount`);
           sync(options, syncStatusCallback, downloadProgressCallback, handleBinaryVersionMismatchCallback);
 
           if (options.checkFrequency === CheckFrequency.ON_APP_RESUME) {
             AppState.addEventListener('change', (newState: string) => {
               if (newState === 'active') {
+                log(LogLevel.DEBUG, `sync on active appState`);
                 sync(options, syncStatusCallback, downloadProgressCallback);
               }
             });

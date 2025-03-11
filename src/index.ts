@@ -10,6 +10,7 @@ export * from './restartApp';
 export * from './sync';
 export * from './getClientUniqueId';
 export * from './resetClientUniqueId';
+export * from './logLevel';
 
 export * from './types';
 
@@ -18,3 +19,4 @@ export * from './enums/InstallMode.enum';
 export * from './enums/UpdateState.enum';
 export { DeploymentStatus } from './internals/CodePushApiSdk.types';
 export * from './enums/CheckFrequency.enum';
+export * from './enums/LogLevel.enum';

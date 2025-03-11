@@ -1,6 +1,7 @@
 import { Alert, type AlertButton, Platform } from 'react-native';
 import { checkForUpdate } from './checkForUpdates';
 import { InstallMode } from './enums/InstallMode.enum';
+import { LogLevel } from './enums/LogLevel.enum';
 import { SyncStatus } from './enums/SyncStatus.enum';
 import { getCurrentPackage } from './internals/getCurrentPackage';
 import { shouldUpdateBeIgnored } from './internals/shouldUpdateBeIgnored';
@@ -62,38 +63,39 @@ async function syncInternal(
       : (syncStatus: SyncStatus) => {
           switch (syncStatus) {
             case SyncStatus.CHECKING_FOR_UPDATE:
-              log('Checking for update.');
+              log(LogLevel.INFO, 'Checking for update.');
               break;
             case SyncStatus.AWAITING_USER_ACTION:
-              log('Awaiting user action.');
+              log(LogLevel.INFO, 'Awaiting user action.');
               break;
             case SyncStatus.DOWNLOADING_PACKAGE:
-              log('Downloading package.');
+              log(LogLevel.INFO, 'Downloading package.');
               break;
             case SyncStatus.INSTALLING_UPDATE:
-              log('Installing update.');
+              log(LogLevel.INFO, 'Installing update.');
               break;
             case SyncStatus.UP_TO_DATE:
-              log('App is up to date.');
+              log(LogLevel.INFO, 'App is up to date.');
               break;
             case SyncStatus.UPDATE_IGNORED:
-              log('User cancelled the update.');
+              log(LogLevel.INFO, 'User cancelled the update.');
               break;
             case SyncStatus.UPDATE_INSTALLED:
               if (resolvedInstallMode == InstallMode.ON_NEXT_RESTART) {
-                log('Update is installed and will be run on the next app restart.');
+                log(LogLevel.INFO, 'Update is installed and will be run on the next app restart.');
               } else if (resolvedInstallMode == InstallMode.ON_NEXT_RESUME) {
                 if (!!syncOptions.minimumBackgroundDuration) {
                   log(
+                    LogLevel.INFO,
                     `Update is installed and will be run after the app has been in the background for at least ${syncOptions.minimumBackgroundDuration} seconds.`,
                   );
                 } else {
-                  log('Update is installed and will be run when the app next resumes.');
+                  log(LogLevel.INFO, 'Update is installed and will be run when the app next resumes.');
                 }
               }
               break;
             case SyncStatus.UNKNOWN_ERROR:
-              log('An unknown error occurred.');
+              log(LogLevel.ERROR, 'An unknown error occurred.');
               break;
           }
         };
@@ -127,7 +129,10 @@ async function syncInternal(
 
     if (!remotePackage || updateShouldBeIgnored) {
       if (updateShouldBeIgnored) {
-        log('An update is available, but it is being ignored due to having been previously rolled back.');
+        log(
+          LogLevel.INFO,
+          'An update is available, but it is being ignored due to having been previously rolled back.',
+        );
       }
 
       const currentPackage = await getCurrentPackage();
@@ -195,6 +200,7 @@ async function syncInternal(
   } catch (error) {
     syncStatusChangeCallback(SyncStatus.UNKNOWN_ERROR);
     log(
+      LogLevel.ERROR,
       error != null && typeof error === 'object' && 'message' in error && typeof error.message === 'string'
         ? error.message
         : 'Unknown',
@@ -228,25 +234,29 @@ export const sync = (() => {
     downloadProgressCallback?: DownloadProgressCallback,
     handleBinaryVersionMismatchCallback?: HandleBinaryVersionMismatchCallback,
   ): Promise<SyncStatus> => {
-    let syncStatusCallbackWithTryCatch: SyncStatusChangedCallback | undefined;
+    log(LogLevel.DEBUG, `sync start`);
+
+    let syncStatusCallbackWithTryCatch: SyncStatusChangedCallback = (status) => {
+      log(LogLevel.DEBUG, `sync status ${SyncStatus[status]}`);
+
+      if (typeof syncStatusChangedCallback !== 'function') {
+        return;
+      }
+
+      try {
+        syncStatusChangedCallback(status);
+      } catch (error) {
+        log(LogLevel.ERROR, `An error has occurred : ${error instanceof Error ? error.stack : 'unknown'}`);
+      }
+    };
+
     let downloadProgressCallbackWithTryCatch: DownloadProgressCallback | undefined;
-
-    if (typeof syncStatusChangedCallback === 'function') {
-      syncStatusCallbackWithTryCatch = (...args) => {
-        try {
-          syncStatusChangedCallback(...args);
-        } catch (error) {
-          log(`An error has occurred : ${error instanceof Error ? error.stack : 'unknown'}`);
-        }
-      };
-    }
-
     if (typeof downloadProgressCallback === 'function') {
       downloadProgressCallbackWithTryCatch = (...args) => {
         try {
           downloadProgressCallback(...args);
         } catch (error) {
-          log(`An error has occurred: ${error instanceof Error ? error.stack : 'unknown'}`);
+          log(LogLevel.ERROR, `An error has occurred: ${error instanceof Error ? error.stack : 'unknown'}`);
         }
       };
     }
@@ -254,7 +264,7 @@ export const sync = (() => {
     if (syncInProgress) {
       typeof syncStatusCallbackWithTryCatch === 'function'
         ? syncStatusCallbackWithTryCatch(SyncStatus.SYNC_IN_PROGRESS)
-        : log('Sync already in progress.');
+        : log(LogLevel.WARN, 'Sync already in progress.');
       return Promise.resolve(SyncStatus.SYNC_IN_PROGRESS);
     }
 
