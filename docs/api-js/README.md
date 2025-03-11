@@ -9,6 +9,7 @@
 - [CheckFrequency](enumerations/CheckFrequency.md)
 - [DeploymentStatus](enumerations/DeploymentStatus.md)
 - [InstallMode](enumerations/InstallMode.md)
+- [LogLevel](enumerations/LogLevel.md)
 - [SyncStatus](enumerations/SyncStatus.md)
 - [UpdateState](enumerations/UpdateState.md)
 
@@ -41,10 +42,12 @@
 - [clearUpdates](functions/clearUpdates.md)
 - [disallowRestart](functions/disallowRestart.md)
 - [getClientUniqueId](functions/getClientUniqueId.md)
+- [getLogLevel](functions/getLogLevel.md)
 - [getUpdateMetadata](functions/getUpdateMetadata.md)
 - [notifyAppReady](functions/notifyAppReady.md)
 - [resetClientUniqueId](functions/resetClientUniqueId.md)
 - [restartApp](functions/restartApp.md)
+- [setLogLevel](functions/setLogLevel.md)
 - [sync](functions/sync.md)
 - [withCodePush](functions/withCodePush.md)
 
