@@ -1,4 +1,5 @@
 import { NativeEventEmitter } from 'react-native';
+import { LogLevel } from '../enums/LogLevel.enum';
 import type { DownloadProgressCallback, LocalPackage, RemotePackage } from '../types';
 import type { ApiSdkDownloadReportPackageInfo } from './CodePushApiSdk.types';
 import { LocalPackageImplementation } from './LocalPackageImplementation';
@@ -42,7 +43,7 @@ export class RemotePackageImpl implements RemotePackage {
           const reportPromise = reportStatusDownload({
             label: this.label,
           }).catch((error) => {
-            log(`Report download status failed: ${error}`);
+            log(LogLevel.ERROR, `Report download status failed: ${error}`);
           });
           await Promise.race([timeoutPromise, reportPromise]);
         }

@@ -1,4 +1,5 @@
 import { AppState, type NativeEventSubscription } from 'react-native';
+import { LogLevel } from './enums/LogLevel.enum';
 import { CodePushApiSdk } from './internals/CodePushApiSdk';
 import { NativeRNAppZungCodePushModule } from './internals/NativeRNAppZungCodePushModule';
 import { getConfiguration } from './internals/getConfiguration';
@@ -26,9 +27,17 @@ export const notifyAppReady = (() => {
 })();
 
 async function notifyApplicationReadyInternal() {
+  log(LogLevel.DEBUG, 'notifyApplicationReady');
+
   await NativeRNAppZungCodePushModule.notifyApplicationReady();
   const statusReport = await NativeRNAppZungCodePushModule.getNewStatusReport();
-  statusReport && tryReportStatus(statusReport); // Don't wait for this to complete.
+  if (statusReport) {
+    log(LogLevel.DEBUG, `tryReportStatus ${statusReport.status || '(no update)'}`);
+
+    tryReportStatus(statusReport); // Don't wait for this to complete.
+  } else {
+    log(LogLevel.DEBUG, `Nothing to report`);
+  }
 
   return statusReport;
 }
@@ -39,7 +48,7 @@ async function tryReportStatus(statusReport: StatusReport, retryOnAppResume?: Na
   const previousReleaseChannelPublicId = statusReport.previousReleaseChannelPublicId || config.releaseChannelPublicId;
   try {
     if (statusReport.appVersion) {
-      log(`Reporting binary update (${statusReport.appVersion})`);
+      log(LogLevel.INFO, `Reporting binary update (${statusReport.appVersion})`);
 
       if (!config.releaseChannelPublicId) {
         throw new Error('Release channel is missing');
@@ -54,9 +63,9 @@ async function tryReportStatus(statusReport: StatusReport, retryOnAppResume?: Na
 
       const label = statusReport.package.label;
       if (statusReport.status === 'DeploymentSucceeded') {
-        log(`Reporting CodePush update success (${label})`);
+        log(LogLevel.INFO, `Reporting CodePush update success (${label})`);
       } else {
-        log(`Reporting CodePush update rollback (${label})`);
+        log(LogLevel.INFO, `Reporting CodePush update rollback (${label})`);
         await NativeRNAppZungCodePushModule.setLatestRollbackInfo(statusReport.package.packageHash);
       }
 
@@ -75,7 +84,7 @@ async function tryReportStatus(statusReport: StatusReport, retryOnAppResume?: Na
     NativeRNAppZungCodePushModule.recordStatusReported(statusReport);
     retryOnAppResume && retryOnAppResume.remove();
   } catch (e) {
-    log(`Report status failed: ${JSON.stringify(statusReport)}`);
+    log(LogLevel.WARN, `Report status failed: ${JSON.stringify(statusReport)}`);
     NativeRNAppZungCodePushModule.saveStatusReportForRetry(statusReport);
     // Try again when the app resumes
     if (!retryOnAppResume) {
@@ -83,6 +92,7 @@ async function tryReportStatus(statusReport: StatusReport, retryOnAppResume?: Na
         if (newState !== 'active') return;
         const refreshedStatusReport = await NativeRNAppZungCodePushModule.getNewStatusReport();
         if (refreshedStatusReport) {
+          log(LogLevel.DEBUG, `tryReportStatus on active appState ${statusReport.status || '(no update)'}`);
           tryReportStatus(refreshedStatusReport, resumeListener);
         } else {
           resumeListener && resumeListener.remove();

@@ -1,4 +1,5 @@
 import { Platform } from 'react-native';
+import { LogLevel } from './enums/LogLevel.enum';
 import { CodePushApiSdk } from './internals/CodePushApiSdk';
 import type { ApiSdkQueryUpdatePackageInfo } from './internals/CodePushApiSdk.types';
 import { NativeRNAppZungCodePushModule } from './internals/NativeRNAppZungCodePushModule';
@@ -84,7 +85,7 @@ export async function checkForUpdate(
       throw new Error('updateAppVersion should never be false');
     }
 
-    log('An update is available but it is not targeting the binary version of your app.');
+    log(LogLevel.INFO, 'An update is available but it is not targeting the binary version of your app.');
     handleBinaryVersionMismatchCallback?.(update);
 
     return null;
