@@ -45,6 +45,7 @@ export interface ApiSdkConfiguration {
   clientUniqueId: string;
   releaseChannelPublicId: string;
   serverUrl: string;
+  telemetryEnabled: boolean;
   ignoreAppVersion?: boolean;
 }
 

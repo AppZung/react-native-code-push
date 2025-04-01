@@ -43,11 +43,13 @@
 - [disallowRestart](functions/disallowRestart.md)
 - [getClientUniqueId](functions/getClientUniqueId.md)
 - [getLogLevel](functions/getLogLevel.md)
+- [getTelemetryEnabled](functions/getTelemetryEnabled.md)
 - [getUpdateMetadata](functions/getUpdateMetadata.md)
 - [notifyAppReady](functions/notifyAppReady.md)
 - [resetClientUniqueId](functions/resetClientUniqueId.md)
 - [restartApp](functions/restartApp.md)
 - [setLogLevel](functions/setLogLevel.md)
+- [setTelemetryEnabled](functions/setTelemetryEnabled.md)
 - [sync](functions/sync.md)
 - [withCodePush](functions/withCodePush.md)
 

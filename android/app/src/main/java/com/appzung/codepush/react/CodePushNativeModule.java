@@ -49,6 +49,7 @@ import java.util.UUID;
 public class CodePushNativeModule extends BaseJavaModule {
     private String mBinaryContentsHash = null;
     private String mClientUniqueId = null;
+    private boolean mTelemetryEnabled = true;
     private LifecycleEventListener mLifecycleEventListener = null;
     private int mMinimumBackgroundDuration = 0;
 
@@ -77,6 +78,17 @@ public class CodePushNativeModule extends BaseJavaModule {
         if (mClientUniqueId == null) {
             mClientUniqueId = UUID.randomUUID().toString();
             preferences.edit().putString(CodePushConstants.CLIENT_UNIQUE_ID_KEY, mClientUniqueId).apply();
+        }
+
+        if (preferences.contains(CodePushConstants.TELEMETRY_ENABLED_KEY)) {
+            mTelemetryEnabled = preferences.getBoolean(CodePushConstants.TELEMETRY_ENABLED_KEY, true);
+        } else {
+            int defaultTelemetryEnabledResId = reactContext.getResources().getIdentifier("CodePushDefaultTelemetryEnabled", "bool", reactContext.getPackageName());
+            if (defaultTelemetryEnabledResId != 0) {
+                mTelemetryEnabled = reactContext.getResources().getBoolean(defaultTelemetryEnabledResId);
+            } else {
+                mTelemetryEnabled = true;
+            }
         }
     }
 
@@ -485,6 +497,7 @@ public class CodePushNativeModule extends BaseJavaModule {
             configMap.putString("clientUniqueId", mClientUniqueId);
             configMap.putString("releaseChannelPublicId", mCodePush.getReleaseChannelPublicId());
             configMap.putString("serverUrl", mCodePush.getServerUrl());
+            configMap.putBoolean("telemetryEnabled", mTelemetryEnabled);
 
             // The binary hash may be null in debug builds
             if (mBinaryContentsHash != null) {
@@ -832,6 +845,24 @@ public class CodePushNativeModule extends BaseJavaModule {
             CodePushUtils.log(e);
             promise.reject(e);
         }
+    }
+
+    @ReactMethod
+    public void setTelemetryEnabled(boolean enabled, Promise promise) {
+        try {
+            SharedPreferences preferences = mCodePush.getContext().getSharedPreferences(CodePushConstants.CODE_PUSH_PREFERENCES, 0);
+            preferences.edit().putBoolean(CodePushConstants.TELEMETRY_ENABLED_KEY, enabled).apply();
+            mTelemetryEnabled = enabled;
+            promise.resolve(null);
+        } catch (Exception e) {
+            CodePushUtils.log(e);
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void getTelemetryEnabled(Promise promise) {
+        promise.resolve(mTelemetryEnabled);
     }
 
     @ReactMethod

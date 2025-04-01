@@ -52,4 +52,7 @@ export interface Spec extends TurboModule {
 
   isFirstRun(packageHash: string): Promise<boolean>;
   isFailedUpdate(packageHash: string): Promise<boolean>;
+
+  setTelemetryEnabled(enabled: boolean): Promise<void>;
+  getTelemetryEnabled(): Promise<boolean>;
 }
