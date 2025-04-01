@@ -29,6 +29,7 @@
 
 - [DownloadProgressCallback](type-aliases/DownloadProgressCallback.md)
 - [HandleBinaryVersionMismatchCallback](type-aliases/HandleBinaryVersionMismatchCallback.md)
+- [LoggerFunction](type-aliases/LoggerFunction.md)
 - [SyncStatusChangedCallback](type-aliases/SyncStatusChangedCallback.md)
 
 ## Variables
@@ -48,8 +49,10 @@
 - [getUpdateMetadata](functions/getUpdateMetadata.md)
 - [notifyAppReady](functions/notifyAppReady.md)
 - [resetClientUniqueId](functions/resetClientUniqueId.md)
+- [resetLogger](functions/resetLogger.md)
 - [restartApp](functions/restartApp.md)
 - [setDataTransmissionEnabled](functions/setDataTransmissionEnabled.md)
+- [setLogger](functions/setLogger.md)
 - [setLogLevel](functions/setLogLevel.md)
 - [setTelemetryEnabled](functions/setTelemetryEnabled.md)
 - [sync](functions/sync.md)
