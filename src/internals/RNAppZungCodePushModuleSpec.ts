@@ -55,4 +55,7 @@ export interface Spec extends TurboModule {
 
   setTelemetryEnabled(enabled: boolean): Promise<void>;
   getTelemetryEnabled(): Promise<boolean>;
+
+  setDataTransmissionEnabled(enabled: boolean): Promise<void>;
+  getDataTransmissionEnabled(): Promise<boolean>;
 }

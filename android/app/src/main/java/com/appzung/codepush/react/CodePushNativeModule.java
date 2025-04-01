@@ -50,6 +50,7 @@ public class CodePushNativeModule extends BaseJavaModule {
     private String mBinaryContentsHash = null;
     private String mClientUniqueId = null;
     private boolean mTelemetryEnabled = true;
+    private boolean mDataTransmissionEnabled = true;
     private LifecycleEventListener mLifecycleEventListener = null;
     private int mMinimumBackgroundDuration = 0;
 
@@ -88,6 +89,17 @@ public class CodePushNativeModule extends BaseJavaModule {
                 mTelemetryEnabled = reactContext.getResources().getBoolean(defaultTelemetryEnabledResId);
             } else {
                 mTelemetryEnabled = true;
+            }
+        }
+
+        if (preferences.contains(CodePushConstants.DATA_TRANSMISSION_ENABLED_KEY)) {
+            mDataTransmissionEnabled = preferences.getBoolean(CodePushConstants.DATA_TRANSMISSION_ENABLED_KEY, true);
+        } else {
+            int defaultDataTransmissionEnabledResId = reactContext.getResources().getIdentifier("CodePushDefaultDataTransmissionEnabled", "bool", reactContext.getPackageName());
+            if (defaultDataTransmissionEnabledResId != 0) {
+                mDataTransmissionEnabled = reactContext.getResources().getBoolean(defaultDataTransmissionEnabledResId);
+            } else {
+                mDataTransmissionEnabled = true;
             }
         }
     }
@@ -498,6 +510,7 @@ public class CodePushNativeModule extends BaseJavaModule {
             configMap.putString("releaseChannelPublicId", mCodePush.getReleaseChannelPublicId());
             configMap.putString("serverUrl", mCodePush.getServerUrl());
             configMap.putBoolean("telemetryEnabled", mTelemetryEnabled);
+            configMap.putBoolean("dataTransmissionEnabled", mDataTransmissionEnabled);
 
             // The binary hash may be null in debug builds
             if (mBinaryContentsHash != null) {
@@ -863,6 +876,24 @@ public class CodePushNativeModule extends BaseJavaModule {
     @ReactMethod
     public void getTelemetryEnabled(Promise promise) {
         promise.resolve(mTelemetryEnabled);
+    }
+
+    @ReactMethod
+    public void setDataTransmissionEnabled(boolean enabled, Promise promise) {
+        try {
+            SharedPreferences preferences = mCodePush.getContext().getSharedPreferences(CodePushConstants.CODE_PUSH_PREFERENCES, 0);
+            preferences.edit().putBoolean(CodePushConstants.DATA_TRANSMISSION_ENABLED_KEY, enabled).apply();
+            mDataTransmissionEnabled = enabled;
+            promise.resolve(null);
+        } catch (Exception e) {
+            CodePushUtils.log(e);
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void getDataTransmissionEnabled(Promise promise) {
+        promise.resolve(mDataTransmissionEnabled);
     }
 
     @ReactMethod

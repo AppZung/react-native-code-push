@@ -12,6 +12,7 @@ export * from './getClientUniqueId';
 export * from './resetClientUniqueId';
 export * from './logLevel';
 export * from './telemetry';
+export * from './dataTransmission';
 
 export * from './types';
 

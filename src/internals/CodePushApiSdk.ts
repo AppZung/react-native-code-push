@@ -36,6 +36,11 @@ export class CodePushApiSdk {
   async queryUpdateWithCurrentPackage(
     currentPackageInfo: ApiSdkQueryUpdatePackageInfo,
   ): Promise<ApiSdkRemotePackage | ApiSdkNativeUpdateNotification | null> {
+    if (!this.configuration.dataTransmissionEnabled) {
+      this.log(LogLevel.DEBUG, 'Skipped querying for update because data transmission is disabled');
+      return null;
+    }
+
     const query: CheckUpdateRequestInput = {
       deployment_key: this.configuration.releaseChannelPublicId,
       app_version: currentPackageInfo.appVersion,
@@ -88,6 +93,11 @@ export class CodePushApiSdk {
     previousLabelOrAppVersion: string | null,
     previousDeploymentKey: string | null,
   ): Promise<void> {
+    if (!this.configuration.dataTransmissionEnabled) {
+      this.log(LogLevel.DEBUG, 'Skipped reporting deploy status because data transmission is disabled');
+      return;
+    }
+
     if (!this.configuration.telemetryEnabled) {
       this.log(LogLevel.DEBUG, 'Skipped reporting deploy status because telemetry is disabled');
       return;
@@ -123,6 +133,11 @@ export class CodePushApiSdk {
   }
 
   async reportStatusDownload(downloadedPackage: ApiSdkDownloadReportPackageInfo): Promise<void> {
+    if (!this.configuration.dataTransmissionEnabled) {
+      this.log(LogLevel.DEBUG, 'Skipped reporting download because data transmission is disabled');
+      return;
+    }
+
     if (!this.configuration.telemetryEnabled) {
       this.log(LogLevel.DEBUG, 'Skipped reporting download because telemetry is disabled');
       return;
