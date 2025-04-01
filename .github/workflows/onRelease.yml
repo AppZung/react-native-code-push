@@ -1,0 +1,30 @@
+name: publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Set npm tag
+        id: set-npm-tag
+        run: |
+          RELEASE_TAG=${{ github.event.release.tag_name }}
+          if [[ $RELEASE_TAG == *"rc"* || $RELEASE_TAG == *"alpha"* || $RELEASE_TAG == *"beta"* ]]; then
+            echo "NPM_TAG=next" >> $GITHUB_OUTPUT
+          else
+            echo "NPM_TAG=latest" >> $GITHUB_OUTPUT
+          fi
+
+      - uses: JS-DevTools/npm-publish@19c28f1ef146469e409470805ea4279d47c3d35c
+        with:
+          token: "${{ secrets.NPM_TOKEN }}"
+          tag: ${{ steps.set-npm-tag.outputs.NPM_TAG }}
