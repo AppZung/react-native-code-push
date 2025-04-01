@@ -6,6 +6,8 @@
 
 # Enumeration: LogLevel
 
+Used to categorize log messages by their severity and importance.
+
 ## Enumeration Members
 
 ### DEBUG
