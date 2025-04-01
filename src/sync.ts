@@ -81,10 +81,10 @@ async function syncInternal(
               log(LogLevel.INFO, 'User cancelled the update.');
               break;
             case SyncStatus.UPDATE_INSTALLED:
-              if (resolvedInstallMode == InstallMode.ON_NEXT_RESTART) {
+              if (resolvedInstallMode === InstallMode.ON_NEXT_RESTART) {
                 log(LogLevel.INFO, 'Update is installed and will be run on the next app restart.');
-              } else if (resolvedInstallMode == InstallMode.ON_NEXT_RESUME) {
-                if (!!syncOptions.minimumBackgroundDuration) {
+              } else if (resolvedInstallMode === InstallMode.ON_NEXT_RESUME) {
+                if (syncOptions.minimumBackgroundDuration) {
                   log(
                     LogLevel.INFO,
                     `Update is installed and will be run after the app has been in the background for at least ${syncOptions.minimumBackgroundDuration} seconds.`,
@@ -210,6 +210,8 @@ async function syncInternal(
 }
 
 /**
+ * @function
+ *
  * Allows checking for an update, downloading it and installing it, all with a single call.
  *
  * Unless you need custom UI and/or behavior, we recommend most developers to use this method when integrating CodePush into their apps, if they are not using the `withCodePush` HOC.

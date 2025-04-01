@@ -6,7 +6,7 @@
 
 # Type Alias: LoggerFunction()
 
-> **LoggerFunction**: (`level`, `message`) => `void`
+> **LoggerFunction** = (`level`, `message`) => `void`
 
 ## Parameters
 

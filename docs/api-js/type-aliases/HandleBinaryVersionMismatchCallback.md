@@ -6,7 +6,7 @@
 
 # Type Alias: HandleBinaryVersionMismatchCallback()
 
-> **HandleBinaryVersionMismatchCallback**: (`update`) => `void`
+> **HandleBinaryVersionMismatchCallback** = (`update`) => `void`
 
 Called when there are any binary update available.
 

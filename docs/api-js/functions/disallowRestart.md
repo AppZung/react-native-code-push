@@ -6,7 +6,7 @@
 
 # Function: disallowRestart()
 
-> **disallowRestart**(): `void`
+> **disallowRestart**(): `Promise`\<`void`\>
 
 Forbid CodePush to restart the app.
 
@@ -14,4 +14,4 @@ This is an advanced API, and is useful when a component within your app (for exa
 
 ## Returns
 
-`void`
+`Promise`\<`void`\>

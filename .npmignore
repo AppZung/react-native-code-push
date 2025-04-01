@@ -103,8 +103,18 @@ packages/
 
 .watchmanconfig
 
-tslint.json
 .prettierrc.json
+.node-version
+
+docs
+
+.yarn
+.yarnrc.yml
+yarn.lock
+
+typedoc.json
+babel.config.js
+eslint.config.mjs
 
 CONTRIBUTING.md
 
