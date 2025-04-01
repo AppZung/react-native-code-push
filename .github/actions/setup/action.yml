@@ -29,9 +29,8 @@ runs:
       run: yarn install --immutable
       shell: bash
 
-    - name: Run postinstall
-      if: steps.yarn-cache.outputs.cache-hit == 'true'
-      run: yarn postinstall
+    - name: Run yarn genversion
+      run: yarn genversion
       shell: bash
 
     - name: Cache dependencies

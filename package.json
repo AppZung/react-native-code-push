@@ -27,7 +27,6 @@
   },
   "scripts": {
     "genversion": "genversion src/internals/version.ts --esm -s",
-    "postinstall": "yarn genversion",
     "prepare": "yarn genversion && typedoc && bob build",
     "clean": "shx rm -rf bin",
     "prebuild:tests": "yarn clean",
