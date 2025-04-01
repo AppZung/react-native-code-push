@@ -1,0 +1,52 @@
+name: Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - 'v[0-9]+'
+      - 'v[0-9]+.[0-9]+'
+  pull_request:
+    branches:
+      - main
+      - 'v[0-9]+'
+      - 'v[0-9]+.[0-9]+'
+  merge_group:
+    types:
+      - checks_requested
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - run: yarn test:lint
+
+  types:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - run: yarn test:types
+
+  build-library:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Build package
+        run: yarn prepare

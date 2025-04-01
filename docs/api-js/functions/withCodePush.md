@@ -16,7 +16,9 @@ Internally, the higher-order component calls `sync` inside its `componentDidMoun
 
 ### Type Parameters
 
-• **P** _extends_ `object`
+#### P
+
+`P` _extends_ `object`
 
 ### Parameters
 
@@ -40,7 +42,9 @@ Internally, the higher-order component calls `sync` inside its `componentDidMoun
 
 ### Type Parameters
 
-• **P** _extends_ `object`
+#### P
+
+`P` _extends_ `object`
 
 ### Parameters
 

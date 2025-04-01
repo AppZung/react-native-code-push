@@ -26,13 +26,14 @@
     "./package.json": "./package.json"
   },
   "scripts": {
+    "genversion": "genversion src/internals/version.ts --esm -s",
+    "postinstall": "yarn genversion",
+    "prepare": "yarn genversion && typedoc && bob build",
     "clean": "shx rm -rf bin",
-    "setup": "npm install --quiet --no-progress",
-    "prebuild:tests": "npm run clean && npm run tslint",
+    "prebuild:tests": "yarn clean",
     "build:tests": "tsc",
-    "test": "npm run build:tests && npm run test:setup && npm run test:fast",
-    "test:android": "npm run build:tests && npm run test:setup:android && npm run test:fast:android",
-    "test:ios": "npm run build:tests && npm run test:setup:ios && npm run test:fast:ios",
+    "test:android": "yarn build:tests && yarn test:setup:android && yarn test:fast:android",
+    "test:ios": "yarn build:tests && yarn test:setup:ios && yarn test:fast:ios",
     "test:setup": "mocha --recursive bin/test --android --ios --setup",
     "test:setup:android": "mocha --recursive bin/test --android --setup",
     "test:setup:ios": "mocha --recursive bin/test --ios --setup",
@@ -42,9 +43,9 @@
     "test:debugger:android": "mocha --recursive --inspect-brk=0.0.0.0 bin/test --android",
     "test:debugger:ios": "mocha --recursive --inspect-brk=0.0.0.0 bin/test --ios",
     "test:types": "tsc --noEmit",
-    "test:format": "prettier --check \"{src,docs}/**/*.{ts,js,md}\" README.md react-native.config.js",
-    "tslint": "tslint -c tslint.json test/**/*.ts",
-    "prepare": "genversion src/internals/version.ts --esm -s && typedoc && bob build"
+    "test:format": "prettier --check \"docs/**/*.md\" README.md",
+    "test:lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "test": "yarn test:lint && yarn test:format && yarn test:types"
   },
   "repository": {
     "type": "git",
@@ -54,6 +55,10 @@
     "hoist-non-react-statics": "^3.3.2"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.2.7",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.23.0",
+    "@react-native/eslint-config": "^0.78.1",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/assert": "^1.5.2",
     "@types/hoist-non-react-statics": "^3.3.6",
@@ -63,8 +68,11 @@
     "@types/q": "^1.5.4",
     "archiver": "^7.0.1",
     "body-parser": "^1.20.3",
-    "code-push-plugin-testing-framework": "file:./code-push-plugin-testing-framework",
+    "code-push-plugin-testing-framework": "workspace:./code-push-plugin-testing-framework",
     "del": "v6.0.0",
+    "eslint": "^9.23.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.5",
     "express": "^4.21.2",
     "genversion": "^3.2.0",
     "mkdirp": "latest",
@@ -75,9 +83,8 @@
     "run-sequence": "latest",
     "shx": "^0.3.4",
     "slash": "^3.0.0",
-    "tslint": "^6.1.3",
-    "typedoc": "^0.27.7",
-    "typedoc-plugin-markdown": "^4.4.2",
+    "typedoc": "^0.28.1",
+    "typedoc-plugin-markdown": "^4.6.0",
     "typescript": "^5.7.3"
   },
   "react-native-builder-bob": {
@@ -105,6 +112,9 @@
       ]
     ]
   },
+  "workspaces": [
+    "code-push-plugin-testing-framework"
+  ],
   "keywords": [
     "appzung",
     "codepush",
@@ -118,5 +128,5 @@
     "expo-ota",
     "appcenter"
   ],
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "yarn@4.8.1"
 }

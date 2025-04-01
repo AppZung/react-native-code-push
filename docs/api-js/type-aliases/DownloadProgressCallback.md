@@ -6,7 +6,7 @@
 
 # Type Alias: DownloadProgressCallback()
 
-> **DownloadProgressCallback**: (`progress`) => `void`
+> **DownloadProgressCallback** = (`progress`) => `void`
 
 Called periodically when an available update is being downloaded from the CodePush server.
 

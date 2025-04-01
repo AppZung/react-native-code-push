@@ -7,4 +7,6 @@ import { NativeRNAppZungCodePushModule } from './internals/NativeRNAppZungCodePu
  * Note: we don’t recommend using this method in scenarios other than that (CodePush will call
  * this method automatically when needed in other cases) as it could lead to unpredictable behavior.
  */
-export const clearUpdates: () => void = NativeRNAppZungCodePushModule.clearUpdates;
+export function clearUpdates() {
+  return NativeRNAppZungCodePushModule.clearUpdates();
+}

@@ -6,7 +6,7 @@
 
 # Type Alias: SyncStatusChangedCallback()
 
-> **SyncStatusChangedCallback**: (`status`) => `void`
+> **SyncStatusChangedCallback** = (`status`) => `void`
 
 Called when the sync process moves from one stage to another in the overall update process.
 

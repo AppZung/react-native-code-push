@@ -8,6 +8,8 @@ import { requestFetchAdapter } from './internals/utils/requestFetchAdapter';
 import type { StatusReport } from './types';
 
 /**
+ * @function
+ *
  * Notifies the CodePush runtime that an installed update is considered successful.
  *
  * If you are manually checking for and installing updates (i.e. not using the `sync` method to handle it all for you), then this method **MUST** be called; otherwise CodePush will treat the update as failed and rollback to the previous version when the app next restarts.
