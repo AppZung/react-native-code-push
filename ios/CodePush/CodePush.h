@@ -105,6 +105,7 @@
 @property (copy) NSString *serverURL;
 @property (copy) NSString *publicKey;
 @property (nonatomic) BOOL telemetryEnabled;
+@property (nonatomic) BOOL dataTransmissionEnabled;
 
 + (instancetype)current;
 

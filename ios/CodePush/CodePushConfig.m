@@ -14,6 +14,7 @@ static NSString * const ReleaseChannelPublicIDConfigKey = @"releaseChannelPublic
 static NSString * const ServerURLConfigKey = @"serverUrl";
 static NSString * const PublicKeyKey = @"publicKey";
 static NSString * const TelemetryEnabledKey = @"telemetryEnabled";
+static NSString * const DataTransmissionEnabledKey = @"dataTransmissionEnabled";
 
 + (instancetype)current
 {
@@ -60,6 +61,16 @@ static NSString * const TelemetryEnabledKey = @"telemetryEnabled";
         telemetryEnabled = YES;
     }
 
+    NSNumber *defaultDataTransmissionEnabled = [infoDictionary objectForKey:@"CodePushDefaultDataTransmissionEnabled"];
+    BOOL dataTransmissionEnabled;
+    if ([userDefaults objectForKey:DataTransmissionEnabledKey] != nil) {
+        dataTransmissionEnabled = [userDefaults boolForKey:DataTransmissionEnabledKey];
+    } else if (defaultDataTransmissionEnabled != nil) {
+        dataTransmissionEnabled = [defaultDataTransmissionEnabled boolValue];
+    } else {
+        dataTransmissionEnabled = YES;
+    }
+
     if (!serverURL) {
         serverURL = @"https://codepush.appzung.com/";
     }
@@ -76,6 +87,7 @@ static NSString * const TelemetryEnabledKey = @"telemetryEnabled";
         [_configDictionary setObject:publicKey forKey:PublicKeyKey];
     }
     [_configDictionary setObject:@(telemetryEnabled) forKey:TelemetryEnabledKey];
+    [_configDictionary setObject:@(dataTransmissionEnabled) forKey:DataTransmissionEnabledKey];
 
     return self;
 }
@@ -125,6 +137,19 @@ static NSString * const TelemetryEnabledKey = @"telemetryEnabled";
     [_configDictionary setValue:@(telemetryEnabled) forKey:TelemetryEnabledKey];
     NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
     [preferences setBool:telemetryEnabled forKey:TelemetryEnabledKey];
+    [preferences synchronize];
+}
+
+- (BOOL)dataTransmissionEnabled
+{
+    return [[_configDictionary objectForKey:DataTransmissionEnabledKey] boolValue];
+}
+
+- (void)setDataTransmissionEnabled:(BOOL)dataTransmissionEnabled
+{
+    [_configDictionary setValue:@(dataTransmissionEnabled) forKey:DataTransmissionEnabledKey];
+    NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
+    [preferences setBool:dataTransmissionEnabled forKey:DataTransmissionEnabledKey];
     [preferences synchronize];
 }
 

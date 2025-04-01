@@ -1063,6 +1063,20 @@ RCT_EXPORT_METHOD(getTelemetryEnabled:(RCTPromiseResolveBlock)resolve
     resolve(@([[CodePushConfig current] telemetryEnabled]));
 }
 
+RCT_EXPORT_METHOD(setDataTransmissionEnabled:(BOOL)enabled
+                                    resolver:(RCTPromiseResolveBlock)resolve
+                                    rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [[CodePushConfig current] setDataTransmissionEnabled:enabled];
+    resolve(nil);
+}
+
+RCT_EXPORT_METHOD(getDataTransmissionEnabled:(RCTPromiseResolveBlock)resolve
+                                   rejecter:(RCTPromiseRejectBlock)reject)
+{
+    resolve(@([[CodePushConfig current] dataTransmissionEnabled]));
+}
+
 #pragma mark - JavaScript-exported module methods (Private)
 
 /*
