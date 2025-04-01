@@ -13,6 +13,7 @@ static NSString * const ClientUniqueIDConfigKey = @"clientUniqueId";
 static NSString * const ReleaseChannelPublicIDConfigKey = @"releaseChannelPublicId";
 static NSString * const ServerURLConfigKey = @"serverUrl";
 static NSString * const PublicKeyKey = @"publicKey";
+static NSString * const TelemetryEnabledKey = @"telemetryEnabled";
 
 + (instancetype)current
 {
@@ -49,6 +50,16 @@ static NSString * const PublicKeyKey = @"publicKey";
         [userDefaults synchronize];
     }
 
+    NSNumber *defaultTelemetryEnabled = [infoDictionary objectForKey:@"CodePushDefaultTelemetryEnabled"];
+    BOOL telemetryEnabled;
+    if ([userDefaults objectForKey:TelemetryEnabledKey] != nil) {
+        telemetryEnabled = [userDefaults boolForKey:TelemetryEnabledKey];
+    } else if (defaultTelemetryEnabled != nil) {
+        telemetryEnabled = [defaultTelemetryEnabled boolValue];
+    } else {
+        telemetryEnabled = YES;
+    }
+
     if (!serverURL) {
         serverURL = @"https://codepush.appzung.com/";
     }
@@ -64,6 +75,7 @@ static NSString * const PublicKeyKey = @"publicKey";
         CPLog(@"Executing CodePush with a signing public key.");
         [_configDictionary setObject:publicKey forKey:PublicKeyKey];
     }
+    [_configDictionary setObject:@(telemetryEnabled) forKey:TelemetryEnabledKey];
 
     return self;
 }
@@ -101,6 +113,19 @@ static NSString * const PublicKeyKey = @"publicKey";
 - (NSString *)publicKey
 {
     return [_configDictionary objectForKey:PublicKeyKey];
+}
+
+- (BOOL)telemetryEnabled
+{
+    return [[_configDictionary objectForKey:TelemetryEnabledKey] boolValue];
+}
+
+- (void)setTelemetryEnabled:(BOOL)telemetryEnabled
+{
+    [_configDictionary setValue:@(telemetryEnabled) forKey:TelemetryEnabledKey];
+    NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
+    [preferences setBool:telemetryEnabled forKey:TelemetryEnabledKey];
+    [preferences synchronize];
 }
 
 - (void)setAppVersion:(NSString *)appVersion

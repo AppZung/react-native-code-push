@@ -11,6 +11,7 @@ export * from './sync';
 export * from './getClientUniqueId';
 export * from './resetClientUniqueId';
 export * from './logLevel';
+export * from './telemetry';
 
 export * from './types';
 

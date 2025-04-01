@@ -39,7 +39,7 @@ export async function checkForUpdate(
    * release channels (e.g. an early access release channel for insiders).
    */
   const config: Configuration = releaseChannelPublicId ? { ...nativeConfig, releaseChannelPublicId } : nativeConfig;
-  const sdk = new CodePushApiSdk(requestFetchAdapter, config);
+  const sdk = new CodePushApiSdk(requestFetchAdapter, log, config);
 
   const localPackage = await getCurrentPackage();
 

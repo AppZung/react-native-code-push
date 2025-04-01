@@ -1,3 +1,4 @@
+import { LogLevel } from '../enums/LogLevel.enum';
 import { CodePushError, CodePushHttpError } from './CodePushApiSdk.errors';
 import {
   type ApiSdkConfiguration,
@@ -22,6 +23,7 @@ export class CodePushApiSdk {
 
   constructor(
     private readonly httpRequester: Http.Requester,
+    private readonly log: (level: LogLevel, message: string) => void,
     configuration: ApiSdkConfiguration,
   ) {
     this.configuration = { ...configuration };
@@ -86,6 +88,11 @@ export class CodePushApiSdk {
     previousLabelOrAppVersion: string | null,
     previousDeploymentKey: string | null,
   ): Promise<void> {
+    if (!this.configuration.telemetryEnabled) {
+      this.log(LogLevel.DEBUG, 'Skipped reporting deploy status because telemetry is disabled');
+      return;
+    }
+
     const requestBody: ReportDeployInput = {
       app_version: this.configuration.appVersion,
       deployment_key: this.configuration.releaseChannelPublicId,
@@ -116,6 +123,11 @@ export class CodePushApiSdk {
   }
 
   async reportStatusDownload(downloadedPackage: ApiSdkDownloadReportPackageInfo): Promise<void> {
+    if (!this.configuration.telemetryEnabled) {
+      this.log(LogLevel.DEBUG, 'Skipped reporting download because telemetry is disabled');
+      return;
+    }
+
     const requestBody: ReportDownloadInput = {
       client_unique_id: this.configuration.clientUniqueId,
       deployment_key: this.configuration.releaseChannelPublicId,

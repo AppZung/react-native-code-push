@@ -54,7 +54,7 @@ async function tryReportStatus(statusReport: StatusReport, retryOnAppResume?: Na
         throw new Error('Release channel is missing');
       }
 
-      const sdk = new CodePushApiSdk(requestFetchAdapter, config);
+      const sdk = new CodePushApiSdk(requestFetchAdapter, log, config);
       await sdk.reportStatusDeploy(null, previousLabelOrAppVersion, previousReleaseChannelPublicId);
     } else {
       if (!statusReport.package) {
@@ -70,7 +70,7 @@ async function tryReportStatus(statusReport: StatusReport, retryOnAppResume?: Na
       }
 
       config.releaseChannelPublicId = statusReport.package.releaseChannelPublicId;
-      const sdk = new CodePushApiSdk(requestFetchAdapter, config);
+      const sdk = new CodePushApiSdk(requestFetchAdapter, log, config);
       await sdk.reportStatusDeploy(
         {
           package: statusReport.package,

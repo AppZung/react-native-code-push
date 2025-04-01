@@ -1,5 +1,60 @@
 ## Advanced usage
 
+### Privacy / GDPR
+
+#### Telemetry
+
+CodePush collects anonymous usage data by default to help improve the service (e.g. to provide you with analytics).
+To be fully compliant with GDPR and other privacy regulations, you may want to disable this telemetry collection.
+
+##### Disabling telemetry by default
+
+You can disable telemetry collection by default by configuring your native app:
+
+**Android:**
+
+Add this to your `android/app/build.gradle` file:
+
+```groovy
+android {
+    // ...
+    defaultConfig {
+        // ...
+        resValue "bool", "CodePushDefaultTelemetryEnabled", "false"
+    }
+}
+```
+
+**iOS:**
+
+Add this to your `ios/YourApp/Info.plist` file:
+
+```
+<key>CodePushDefaultTelemetryEnabled</key>
+<false/>
+```
+
+##### Managing telemetry during runtime
+
+You can also programmatically check or change telemetry status during app runtime:
+
+```typescript
+import * as CodePush from '@appzung/react-native-code-push';
+
+// Check if telemetry is enabled
+CodePush.getTelemetryEnabled().then((enabled) => {
+  console.log('Telemetry is ' + (enabled ? 'enabled' : 'disabled'));
+});
+
+// Enable telemetry
+CodePush.setTelemetryEnabled(true);
+
+// Disable telemetry
+CodePush.setTelemetryEnabled(false);
+```
+
+This setting will persist across app sessions.
+
 ### Multiple environments
 
 #### Staging / Production
@@ -43,7 +98,7 @@ In order to achieve this kind of workflow, all you need to do is specify the rel
 ```javascript
 // Imagine that "userProfile" is a prop that this component received
 // which includes the release channel public ID that the current user should use.
-codePush.sync({ releaseChannelPublicId: userProfile.RELEASE_CHANNEL_PUBLIC_ID });
+CodePush.sync({ releaseChannelPublicId: userProfile.RELEASE_CHANNEL_PUBLIC_ID });
 ```
 
 With that change in place, now it's just a matter of choosing how your app determines the right release channel for the current user. In practice, there are typically two solutions for this:

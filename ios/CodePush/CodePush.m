@@ -1049,6 +1049,20 @@ RCT_EXPORT_METHOD(resetClientUniqueId:(RCTPromiseResolveBlock)resolve
     resolve([[CodePushConfig current] clientUniqueId]);
 }
 
+RCT_EXPORT_METHOD(setTelemetryEnabled:(BOOL)enabled
+                            resolver:(RCTPromiseResolveBlock)resolve
+                            rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [[CodePushConfig current] setTelemetryEnabled:enabled];
+    resolve(nil);
+}
+
+RCT_EXPORT_METHOD(getTelemetryEnabled:(RCTPromiseResolveBlock)resolve
+                           rejecter:(RCTPromiseRejectBlock)reject)
+{
+    resolve(@([[CodePushConfig current] telemetryEnabled]));
+}
+
 #pragma mark - JavaScript-exported module methods (Private)
 
 /*
