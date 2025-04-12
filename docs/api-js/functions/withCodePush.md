@@ -18,7 +18,7 @@ Internally, the higher-order component calls `sync` inside its `componentDidMoun
 
 #### P
 
-`P` _extends_ `object`
+`P` _extends_ `object` \| `Record`\<`string`, `unknown`\>
 
 ### Parameters
 
@@ -44,7 +44,7 @@ Internally, the higher-order component calls `sync` inside its `componentDidMoun
 
 #### P
 
-`P` _extends_ `object`
+`P` _extends_ `object` \| `Record`\<`string`, `unknown`\>
 
 ### Parameters
 

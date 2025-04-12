@@ -30,7 +30,9 @@ export interface CodePushOptions extends SyncOptions {
  * @param component the React Component that will be decorated
  */
 // @ts-ignore
-export function withCodePush<P extends object>(component: React.ComponentType<P>): React.ComponentType;
+export function withCodePush<P extends object | Record<string, unknown>>(
+  component: React.ComponentType<P>,
+): React.ComponentType;
 
 /**
  * Wraps a React component inside a "higher order" React component that knows how to synchronize your app's JavaScript bundle and image assets when it is mounted.
@@ -39,7 +41,7 @@ export function withCodePush<P extends object>(component: React.ComponentType<P>
  *
  * @param options Options used to configure the end-user sync and update experience (e.g. when to check for updates?, show a prompt?, install the update immediately?).
  */
-export function withCodePush<P extends object>(
+export function withCodePush<P extends object | Record<string, unknown>>(
   options: CodePushOptions,
 ): (component: React.ComponentType<P>) => React.ComponentType;
 
