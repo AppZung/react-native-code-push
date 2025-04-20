@@ -64,12 +64,6 @@
 
 
 /*
- * This method is used to get information about the latest rollback.
- * This information will be used to decide whether the application
- * should ignore the update or not.
- */
-+ (NSDictionary*)getRollbackInfo;
-/*
  * This method is used to save information about the latest rollback.
  * This information will be used to decide whether the application
  * should ignore the update or not.
