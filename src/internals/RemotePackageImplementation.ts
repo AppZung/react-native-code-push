@@ -1,7 +1,7 @@
-import { NativeEventEmitter } from 'react-native';
 import { LogLevel } from '../enums/LogLevel.enum';
 import type { DownloadProgressCallback, LocalPackage, RemotePackage } from '../types';
 import type { ApiSdkDownloadReportPackageInfo } from './CodePushApiSdk.types';
+import { CodePushEventEmitter } from './CodePushEventEmitter';
 import { LocalPackageImplementation } from './LocalPackageImplementation';
 import { NativeRNAppZungCodePushModule } from './NativeRNAppZungCodePushModule';
 import { log } from './utils/log';
@@ -21,9 +21,8 @@ export class RemotePackageImpl implements RemotePackage {
       let downloadProgressSubscription;
 
       if (downloadProgressCallback) {
-        const codePushEventEmitter = new NativeEventEmitter(NativeRNAppZungCodePushModule);
         // Use event subscription to obtain download progress.
-        downloadProgressSubscription = codePushEventEmitter.addListener(
+        downloadProgressSubscription = CodePushEventEmitter.addListener(
           'CodePushDownloadProgress',
           downloadProgressCallback,
         );
