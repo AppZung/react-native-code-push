@@ -18,10 +18,8 @@ Pod::Spec.new do |s|
   s.public_header_files = ['ios/CodePush/CodePush.h']
   s.pod_target_xcconfig = { "DEFINES_MODULE" => "YES" }
 
-  # Note: Even though there are copy/pasted versions of some of these dependencies in the repo,
-  # we explicitly let CocoaPods pull in the versions below so all dependencies are resolved and
-  # linked properly at a parent workspace level.
-  s.dependency 'React-Core'
+  install_modules_dependencies(s)
+
   s.dependency 'SSZipArchive', '~> 2.5.5'
   s.dependency 'JWT', '~> 3.0.0-beta.12'
   s.dependency 'Base64', '~> 1.1'
