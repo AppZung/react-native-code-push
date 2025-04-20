@@ -30,7 +30,7 @@
 
     // Used to coordinate the dispatching of download progress events to JS.
     long long _latestExpectedContentLength;
-    long long _latestReceivedConentLength;
+    long long _latestReceivedContentLength;
     NSTimeInterval _lastProgressEmitTimestamp;
 
     BOOL _allowed;
@@ -320,7 +320,7 @@ static NSString *const LatestRollbackCountKey = @"count";
         @"totalBytes" : [NSNumber
                          numberWithLongLong:_latestExpectedContentLength],
         @"receivedBytes" : [NSNumber
-                            numberWithLongLong:_latestReceivedConentLength]
+                            numberWithLongLong:_latestReceivedContentLength]
     }];
 }
 
@@ -714,8 +714,8 @@ RCT_EXPORT_METHOD(downloadUpdate:(NSDictionary*)updatePackage
      operationQueue:_methodQueue
      // The download is progressing forward
      progressCallback:^(long long expectedContentLength, long long receivedContentLength) {
-        _latestExpectedContentLength = expectedContentLength;
-        _latestReceivedConentLength = receivedContentLength;
+        self->_latestExpectedContentLength = expectedContentLength;
+        self->_latestReceivedContentLength = receivedContentLength;
 
         if (expectedContentLength == receivedContentLength) {
             [self dispatchDownloadProgressEvent];
