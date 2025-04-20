@@ -216,7 +216,15 @@ failCallback:(void (^)(NSError *err))failCallback;
 
 @end
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void CPLog(NSString *formatString, ...);
+
+#ifdef __cplusplus
+}
+#endif
 
 typedef NS_ENUM(NSInteger, CodePushInstallMode) {
     CodePushInstallModeImmediate,

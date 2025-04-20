@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.tvos.deployment_target = '15.5'
   s.preserve_paths = '*.js'
   s.library        = 'z'
-  s.source_files = 'ios/CodePush/*.{h,m}'
+  s.source_files = 'ios/CodePush/*.{h,m,mm}'
   s.public_header_files = ['ios/CodePush/CodePush.h']
   s.pod_target_xcconfig = { "DEFINES_MODULE" => "YES" }
 
