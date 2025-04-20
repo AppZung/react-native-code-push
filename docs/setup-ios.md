@@ -73,7 +73,7 @@
 
    _Note: If you need to dynamically use a different release channel, you can also override your release channel public ID in JS code using [Code-Push options](./api-js/interfaces/CodePushOptions.mds)_
 
-6. [Configure code signing](./code-signing.md), this is optional but recommended for security
+6. [Configure code signing](./code-signing.md)
 
 ### (optional) HTTP exception domains configuration
 
