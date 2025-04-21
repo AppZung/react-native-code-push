@@ -6,6 +6,7 @@
   "typings": "typings/react-native-code-push.d.ts",
   "author": "Louis Lagrange <lagrange.louis@gmail.com> (https://github.com/Minishlink)",
   "license": "MIT",
+  "homepage": "https://appzung.com",
   "scripts": {
     "clean": "shx rm -rf bin",
     "setup": "npm install --quiet --no-progress",
