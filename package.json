@@ -1,6 +1,6 @@
 {
   "name": "@appzung/react-native-code-push",
-  "version": "10.2.2",
+  "version": "10.2.3",
   "description": "React Native plugin for the CodePush service",
   "author": "Louis Lagrange <lagrange.louis@gmail.com> (https://github.com/Minishlink)",
   "license": "MIT",
