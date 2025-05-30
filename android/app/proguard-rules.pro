@@ -20,6 +20,11 @@
 -keepclassmembers class com.facebook.react.ReactInstanceManager {
     private final ** mBundleLoader;
 }
+-keepclassmembers class com.facebook.react.runtime.ReactHostImpl {
+    private final ** mReactHostDelegate;
+}
+-keep interface com.facebook.react.runtime.ReactHostDelegate { *; }
+-keep class * implements com.facebook.react.runtime.ReactHostDelegate { *; }
 
 # Can't find referenced class org.bouncycastle.**
 -dontwarn com.nimbusds.jose.**
