@@ -62,6 +62,15 @@
 
 3. If you use New Architecture, make sure to have bridgeless mode enabled:
 
+   **For React Native 0.80+:**
+   ```kotlin
+   override fun onCreate() {
+       super.onCreate()
+       loadReactNative(this)
+   }
+   ```
+
+   **For React Native < 0.80:**
    ```kotlin
    override fun onCreate() {
        super.onCreate()
