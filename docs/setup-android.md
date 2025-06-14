@@ -60,7 +60,20 @@
    }
    ```
 
-3. Add the release channel public ID to `strings.xml`:
+3. If you use New Architecture, make sure to have bridgeless mode enabled:
+
+   ```kotlin
+   override fun onCreate() {
+       super.onCreate()
+       SoLoader.init(this, OpenSourceMergedSoMapping)
+       if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+           // If you opted-in for the New Architecture, we load the native entry point for this app.
+           load() // NOT load(bridgelessEnabled = false)
+       }
+   }
+   ```
+
+4. Add the release channel public ID to `strings.xml`:
 
    To let the CodePush runtime know which release channel it should query for updates, open your app's `strings.xml` file and add a new string named `CodePushReleaseChannelPublicId`, whose value is the public ID of the release channel you want to configure this app against. You can retrieve this value by running `appzung release-channels list` in the AppZung CLI and copying the value of the `Public ID` column.
 
@@ -77,4 +90,4 @@
 
    _Note: If you need to dynamically use a different release channel, you can also override your release channel public ID in JS code using [Code-Push options](./api-js/interfaces/CodePushOptions.md)_
 
-4. [Configure code signing](./code-signing.md)
+5. [Configure code signing](./code-signing.md)
