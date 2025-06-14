@@ -1,4 +1,4 @@
-[**@appzung/react-native-code-push v10.2.3**](../README.md)
+[**@appzung/react-native-code-push v10.2.4**](../README.md)
 
 ---
 
