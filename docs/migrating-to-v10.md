@@ -22,7 +22,7 @@ If you are less in a hurry, you can migrate to `@appzung/react-native-code-push`
 
 ### Change your Android setup
 
-1. In `android/settings.gradle` remove the lines about CodePush : `include ':react-native-code-push'` and `project(':react-native-code-push').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-code-push/android/app')`
+1. In `android/settings.gradle` remove the lines about CodePush : `include ':react-native-code-push'` and `project(':react-native-code-push').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-code-push/android/app')` (keep `include ':app'`)
 2. In `android/app/build.gradle` change the line about CodePush: `apply from: "../../node_modules/@appzung/react-native-code-push/android/codepush.gradle"`
 3. In your Android files (eg. `MainApplication.kt`), rename every `com.microsoft.codepush` prefix imports with `com.appzung.codepush`
 4. Rename `CodePushDeploymentKey` to `CodePushReleaseChannelPublicId` in your strings resources (located either at strings.xml or app/build.gradle).
