@@ -174,7 +174,7 @@ If you would like to display an update confirmation dialog (an "active install")
 
 ## Releasing updates
 
-Once your app is configured and distributed to your users, and you have made some JS or asset changes, it's time to release them. The recommended way to release them is using the `appzung releases deploy-react-native` command in the AppZung CLI, which will bundle your JavaScript files, asset files, and release the update to the CodePush server.
+Once your app is configured and distributed to your users, and you have made some JS or asset changes, it's time to release them. The recommended way to release them is running the `appzung releases deploy-react-native` command (or `appzung releases deploy-expo` if using Expo) in the AppZung CLI, which will bundle your JavaScript files, asset files, and release the update to the CodePush server.
 
 ### Locally
 
