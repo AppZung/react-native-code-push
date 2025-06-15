@@ -203,6 +203,7 @@ public class CodePush implements ReactPackage {
 
     public static String getJSBundleFile(String assetsBundleFileName) {
         if (mCurrentInstance == null) {
+            CodePushUtils.log("A CodePush instance has not been created yet. Have you added it to your app's list of ReactPackages?");
             throw new CodePushNotInitializedException("A CodePush instance has not been created yet. Have you added it to your app's list of ReactPackages?");
         }
 

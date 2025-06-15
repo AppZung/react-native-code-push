@@ -51,6 +51,7 @@ public class CodePushNativeModule extends BaseJavaModule {
     private String mClientUniqueId = null;
     private boolean mTelemetryEnabled = true;
     private boolean mDataTransmissionEnabled = true;
+    private boolean mIsExpoApp = false;
     private LifecycleEventListener mLifecycleEventListener = null;
     private int mMinimumBackgroundDuration = 0;
 
@@ -70,6 +71,8 @@ public class CodePushNativeModule extends BaseJavaModule {
         mSettingsManager = settingsManager;
         mTelemetryManager = codePushTelemetryManager;
         mUpdateManager = codePushUpdateManager;
+
+        mIsExpoApp = ExpoUtils.detectExpoEnvironment(reactContext);
 
         // Initialize module state while we have a reference to the current context.
         mBinaryContentsHash = CodePushUpdateUtils.getHashForBinaryContents(reactContext, mCodePush.isDebugMode());
@@ -210,8 +213,11 @@ public class CodePushNativeModule extends BaseJavaModule {
 
                 String latestJSBundleFile = mCodePush.getJSBundleFileInternal(mCodePush.getAssetsBundleFileName());
 
-                // #2) Update the locally stored JS bundle file path
-                setJSBundle(getReactHostDelegate((ReactHostImpl) reactHost), latestJSBundleFile);
+                // if expo and new arch this is unnecessary, see https://github.com/expo/expo/blob/8113ce44edaef0311e2daff3ab1a63b9731d2d6c/packages/expo-updates/android/src/main/java/expo/modules/updates/procedures/RelaunchProcedure.kt#L148
+                if (!mIsExpoApp) {
+                    // #2) Update the locally stored JS bundle file path
+                    setJSBundle(getReactHostDelegate((ReactHostImpl) reactHost), latestJSBundleFile);
+                }
 
                 // #3) Get the context creation method
                 try {
