@@ -86,6 +86,7 @@ export async function checkForUpdate(
     }
 
     log(LogLevel.INFO, 'An update is available but it is not targeting the binary version of your app.');
+    log(LogLevel.DEBUG, `Your current app version is ${nativeConfig.appVersion}`);
     handleBinaryVersionMismatchCallback?.(update);
 
     return null;
