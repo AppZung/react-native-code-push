@@ -111,8 +111,8 @@ We try our best to maintain backwards compatibility of our plugin with previous 
 | v0.65-v0.70             | 4.1+ (TLS 1.2+) | 9    | ✅       | ❌       | v7.1.1                         |
 | v0.71-v0.79             | 4.1+ (TLS 1.2+) | 9    | ✅       | ❌       | v8.3.2                         |
 | v0.71-v0.79             | 4.1+ (TLS 1.2+) | 15.5 | ✅       | ❌       | v9.0.2                         |
-| v0.71+                  | 4.1+ (TLS 1.2+) | 15.5 | ✅       | ❌       | v10+                           |
-| v0.74+                  | 4.1+ (TLS 1.2+) | 15.5 | ✅       | ✅       | v11+                           |
+| v0.71-v0.80             | 4.1+ (TLS 1.2+) | 15.5 | ✅       | ❌       | v10+                           |
+| v0.74-v0.81             | 4.1+ (TLS 1.2+) | 15.5 | ✅       | ✅       | v11+                           |
 
 We work hard to respond to new RN releases, but they do occasionally break us. We will update this chart with each RN release, so that users can check to see what our "official" support is.
 
