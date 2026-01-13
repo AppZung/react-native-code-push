@@ -54,7 +54,7 @@ Add record in `Info.plist` with name `CodePushSigningPublicKey` and string value
     <!-- ...other configs... -->
 
     <key>CodePushSigningPublicKey</key>
-        <string>-----BEGIN PUBLIC KEY-----
+    <string>-----BEGIN PUBLIC KEY-----
 MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBANkWYydPuyOumR/sn2agNBVDnzyRpM16NAUpYPGxNgjSEp0etkDNgzzdzyvyl+OsAGBYF3jCxYOXozum+uV5hQECAwEAAQ==
 -----END PUBLIC KEY-----</string>
 

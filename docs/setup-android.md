@@ -14,7 +14,31 @@
 
 2. Update the `MainApplication` file to use CodePush via the following changes:
 
-   If your MainApplication is a Kotlin file, update the `MainApplication.kt`
+   If your MainApplication is a Kotlin file on RN >= 0.82, update the `MainApplication.kt`:
+
+   ```kotlin
+   ...
+   // 1. Import the plugin class.
+   import com.appzung.codepush.react.CodePush
+
+   class MainApplication : Application(), ReactApplication {
+    
+   override val reactHost: ReactHost by lazy {
+       getDefaultReactHost(
+           context = applicationContext,
+           packageList =
+             PackageList(this).packages.apply {
+               // Packages that cannot be autolinked yet can be added manually here, for example:
+               // add(MyReactNativePackage())
+           },
+           // 2. Override the getJSBundleFile method in order to let
+           // the CodePush runtime determine where to get the JS
+           // bundle location from on each app start (after packageList)
+           jsBundleFilePath = CodePush.getJSBundleFile(),
+           ...
+   ```
+
+   If your MainApplication is a Kotlin file on RN < 0.82, update the `MainApplication.kt`:
 
    ```kotlin
    ...
@@ -95,7 +119,7 @@
    ```xml
     <resources>
         <string name="app_name">AppName</string>
-        <string moduleConfig="true" name="CodePushReleaseChannelPublicId">ReleaseChannelPublicId</string>
+        <string name="CodePushReleaseChannelPublicId">ReleaseChannelPublicId</string>
     </resources>
    ```
 

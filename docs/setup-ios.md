@@ -4,36 +4,36 @@
 
 ### Plugin Installation and Configuration
 
-1. Run `cd ios && pod install && cd ..` to install all the necessary CocoaPods dependencies.
+1. Run `cd ios && pod install && cd ..` to install all the necessary CocoaPods dependencies. You may have to change the `Podfile`'s min iOS version to 15.5 (`platform :ios, '15.5'`).
 
-2. Open up the `AppDelegate.m`/`AppDelegate.swift` file, and add an import statement for the CodePush headers:
-
-   ```objective-c
-   #import <CodePush/CodePush.h>
-   ```
+2. Open up the `AppDelegate.swift`/`AppDelegate.m` file, and add an import statement for the CodePush headers:
 
    ```swift
    import CodePush
    ```
 
-3. Find the following line of code, which sets the source URL for bridge for production releases:
-
    ```objective-c
-   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+   #import <CodePush/CodePush.h>
    ```
+
+3. Find the following line of code, which sets the source URL for bridge for production releases:
 
    ```swift
    Bundle.main.url(forResource: "main", withExtension: "jsbundle")
    ```
 
-4. Replace it with this line:
-
    ```objective-c
-   return [CodePush bundleURL];
+   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
    ```
+
+4. Replace it with this line:
 
    ```swift
    CodePush.bundleURL()
+   ```
+
+   ```objective-c
+   return [CodePush bundleURL];
    ```
 
    This change configures your app to always load the most recent version of your app's JS bundle. On the first launch, this will correspond to the file that was compiled with the app. However, after an update has been pushed via CodePush, this will return the location of the most recently installed update.
@@ -44,6 +44,16 @@
 
    Your `sourceURLForBridge` method should look like this:
 
+   ```swift
+     override func bundleURL() -> URL? {
+   #if DEBUG
+       RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+   #else
+       CodePush.bundleURL()
+   #endif
+     }
+   ```
+
    ```objective-c
    - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
    {
@@ -53,16 +63,6 @@
        return [CodePush bundleURL];
      #endif
    }
-   ```
-
-   ```swift
-     override func bundleURL() -> URL? {
-   #if DEBUG
-       RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
-   #else
-       CodePush.bundleURL()
-   #endif
-     }
    ```
 
 5. Add the Release channel public ID to `Info.plist`:
