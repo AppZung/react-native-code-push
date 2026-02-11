@@ -140,10 +140,28 @@ By default, and this is recommended for production environments, CodePush will c
 If you would like your app to discover updates more quickly, you can also choose to sync up with the CodePush server every time the app resumes from the background.
 
 ```javascript
-withCodePush({ checkFrequency: CheckFrequency.ON_APP_RESUME })(MyApp);
+import withCodePush, { CheckFrequency, InstallMode } from '@appzung/react-native-code-push';
+
+withCodePush({
+  checkFrequency: CheckFrequency.ON_APP_RESUME,
+})(MyApp);
 ```
 
-Alternatively, if you want fine-grained control over when the check happens (like a button press or timer interval), eg. in a staging environment, you can call [`CodePush.sync()`](docs/api-js/functions/sync.md) at any time with your desired `SyncOptions`, and turn off CodePush's automatic checking by specifying a manual `checkFrequency`:
+For a more aggressive setup, you may choose to also install updates in the background or when the app resumes. Note that because the app would reload during update installation, the user might be slightly bothered unless you have a mechanism to come back to the exact same app state after restarting. You may minimize this discomfort using `minimumBackgroundDuration`.
+On Android in New Arch it is preferable to use ON_NEXT_RESUME instead of ON_NEXT_SUSPEND because it looks like React Native has a bug where network requests fail when React initializes in the background.
+
+```javascript
+import { Platform } from 'react-native';
+import withCodePush, { CheckFrequency, InstallMode } from '@appzung/react-native-code-push';
+
+withCodePush({
+  checkFrequency: CheckFrequency.ON_APP_RESUME,
+  installMode: Platform.OS === 'android' ? InstallMode.ON_NEXT_RESUME : InstallMode.ON_NEXT_SUSPEND,
+  minimumBackgroundDuration: 60 * 5, // if the app is suspended more than 5 minutes, install the update. If the app is restarted (killed and restarted) it will also install the update.
+})(MyApp);
+```
+
+Alternatively, if you want fine-grained control over when the check happens (like a button press or timer interval), e.g. in a staging environment, you can call [`CodePush.sync()`](docs/api-js/functions/sync.md) at any time with your desired `SyncOptions`, and turn off CodePush's automatic checking by specifying a manual `checkFrequency`:
 
 ```javascript
 import withCodePush, { CheckFrequency, InstallMode, sync } from '@appzung/react-native-code-push';
