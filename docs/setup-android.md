@@ -22,7 +22,7 @@
    import com.appzung.codepush.react.CodePush
 
    class MainApplication : Application(), ReactApplication {
-    
+
    override val reactHost: ReactHost by lazy {
        getDefaultReactHost(
            context = applicationContext,
