@@ -686,7 +686,12 @@ public class CodePushNativeModule extends BaseJavaModule {
                                         if (installMode == CodePushInstallMode.IMMEDIATE.getValue()
                                                 || durationInBackground >= CodePushNativeModule.this.mMinimumBackgroundDuration) {
                                             CodePushUtils.log("Loading bundle on resume");
-                                            restartAppInternal(false);
+                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    restartAppInternal(false);
+                                                }
+                                            });
                                         }
                                     }
                                 }
