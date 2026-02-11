@@ -19,6 +19,7 @@
 # Invoked via reflection, when setting js bundle.
 -keepclassmembers class com.facebook.react.ReactInstanceManager {
     private final ** mBundleLoader;
+    private ** mAttachedReactRoots;
 }
 -keepclassmembers class com.facebook.react.runtime.ReactHostImpl {
     private final ** mReactHostDelegate;
@@ -26,6 +27,14 @@
 }
 -keep interface com.facebook.react.runtime.ReactHostDelegate { *; }
 -keep class * implements com.facebook.react.runtime.ReactHostDelegate { *; }
+
+# Invoked via reflection, when resetting root views.
+-keepclassmembers interface com.facebook.react.ReactRoot {
+    public ** getRootViewGroup();
+}
+-keepclassmembers class * implements com.facebook.react.ReactRoot {
+    public ** getRootViewGroup();
+}
 
 # Can't find referenced class org.bouncycastle.**
 -dontwarn com.nimbusds.jose.**

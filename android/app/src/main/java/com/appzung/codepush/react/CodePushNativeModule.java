@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.Choreographer;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.OptIn;
 
@@ -268,6 +269,7 @@ public class CodePushNativeModule extends BaseJavaModule {
                     @Override
                     public void run() {
                         try {
+                            resetReactRootViews(instanceManager);
                             instanceManager.recreateReactContextInBackground();
                             mCodePush.initializeUpdateAfterRestart();
                         } catch (Exception e) {
@@ -312,6 +314,26 @@ public class CodePushNativeModule extends BaseJavaModule {
         if (mLifecycleEventListener != null) {
             getReactApplicationContext().removeLifecycleEventListener(mLifecycleEventListener);
             mLifecycleEventListener = null;
+        }
+    }
+
+    private void resetReactRootViews(ReactInstanceManager instanceManager) throws NoSuchFieldException, IllegalAccessException {
+        Field mAttachedReactRootsField = instanceManager.getClass().getDeclaredField("mAttachedReactRoots");
+        mAttachedReactRootsField.setAccessible(true);
+        java.util.Set<?> mAttachedReactRoots = (java.util.Set<?>) mAttachedReactRootsField.get(instanceManager);
+        if (mAttachedReactRoots != null) {
+            for (Object reactRoot : mAttachedReactRoots) {
+                try {
+                    Method getRootViewGroupMethod = reactRoot.getClass().getMethod("getRootViewGroup");
+                    ViewGroup rootViewGroup = (ViewGroup) getRootViewGroupMethod.invoke(reactRoot);
+                    if (rootViewGroup != null) {
+                        rootViewGroup.removeAllViews();
+                        rootViewGroup.setId(View.NO_ID);
+                    }
+                } catch (Exception e) {
+                    CodePushUtils.log("Failed to reset root view: " + e.getMessage());
+                }
+            }
         }
     }
 
