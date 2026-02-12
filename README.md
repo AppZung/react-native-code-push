@@ -112,7 +112,7 @@ We try our best to maintain backwards compatibility of our plugin with previous 
 | v0.71-v0.79             | 4.1+ (TLS 1.2+) | 9    | ✅       | ❌       | v8.3.2                         |
 | v0.71-v0.79             | 4.1+ (TLS 1.2+) | 15.5 | ✅       | ❌       | v9.0.2                         |
 | v0.71-v0.80             | 4.1+ (TLS 1.2+) | 15.5 | ✅       | ❌       | v10+                           |
-| v0.74-v0.83             | 4.1+ (TLS 1.2+) | 15.5 | ✅       | ✅       | v11+                           |
+| v0.74-v0.84             | 4.1+ (TLS 1.2+) | 15.5 | ✅       | ✅       | v11+                           |
 
 We work hard to respond to new RN releases, but they do occasionally break us. We will update this chart with each RN release, so that users can check to see what our "official" support is.
 
@@ -151,8 +151,8 @@ For a more aggressive setup, you may choose to also install updates in the backg
 On Android in New Arch it is preferable to use ON_NEXT_RESUME instead of ON_NEXT_SUSPEND because it looks like React Native has a bug where network requests fail when React initializes in the background.
 
 ```javascript
-import { Platform } from 'react-native';
 import withCodePush, { CheckFrequency, InstallMode } from '@appzung/react-native-code-push';
+import { Platform } from 'react-native';
 
 withCodePush({
   checkFrequency: CheckFrequency.ON_APP_RESUME,
