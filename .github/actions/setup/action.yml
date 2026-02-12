@@ -1,19 +1,27 @@
 name: Setup
 description: Setup Node.js and install dependencies
 
+inputs:
+  skip-cache:
+    description: Skip dependency caching
+    required: false
+    default: "false"
+
 runs:
   using: composite
   steps:
     - name: Setup Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version-file: .node-version
+        registry-url: "https://registry.npmjs.org"
 
     - run: corepack enable
       shell: bash
 
     - name: Restore dependencies
       id: yarn-cache
+      if: inputs.skip-cache != 'true'
       uses: actions/cache/restore@v4
       with:
         path: |
@@ -25,7 +33,7 @@ runs:
           ${{ runner.os }}-yarn-
 
     - name: Install dependencies
-      if: steps.yarn-cache.outputs.cache-hit != 'true'
+      if: inputs.skip-cache == 'true' || steps.yarn-cache.outputs.cache-hit != 'true'
       run: yarn install --immutable
       shell: bash
 
@@ -34,7 +42,7 @@ runs:
       shell: bash
 
     - name: Cache dependencies
-      if: steps.yarn-cache.outputs.cache-hit != 'true'
+      if: inputs.skip-cache != 'true' && steps.yarn-cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v4
       with:
         path: |
