@@ -4,10 +4,6 @@ on:
   release:
     types: [published]
 
-permissions:
-  id-token: write
-  contents: read
-
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -28,5 +24,7 @@ jobs:
             echo "NPM_TAG=latest" >> $GITHUB_OUTPUT
           fi
 
-      - name: Publish
-        run: npm publish --tag ${{ steps.set-npm-tag.outputs.NPM_TAG }}
+      - uses: JS-DevTools/npm-publish@19c28f1ef146469e409470805ea4279d47c3d35c
+        with:
+          token: "${{ secrets.NPM_TOKEN }}"
+          tag: ${{ steps.set-npm-tag.outputs.NPM_TAG }}
