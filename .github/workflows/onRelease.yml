@@ -20,6 +20,8 @@ jobs:
         with:
           skip-cache: "true"
 
+      - run: sudo npm install -g npm@latest
+
       - name: Set npm tag
         id: set-npm-tag
         run: |
