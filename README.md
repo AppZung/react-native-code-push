@@ -103,7 +103,7 @@ See the [corresponding steps](./docs/migrating-to-v10.md).
 We try our best to maintain backwards compatibility of our plugin with previous versions of React Native, but due to the nature of the platform, and the existence of breaking changes between releases, it is possible that you need to use a specific version of the CodePush plugin in order to support the exact version of React Native you are using. The following table outlines which CodePush plugin versions officially support the respective React Native versions:
 
 | React Native version(s) | Android         | iOS  | Old arch | New arch | Supporting CodePush version(s) |
-| ----------------------- | --------------- | ---- | -------- | -------- | ------------------------------ |
+|-------------------------| --------------- | ---- | -------- | -------- | ------------------------------ |
 | <0.59                   | -               | -    | ✅       | ❌       | **Unsupported**                |
 | v0.59                   | 4.1+ (TLS 1.2+) | 7    | ✅       | ❌       | v5.7.1                         |
 | v0.60-v0.61             | 4.1+ (TLS 1.2+) | 7    | ✅       | ❌       | v6.3.1                         |
@@ -112,7 +112,7 @@ We try our best to maintain backwards compatibility of our plugin with previous 
 | v0.71-v0.79             | 4.1+ (TLS 1.2+) | 9    | ✅       | ❌       | v8.3.2                         |
 | v0.71-v0.79             | 4.1+ (TLS 1.2+) | 15.5 | ✅       | ❌       | v9.0.2                         |
 | v0.71-v0.80             | 4.1+ (TLS 1.2+) | 15.5 | ✅       | ❌       | v10+                           |
-| v0.74-v0.84             | 4.1+ (TLS 1.2+) | 15.5 | ✅       | ✅       | v11+                           |
+| v0.74-v0.85             | 4.1+ (TLS 1.2+) | 15.5 | ✅       | ✅       | v11+                           |
 
 We work hard to respond to new RN releases, but they do occasionally break us. We will update this chart with each RN release, so that users can check to see what our "official" support is.
 
