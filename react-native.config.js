@@ -3,7 +3,7 @@ module.exports = {
     platforms: {
       android: {
         packageInstance: 'CodePush.getInstance(getApplicationContext())',
-        sourceDir: './android/app',
+        sourceDir: './android',
       },
     },
   },

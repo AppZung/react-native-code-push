@@ -194,7 +194,7 @@ Ankh.NoLoad
 Examples/testapp_rn
 
 # Android debug build files (conflict ignoring #Visual Studio files)
-!android/app/src/debug/
+!android/src/debug/
 
 # Yarn
 .yarn/*
