@@ -174,7 +174,8 @@ public class CodePushNativeModule extends BaseJavaModule {
             if (latestJSBundleFile.toLowerCase().startsWith("assets://")) {
                 latestJSBundleLoader = JSBundleLoader.createAssetLoader(getReactApplicationContext(), latestJSBundleFile, false);
             } else {
-                latestJSBundleLoader = JSBundleLoader.createFileLoader(latestJSBundleFile);
+                String fileUrl = latestJSBundleFile.startsWith("file://") ? latestJSBundleFile : "file://" + latestJSBundleFile;
+                latestJSBundleLoader = JSBundleLoader.createFileLoader(latestJSBundleFile, fileUrl, false);
             }
 
             Field bundleLoaderField = reactHostDelegate.getClass().getDeclaredField("jsBundleLoader");
