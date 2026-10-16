@@ -665,13 +665,19 @@ public class CodePushNativeModule extends BaseJavaModule {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    mUpdateManager.installPackage(CodePushUtils.convertReadableToJsonObject(updatePackage), mSettingsManager.isPendingUpdate(null));
-
                     String pendingHash = CodePushUtils.tryGetString(updatePackage, CodePushConstants.PACKAGE_HASH_KEY);
                     if (pendingHash == null) {
                         throw new CodePushUnknownException("Update package to be installed has no hash.");
-                    } else {
-                        mSettingsManager.savePendingUpdate(pendingHash, /* isLoading */false);
+                    }
+
+                    JSONObject previousPendingUpdate = mSettingsManager.getPendingUpdate();
+                    boolean removePendingUpdate = mSettingsManager.isPendingUpdate(null);
+                    mSettingsManager.savePendingUpdate(pendingHash, /* isLoading */false);
+                    try {
+                        mUpdateManager.installPackage(CodePushUtils.convertReadableToJsonObject(updatePackage), removePendingUpdate);
+                    } catch (RuntimeException e) {
+                        restorePendingUpdate(previousPendingUpdate);
+                        throw e;
                     }
 
                     if (installMode == CodePushInstallMode.ON_NEXT_RESUME.getValue() ||
@@ -750,6 +756,22 @@ public class CodePushNativeModule extends BaseJavaModule {
         };
 
         asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void restorePendingUpdate(JSONObject pendingUpdate) {
+        if (pendingUpdate == null) {
+            mSettingsManager.removePendingUpdate();
+            return;
+        }
+
+        try {
+            mSettingsManager.savePendingUpdate(
+                    pendingUpdate.getString(CodePushConstants.PENDING_UPDATE_HASH_KEY),
+                    pendingUpdate.getBoolean(CodePushConstants.PENDING_UPDATE_IS_LOADING_KEY));
+        } catch (JSONException e) {
+            // Should not happen.
+            throw new CodePushUnknownException("Unable to read pending update metadata stored in SharedPreferences", e);
+        }
     }
 
     @ReactMethod

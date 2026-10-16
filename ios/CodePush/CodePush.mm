@@ -378,6 +378,16 @@ static NSString *const LatestRollbackCountKey = @"count";
     NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
     NSDictionary *pendingUpdate = [preferences objectForKey:PendingUpdateKey];
     if (pendingUpdate) {
+        NSError *error;
+        NSString *currentPackageHash = [CodePushPackage getCurrentPackageHash:&error];
+        if (![pendingUpdate[PendingUpdateHashKey] isEqualToString:currentPackageHash]) {
+            // installUpdate records the pending update before switching the current package, so
+            // the process died in between: the update was never installed, nothing to initialize.
+            CPLog(@"Discarding pending update %@ that never became the current package.", pendingUpdate[PendingUpdateHashKey]);
+            [[self class] removePendingUpdate];
+            return;
+        }
+
         _isFirstRunAfterUpdate = YES;
         BOOL updateIsLoading = [pendingUpdate[PendingUpdateIsLoadingKey] boolValue];
         if (updateIsLoading) {
@@ -859,17 +869,26 @@ RCT_EXPORT_METHOD(installUpdate:(NSDictionary*)updatePackage
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
+    NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
+    NSDictionary *previousPendingUpdate = [preferences objectForKey:PendingUpdateKey];
+    BOOL removePendingUpdate = [[self class] isPendingUpdate:nil];
+    [self savePendingUpdate:updatePackage[PackageHashKey]
+                  isLoading:NO];
+
     NSError *error;
     [CodePushPackage installPackage:updatePackage
-                removePendingUpdate:[[self class] isPendingUpdate:nil]
+                removePendingUpdate:removePendingUpdate
                               error:&error];
 
     if (error) {
+        if (previousPendingUpdate) {
+            [preferences setObject:previousPendingUpdate forKey:PendingUpdateKey];
+            [preferences synchronize];
+        } else {
+            [[self class] removePendingUpdate];
+        }
         reject([NSString stringWithFormat: @"%lu", (long)error.code], error.localizedDescription, error);
     } else {
-        [self savePendingUpdate:updatePackage[PackageHashKey]
-                      isLoading:NO];
-
         _installMode = installMode;
         if (_installMode == CodePushInstallModeOnNextResume || _installMode == CodePushInstallModeOnNextSuspend) {
             _minimumBackgroundDuration = minimumBackgroundDuration;

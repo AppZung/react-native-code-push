@@ -269,6 +269,16 @@ public class CodePush implements ReactPackage {
                 clearUpdates();
                 return;
             }
+
+            String pendingHash = pendingUpdate.optString(CodePushConstants.PENDING_UPDATE_HASH_KEY, null);
+            if (pendingHash == null || !pendingHash.equals(mUpdateManager.getCurrentPackageHash())) {
+                // installUpdate records the pending update before switching the current package, so
+                // the process died in between: the update was never installed, nothing to initialize.
+                CodePushUtils.log("Discarding pending update " + pendingHash + " that never became the current package.");
+                mSettingsManager.removePendingUpdate();
+                return;
+            }
+
             if (packageMetadata == null || !isPackageBundleLatest(packageMetadata) && hasBinaryVersionChanged(packageMetadata)) {
                 CodePushUtils.log("Skipping initializeUpdateAfterRestart(), binary version is newer");
                 return;
