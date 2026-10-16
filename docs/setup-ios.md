@@ -6,7 +6,10 @@
 
 1. Run `cd ios && pod install && cd ..` to install all the necessary CocoaPods dependencies. You may have to change the `Podfile`'s min iOS version to 15.5 (`platform :ios, '15.5'`).
 
-2. Open up the `AppDelegate.swift`/`AppDelegate.m` file, and add an import statement for the CodePush headers:
+2. Open up the file that overrides the bundle URL and add an import statement for the CodePush headers:
+
+   - **React Native 0.88+**: `SceneDelegate.swift`
+   - **React Native < 0.88**: `AppDelegate.swift`/`AppDelegate.m`
 
    ```swift
    import CodePush
