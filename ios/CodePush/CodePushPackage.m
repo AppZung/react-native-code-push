@@ -1,8 +1,10 @@
 #import "CodePush.h"
 #if __has_include(<SSZipArchive/SSZipArchive.h>)
 #import <SSZipArchive/SSZipArchive.h>
-#else
+#elif __has_include("SSZipArchive.h")
 #import "SSZipArchive.h"
+#else
+@import ZipArchive;
 #endif
 
 @implementation CodePushPackage

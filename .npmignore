@@ -116,3 +116,8 @@ eslint.config.mjs
 
 CONTRIBUTING.md
 
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved

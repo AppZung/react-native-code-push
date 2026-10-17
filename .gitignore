@@ -208,3 +208,8 @@ Examples/testapp_rn
 lib/
 
 src/internals/version.ts
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved

@@ -4,7 +4,10 @@
 
 ### Plugin Installation and Configuration
 
-1. Run `cd ios && pod install && cd ..` to install all the necessary CocoaPods dependencies. You may have to change the `Podfile`'s min iOS version to 15.5 (`platform :ios, '15.5'`).
+1. Install the native dependencies:
+
+   - **CocoaPods**: run `cd ios && bundle exec pod install && cd ..`. You may have to change the `Podfile`'s min iOS version to 15.5 (`platform :ios, '15.5'`).
+   - **Swift Package Manager**: `npx react-native spm` (React Native 0.88+). Your app's iOS deployment target must be 15.5 or higher.
 
 2. Open up the file that overrides the bundle URL and add an import statement for the CodePush headers:
 
