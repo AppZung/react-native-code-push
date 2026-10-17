@@ -13,7 +13,6 @@
 
 @implementation CodePush {
     BOOL _hasResumeListener;
-    BOOL _isFirstRunAfterUpdate;
     int _minimumBackgroundDuration;
     NSDate *_lastResignedDate;
     CodePushInstallMode _installMode;
@@ -59,6 +58,7 @@ static NSString *const PackageIsPendingKey = @"isPending";
 #pragma mark - Static variables
 
 static BOOL isRunningBinaryVersion = NO;
+static BOOL didUpdate = NO;
 static BOOL needToReportRollback = NO;
 static BOOL testConfigurationFlag = NO;
 
@@ -81,6 +81,8 @@ static NSString *const LatestRollbackCountKey = @"count";
     if (self == [CodePush class]) {
         // Use the mainBundle by default.
         bundleResourceBundle = [NSBundle mainBundle];
+
+        [self initializeUpdateAfterRestart];
     }
 }
 
@@ -358,23 +360,24 @@ static NSString *const LatestRollbackCountKey = @"count";
     _restartQueue = [NSMutableArray arrayWithCapacity:1];
 
     self = [super init];
+#ifdef DEBUG
     if (self) {
-        [self initializeUpdateAfterRestart];
+        [self clearDebugUpdates];
     }
+#endif
 
     return self;
 }
 
 /*
- * This method is used when the app is started to either
+ * This method is used before each bundle load to either
  * initialize a pending update or rollback a faulty update
  * to the previous version.
  */
-- (void)initializeUpdateAfterRestart
++ (void)initializeUpdateAfterRestart
 {
-#ifdef DEBUG
-    [self clearDebugUpdates];
-#endif
+    didUpdate = NO;
+
     NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
     NSDictionary *pendingUpdate = [preferences objectForKey:PendingUpdateKey];
     if (pendingUpdate) {
@@ -384,11 +387,10 @@ static NSString *const LatestRollbackCountKey = @"count";
             // installUpdate records the pending update before switching the current package, so
             // the process died in between: the update was never installed, nothing to initialize.
             CPLog(@"Discarding pending update %@ that never became the current package.", pendingUpdate[PendingUpdateHashKey]);
-            [[self class] removePendingUpdate];
+            [self removePendingUpdate];
             return;
         }
 
-        _isFirstRunAfterUpdate = YES;
         BOOL updateIsLoading = [pendingUpdate[PendingUpdateIsLoadingKey] boolValue];
         if (updateIsLoading) {
             // Pending update was initialized, but notifyApplicationReady was not called.
@@ -397,6 +399,9 @@ static NSString *const LatestRollbackCountKey = @"count";
             needToReportRollback = YES;
             [self rollbackPackage];
         } else {
+            didUpdate = YES;
+            CPLog(@"Starting pending update %@.", pendingUpdate[PendingUpdateHashKey]);
+
             // Mark that we tried to initialize the new update, so that if it crashes,
             // we will know that we need to rollback when the app next starts.
             [self savePendingUpdate:pendingUpdate[PendingUpdateHashKey]
@@ -521,6 +526,8 @@ static NSString *const LatestRollbackCountKey = @"count";
     // This needs to be async dispatched because the bridge is not set on init
     // when the app first starts, therefore rollbacks will not take effect.
     dispatch_async(dispatch_get_main_queue(), ^{
+        [CodePush initializeUpdateAfterRestart];
+
         // If the current bundle URL is using http(s), then assume the dev
         // is debugging and therefore, shouldn't be redirected to a local
         // file (since Chrome wouldn't support it). Otherwise, update
@@ -536,11 +543,9 @@ static NSString *const LatestRollbackCountKey = @"count";
 /*
  * This method is used when an update has failed installation
  * and the app needs to be rolled back to the previous bundle.
- * This method is automatically called when the rollback timer
- * expires without the app indicating whether the update succeeded,
- * and therefore, it shouldn't be called directly.
+ * It shouldn't be called directly.
  */
-- (void)rollbackPackage
++ (void)rollbackPackage
 {
     NSError *error;
     NSDictionary *failedPackage = [CodePushPackage getCurrentPackage:&error];
@@ -557,8 +562,7 @@ static NSString *const LatestRollbackCountKey = @"count";
 
     // Rollback to the previous version and de-register the new update
     [CodePushPackage rollbackPackage];
-    [CodePush removePendingUpdate];
-    [self loadBundle];
+    [self removePendingUpdate];
 }
 
 /*
@@ -566,9 +570,9 @@ static NSString *const LatestRollbackCountKey = @"count";
  * to store its hash so that it can be ignored on future
  * attempts to check the server for an update.
  */
-- (void)saveFailedUpdate:(NSDictionary *)failedPackage
++ (void)saveFailedUpdate:(NSDictionary *)failedPackage
 {
-    if ([[self class] isFailedHash:[failedPackage objectForKey:PackageHashKey]]) {
+    if ([self isFailedHash:[failedPackage objectForKey:PackageHashKey]]) {
         return;
     }
 
@@ -614,7 +618,7 @@ static NSString *const LatestRollbackCountKey = @"count";
  * can be called to store the pending update's metadata (e.g. packageHash)
  * so that it can be used when the actual update application occurs at a later point.
  */
-- (void)savePendingUpdate:(NSString *)packageHash
++ (void)savePendingUpdate:(NSString *)packageHash
                 isLoading:(BOOL)isLoading
 {
     // Since we're not restarting, we need to store the fact that the update
@@ -741,7 +745,7 @@ RCT_EXPORT_METHOD(downloadUpdate:(NSDictionary*)updatePackage
      // The download failed
      failCallback:^(NSError *err) {
         if ([CodePushErrorUtils isCodePushError:err]) {
-            [self saveFailedUpdate:mutableUpdatePackage];
+            [[self class] saveFailedUpdate:mutableUpdatePackage];
         }
 
         reject([NSString stringWithFormat: @"%lu", (long)err.code], err.localizedDescription, err);
@@ -872,8 +876,8 @@ RCT_EXPORT_METHOD(installUpdate:(NSDictionary*)updatePackage
     NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
     NSDictionary *previousPendingUpdate = [preferences objectForKey:PendingUpdateKey];
     BOOL removePendingUpdate = [[self class] isPendingUpdate:nil];
-    [self savePendingUpdate:updatePackage[PackageHashKey]
-                  isLoading:NO];
+    [[self class] savePendingUpdate:updatePackage[PackageHashKey]
+                          isLoading:NO];
 
     NSError *error;
     [CodePushPackage installPackage:updatePackage
@@ -958,7 +962,7 @@ RCT_EXPORT_METHOD(isFirstRun:(NSString *)packageHash
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSError *error;
-    BOOL isFirstRun = _isFirstRunAfterUpdate
+    BOOL isFirstRun = didUpdate
     && nil != packageHash
     && [packageHash length] > 0
     && [packageHash isEqualToString:[CodePushPackage getCurrentPackageHash:&error]];
@@ -1097,7 +1101,7 @@ RCT_EXPORT_METHOD(getNewStatusReport:(RCTPromiseResolveBlock)resolve
                 return;
             }
         }
-    } else if (_isFirstRunAfterUpdate) {
+    } else if (didUpdate) {
         NSError *error;
         NSDictionary *currentPackage = [CodePushPackage getCurrentPackage:&error];
         if (!error && currentPackage) {
