@@ -178,7 +178,13 @@ public class CodePushNativeModule extends BaseJavaModule {
                 latestJSBundleLoader = JSBundleLoader.createFileLoader(latestJSBundleFile, fileUrl, false);
             }
 
-            Field bundleLoaderField = reactHostDelegate.getClass().getDeclaredField("jsBundleLoader");
+            Field bundleLoaderField;
+            try {
+                bundleLoaderField = reactHostDelegate.getClass().getDeclaredField("jsBundleLoader");
+            } catch (NoSuchFieldException e) {
+                // Expo SDK 55+ (ExpoReactHostDelegate)
+                bundleLoaderField = reactHostDelegate.getClass().getDeclaredField("_jsBundleLoader");
+            }
             bundleLoaderField.setAccessible(true);
             bundleLoaderField.set(reactHostDelegate, latestJSBundleLoader);
         } catch (Exception e) {
