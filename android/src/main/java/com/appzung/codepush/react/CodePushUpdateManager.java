@@ -299,6 +299,11 @@ public class CodePushUpdateManager {
                 CodePushUtils.setJSONValueForKey(updatePackage, CodePushConstants.RELATIVE_BUNDLE_PATH_KEY, relativeBundlePath);
             }
         } else {
+            if (stringPublicKey != null) {
+                FileUtils.deleteFileOrFolderSilently(downloadFile);
+                throw new CodePushInvalidUpdateException("Public key was provided but the update is not a signed zip archive.");
+            }
+
             // File is a jsbundle, move it to a folder with the packageHash as its name
             FileUtils.moveFile(downloadFile, newUpdateFolderPath, expectedBundleFileName);
         }

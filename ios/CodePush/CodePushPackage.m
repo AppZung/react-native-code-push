@@ -311,6 +311,12 @@ static NSString *const UnzippedFolderName = @"unzipped";
                                                             }
                                                         }
                                                     } else {
+                                                        if (publicKey != nil) {
+                                                            [[NSFileManager defaultManager] removeItemAtPath:downloadFilePath error:nil];
+                                                            failCallback([CodePushErrorUtils errorWithMessage:@"Public key was provided but the update is not a signed zip archive."]);
+                                                            return;
+                                                        }
+
                                                         [[NSFileManager defaultManager] createDirectoryAtPath:newUpdateFolderPath
                                                                                   withIntermediateDirectories:YES
                                                                                                    attributes:nil
