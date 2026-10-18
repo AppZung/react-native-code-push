@@ -2,16 +2,16 @@
 import PackageDescription
 
 let package = Package(
-    name: "CodePush",
+    name: "AppZungReactNativeCodePush",
     platforms: [.iOS("15.5")],
     products: [
-        .library(name: "CodePush", targets: ["CodePush"]),
+        .library(name: "AppZungReactNativeCodePush", targets: ["CodePush"]),
     ],
     dependencies: [
         .package(name: "ReactNative", path: "../../../../xcframeworks"),
         .package(name: "React-GeneratedCode", path: "../../../ios"),
         .package(url: "https://github.com/ZipArchive/ZipArchive.git", "2.5.5"..<"2.6.0"),
-        .package(url: "https://github.com/yourkarma/JWT.git", revision: "8414cafd06843addf1ce9a63417386f25b2a6e20"),
+        .package(url: "https://github.com/airsidemobile/JOSESwift.git", from: "3.0.0"),
     ],
     targets: [
         .target(
@@ -22,7 +22,7 @@ let package = Package(
                 .product(name: "ReactNativeDependenciesHeaders", package: "ReactNative"),
                 .product(name: "ReactAppHeaders", package: "React-GeneratedCode"),
                 .product(name: "ZipArchive", package: "ZipArchive"),
-                .product(name: "JWT", package: "JWT"),
+                "CodePushSignatureVerification",
             ],
             path: "ios/CodePush",
             publicHeadersPath: ".",
@@ -33,6 +33,13 @@ let package = Package(
             linkerSettings: [
                 .linkedLibrary("z"),
             ]
+        ),
+        .target(
+            name: "CodePushSignatureVerification",
+            dependencies: [
+                .product(name: "JOSESwift", package: "JOSESwift"),
+            ],
+            path: "ios/CodePushSignatureVerification"
         ),
     ],
     cxxLanguageStandard: .cxx20

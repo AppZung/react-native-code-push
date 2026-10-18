@@ -1,9 +1,11 @@
 #import "CodePush.h"
 #include <CommonCrypto/CommonDigest.h>
-#if __has_include("JWT.h")
-#import "JWT.h"
+#if __has_include(<CodePush/CodePush-Swift.h>)
+#import <CodePush/CodePush-Swift.h>
+#elif __has_include("CodePush-Swift.h")
+#import "CodePush-Swift.h"
 #else
-@import JWT;
+@import CodePushSignatureVerification;
 #endif
 
 @implementation CodePushUpdateUtils
@@ -329,17 +331,7 @@ NSString * const IgnoreCodePushMetadata = @".codepushrelease";
      withPublicKey:(NSString *)publicKey
              error:(NSError **)error
 {
-    id <JWTAlgorithmDataHolderProtocol> verifyDataHolder = [JWTAlgorithmRSFamilyDataHolder new].keyExtractorType([JWTCryptoKeyExtractor publicKeyWithPEMBase64].type).algorithmName(@"RS256").secret(publicKey);
-
-    JWTCodingBuilder *verifyBuilder = [JWTDecodingBuilder decodeMessage:jwt].addHolder(verifyDataHolder);
-    JWTCodingResultType *verifyResult = verifyBuilder.result;
-    if (verifyResult.successResult) {
-        return verifyResult.successResult.payload;
-    }
-    else {
-        *error = verifyResult.errorResult.error;
-        return nil;
-    }
+    return [CodePushSignatureVerifier verifiedPayloadOfJWT:jwt publicKey:publicKey error:error];
 }
 
 + (BOOL)verifyUpdateSignatureFor:(NSString *)folderPath

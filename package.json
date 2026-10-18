@@ -53,6 +53,9 @@
   "dependencies": {
     "hoist-non-react-statics": "^3.3.2"
   },
+  "swiftpmConfig": {
+    "name": "AppZungReactNativeCodePush"
+  },
   "devDependencies": {
     "@eslint/compat": "^1.2.7",
     "@eslint/eslintrc": "^3.3.1",
