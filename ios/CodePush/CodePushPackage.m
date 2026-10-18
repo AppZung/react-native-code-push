@@ -174,8 +174,14 @@ static NSString *const UnzippedFolderName = @"unzipped";
                                                                                                                          options:kNilOptions
                                                                                                                            error:&error];
                                                             NSArray *deletedFiles = manifestJSON[@"deletedFiles"];
+                                                            NSString *newUpdateFolderPrefix = [[newUpdateFolderPath stringByStandardizingPath] stringByAppendingString:@"/"];
                                                             for (NSString *deletedFileName in deletedFiles) {
-                                                                NSString *absoluteDeletedFilePath = [newUpdateFolderPath stringByAppendingPathComponent:deletedFileName];
+                                                                NSString *absoluteDeletedFilePath = [[newUpdateFolderPath stringByAppendingPathComponent:deletedFileName] stringByStandardizingPath];
+                                                                if (![absoluteDeletedFilePath hasPrefix:newUpdateFolderPrefix]) {
+                                                                    failCallback([CodePushErrorUtils errorWithMessage:[NSString stringWithFormat:@"The update contains a path outside its folder: %@", deletedFileName]]);
+                                                                    return;
+                                                                }
+
                                                                 if ([[NSFileManager defaultManager] fileExistsAtPath:absoluteDeletedFilePath]) {
                                                                     [[NSFileManager defaultManager] removeItemAtPath:absoluteDeletedFilePath
                                                                                                                error:&error];

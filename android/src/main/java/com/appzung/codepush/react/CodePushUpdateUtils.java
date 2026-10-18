@@ -109,9 +109,10 @@ public class CodePushUpdateUtils {
         JSONObject diffManifest = CodePushUtils.getJsonObjectFromFile(diffManifestFilePath);
         try {
             JSONArray deletedFiles = diffManifest.getJSONArray("deletedFiles");
+            File newPackageFolder = new File(newPackageFolderPath);
             for (int i = 0; i < deletedFiles.length(); i++) {
                 String fileNameToDelete = deletedFiles.getString(i);
-                File fileToDelete = new File(newPackageFolderPath, fileNameToDelete);
+                File fileToDelete = new File(FileUtils.validateFileName(fileNameToDelete, newPackageFolder));
                 if (fileToDelete.exists()) {
                     fileToDelete.delete();
                 }
