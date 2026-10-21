@@ -1,8 +1,8 @@
-**@appzung/react-native-code-push v11.0.6**
+**@appzung/react-native-code-push v11.1.0**
 
 ---
 
-# @appzung/react-native-code-push v11.0.6
+# @appzung/react-native-code-push v11.1.0
 
 ## Enumerations
 
